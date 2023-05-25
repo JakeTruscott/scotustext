@@ -1009,7 +1009,7 @@ plf_docket_ids <- docket_id[1:10000]
 ################################################################################
 
 oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type = NULL, docket_id = NULL, party = NULL) {
-  base_url <- "https://github.com/JakeTruscott/scotustext/raw/8bfdf2447544a0cdfcd55a4a7de30188c4873098/R/"
+  base_url <- "https://github.com/JakeTruscott/scotustext/blob/fbd53c4bbd755f724cc9a02afb05a2ffe391f75a/Data/"
   rdata_url <- paste0(base_url, "scotus_transcripts_04_22.rdata")
   load(url(rdata_url))
 
@@ -1161,7 +1161,7 @@ oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type
 
 test <- oa_search(docket_id = c("19-1392", "02-1472", "02-1672"))
 
-corpus_cleaner <- function(dir_path) {
+oa_corpus_cleaner <- function(dir_path) {
   directory <- trimws(dir_path)
   file_directory <- paste0(directory, "/")
 
@@ -1276,7 +1276,7 @@ oa_frame_cleaner <- function(cleaned_corpus){
 }
 
 oa_parser <- function(dir_path = NULL) {
-  cleaned_corpus <- suppressMessages({suppressWarnings(corpus_cleaner(dir_path))})
+  cleaned_corpus <- suppressMessages({suppressWarnings(oa_corpus_cleaner(dir_path))})
   cleaned_frame <- suppressWarnings(oa_frame_cleaner(cleaned_corpus))
   message("\nCompletion Summary:\n")
   message(paste0("Total Arguments:", "  ", format(length(unique(cleaned_frame$argument)), big.mark = ","), "\n"))
@@ -1285,7 +1285,6 @@ oa_parser <- function(dir_path = NULL) {
   message(paste0("Number of Unique Attorneys:", "  ", format(length(unique(cleaned_frame$speaker[cleaned_frame$speaker_type == "Attorney"])), big.mark = ","), "\n"))
   return(cleaned_frame)
 }
-
 
 scotus <- oa_parser(dir_path = "C:/Users/Jake Truscott/OneDrive - University of Georgia/Active/Justices Oral Argument Rhetoric/SCOTUS_Transcripts/Combined Transcripts")
 
