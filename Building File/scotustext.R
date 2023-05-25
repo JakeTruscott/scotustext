@@ -1009,7 +1009,7 @@ plf_docket_ids <- docket_id[1:10000]
 ################################################################################
 
 oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type = NULL, docket_id = NULL, party = NULL) {
-  base_url <- "https://github.com/JakeTruscott/scotustext/blob/fbd53c4bbd755f724cc9a02afb05a2ffe391f75a/Data/"
+  base_url <- "https://github.com/JakeTruscott/scotustext/raw/ac4a2ed9154306cea63e9218cf354822eb819bb1/Data/"
   rdata_url <- paste0(base_url, "scotus_transcripts_04_22.rdata")
   load(url(rdata_url))
 
