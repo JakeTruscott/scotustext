@@ -3,8 +3,8 @@ docket_call <- function(urls, rate, sleep) {
   error_count <- 0
   url_counter <- 0
 
-  for (i in seq(1, length(urls), by = 5000)) {
-    batch_urls <- urls[i:min(i+4999, length(urls))]
+  for (i in seq(1, length(urls), by = rate)) {
+    batch_urls <- urls[i:min(i+rate-1, length(urls))]
     for (j in seq_along(batch_urls)) {
       url <- batch_urls[j]
       try_count <- 0
