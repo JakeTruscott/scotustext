@@ -1,5 +1,5 @@
 oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type = NULL, docket_id = NULL, party = NULL) {
-  base_url <- "https://github.com/JakeTruscott/scotustext/raw/ac4a2ed9154306cea63e9218cf354822eb819bb1/Data/"
+  base_url <- "https://github.com/JakeTruscott/scotustext/raw/cc6f46dbddba93634a1781be8a9eb417bd04924f/Data/"
   rdata_url <- paste0(base_url, "scotus_transcripts_04_22.rdata")
   load(url(rdata_url))
 
