@@ -6,7 +6,6 @@ Authors@R: person("Jake", "Truscott", email = "jake.truscott@uga.edu",
                   role = c("aut", "cre"))
 Maintainer: The package maintainer <jake.truscott@uga.edu>
 Description: This package provides tools for collecting, parsing, cleaning, and analyzing text data from the United States Supreme Court, including: Oral Argument transcripts, Rulings and Orders, etc. 
-
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
