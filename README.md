@@ -5,7 +5,7 @@
 </p>
 
 ## Description
-This is a CRAN package of automated tools to retrieve, parse, clean, and analyze documents from the United States Supreme Court - including: oral argument transcripts, motions, applications, orders, and decisions. Navigate [here](https://github.com/JakeTruscott/scotustext/tree/e501c2ea860b5eff47e7dd51912eae7042a57caf/walkthroughs) to see walkhroughs and other relevent package documentation.
+This is a CRAN package of automated tools to retrieve, parse, clean, and analyze documents from the United States Supreme Court - including: oral argument transcripts, motions, applications, orders, and decisions. Navigate [here]([https://github.com/JakeTruscott/scotustext/tree/e501c2ea860b5eff47e7dd51912eae7042a57caf/walkthroughs](https://github.com/JakeTruscott/scotustext/tree/04c9e25f162fd3202155184ca12c764acf79eb99/Walkthroughs)) to see walkhroughs and other relevent package documentation.
 
 
 ## *Notice* 
