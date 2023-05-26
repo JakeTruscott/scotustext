@@ -1,7 +1,7 @@
 # README: scotustext (CRAN)
 
 <p align="center">
-<img src= "https://github.com/JakeTruscott/scotustext/assets/99896174/59484726-ff93-4a81-94d2-16d9660afab0"
+<img src= "https://github.com/JakeTruscott/scotustext/blob/d658fb53cb22d1304a9137154ece4434567eeb15/Misc/scotutext_coverimage.png"
 </p>
 
 ## Description
