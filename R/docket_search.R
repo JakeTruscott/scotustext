@@ -1,3 +1,19 @@
+#' SCOTUS Docket Search
+#'
+#' @param docket_id Character or comma-separated vector of docket ID numbers (e.g., "19-1392")
+#' @param rate Rate of docket processing (default is **50**)
+#' @param sleep Seconds to wait between docket requests (default is **30**)
+#' @param include Character vector to limit the output variables to only those requested (default is **NULL**).
+#' @param exclude Character vector that will exclude any output variables requested (default is **NULL**)
+#' @param write_csv Logical value indicating whether to print code to convert the output dataframe to a .csv file (default is **FALSE**)
+#' @param write_xlsx Logical value indicating whether to print code to convert the output dataframe to a excel file (default is **FALSE**)
+#' @param write_reactable Logical value indicating whether to print code to convert the output dataframe to a .html file using `reactable()` (default is **FALSE**).
+#'
+#' @return Parsed Supreme Court Docket Information
+#' @export
+#'
+#' @examples
+#' docket_search(docket_id = "19-1392")
 docket_search <- function(docket_id, rate = 50, sleep = 30, include = NULL, exclude = NULL, write_csv = FALSE, write_xlsx = FALSE, write_reactable = FALSE) {
   urls <- suppressWarnings(process_docket_id(docket_id))
   urls <- gsub(" ", "", urls)
