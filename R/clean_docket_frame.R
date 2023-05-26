@@ -515,23 +515,6 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       select(-c(petitioner_counsel_fix))
 
 
-    petitioner_counsel <- petitioner_counsel %>%
-      mutate(petitioner_counsel_address = mapply(function(truncated, address) {
-        gsub(truncated, "", address)
-      }, petitioner_counsel_truncated, petitioner_counsel_address))
-
-
-
-
-
-
-
-
-
-
-
-
-
   } #Petitioner Counsel Parse
   {
     respondent_counsel <- data.frame(docket_entries$respondent_counsel)
@@ -617,25 +600,18 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       )) %>%
       select(-c(respondent_counsel_fix))
 
-    respondent_counsel <- respondent_counsel %>%
-      mutate(respondent_counsel_address = mapply(function(truncated, address) {
-        gsub(truncated, "", address)
-      }, respondent_counsel_truncated, respondent_counsel_address))
-
-
-
   } #Respondent Counsel Parse
   {
 
     docket_entries$petitioner_counsel_address <- petitioner_counsel$petitioner_counsel_address
     docket_entries$petitioner_counsel_address <- ifelse(is.na(docket_entries$petitioner_counsel_address), "", docket_entries$petitioner_counsel_address)
     docket_entries$petitioner_counsel <- petitioner_counsel$petitioner_counsel_truncated
-    docket_entries$petitioner_counsel_address <- gsub(docket_entries$petitioner_counsel, "", docket_entries$petitioner_counsel_address)
+    docket_entries$petitioner_counsel_address <- str_replace_all(docket_entries$petitioner_counsel_address, docket_entries$petitioner_counsel, "")
 
     docket_entries$respondent_counsel_address <- respondent_counsel$respondent_counsel_address
     docket_entries$respondent_counsel_address <- ifelse(is.na(docket_entries$respondent_counsel_address), "", docket_entries$respondent_counsel_address)
     docket_entries$respondent_counsel <- respondent_counsel$respondent_counsel_truncated
-    docket_entries$respondent_counsel_address <- gsub(docket_entries$respondent_counsel, "", docket_entries$respondent_counsel_address)
+    docket_entries$respondent_counsel_address <- str_replace_all(docket_entries$respondent_counsel_address, docket_entries$respondent_counsel, "")
 
   } #Add Parsed & Cleaned Counsel
   {

@@ -30,16 +30,18 @@ docket_call <- function(urls, rate, sleep) {
             break  # Exit the inner loop
           } else {
             cat(paste("Error occurred with URL:", url, "\n"))
+            cat(paste("Waiting 1 minute, then trying again...\n"))
+            Sys.sleep(60)  # Pause for 1 minute
             try_count <- try_count + 1
           }
         })
         if (error_count == 0) {
-          break  # Exit the retry loop if there was a successful retrieval
+          break
         }
       }
     }
     if (error_count == 21) {
-      break  # Exit the outer loop if there were too many errors
+      break
     }
     if (i+4999 < length(urls)) {
       cat("Pausing for 30 seconds...\n")
@@ -48,4 +50,4 @@ docket_call <- function(urls, rate, sleep) {
   }
 
   return(docket_frame)
-} #Call to Docket via Internet
+} # Call to Docket via Internet
