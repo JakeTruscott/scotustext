@@ -192,6 +192,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
         original_text <- gsub(paste0("\\b", month), paste0("\n###\n", month), original_text)
       }
 
+
       docket_entries$amicus_check[i] <- iconv(original_text, to = "UTF-8", sub = "")
       encoded_string <- docket_entries$amicus_check[i]
 
@@ -205,7 +206,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
         row <- str_remove(row, ".*amici curiae of |.*amicus curiae of ")
       })
       cleaned_rows <- lapply(cleaned_rows, function(row) {
-        str_remove(row, " filed\\..*")
+        sub(" filed\\..*", "", row)
       })
       cleaned_rows <- lapply(cleaned_rows, function(row) {
         str_remove(row, "\\nMain.*")
@@ -226,8 +227,10 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       docket_entries$amicus_filers[i] <- nested_list
       docket_entries <- docket_entries %>%
         mutate(amicus_filers = sapply(amicus_filers, function(x) paste(unlist(x), collapse = "; "))) %>%
-        mutate(amicus_indicator = ifelse(is.na(amicus_filers), 0, 1)) %>%
-        mutate(amicus_count = sapply(docket_entries$amicus_filers, function(x) length(unlist(x))))
+        mutate(amicus_indicator = ifelse(amicus_filers == "", 0, 1)) %>%
+        mutate(amicus_indicator = ifelse(is.na(amicus_filers), 0, amicus_indicator)) %>%
+        mutate(amicus_count = sapply(docket_entries$amicus_filers, function(x) length(unlist(x)))) %>%
+        mutate(amicus_count = ifelse(amicus_indicator == 0, 0, amicus_count))
     }
   } #Amicus Filings
   {
@@ -685,15 +688,22 @@ clean_docket_frame <- function(docket_frame, include, exclude){
         mutate(all_petitioner_counsel = gsub("Attorney:\n", "\n\nAttorney:", all_petitioner_counsel),
                all_respondent_counsel = gsub("Attorney:\n", "\n\nAttorney:", all_respondent_counsel ),
                all_other_counsel = gsub("Attorney:\n", "\nAttorney:", all_other_counsel)) %>%
-        mutate(all_respondent_counsel = ifelse(all_respondent_counsel != "" & !grepl("^Attorney:", all_respondent_counsel),
-                                               paste0("Attorney: ", all_respondent_counsel),
-                                               all_respondent_counsel),
-               all_petitioner_counsel = ifelse(all_petitioner_counsel != "" & !grepl("^Attorney:", all_petitioner_counsel),
-                                               paste0("Attorney: ", all_petitioner_counsel),
-                                               all_petitioner_counsel),
-               all_other_counsel = ifelse(all_other_counsel != "" & !grepl("^Attorney:", all_other_counsel),
-                                          paste0("Attorney: ", all_other_counsel),
-                                          all_other_counsel))
+        mutate(all_respondent_counsel = ifelse(all_respondent_counsel != "" & !grepl("^Attorney:", all_respondent_counsel), paste0("Attorney: ", all_respondent_counsel), all_respondent_counsel),
+               all_petitioner_counsel = ifelse(all_petitioner_counsel != "" & !grepl("^Attorney:", all_petitioner_counsel), paste0("Attorney: ", all_petitioner_counsel), all_petitioner_counsel),
+               all_other_counsel = ifelse(all_other_counsel != "" & !grepl("^Attorney:", all_other_counsel), paste0("Attorney: ", all_other_counsel), all_other_counsel)) %>%
+        mutate(contains_org_petitioner = !grepl("Organization", all_petitioner_counsel),
+               contains_org_respondent = !grepl("Organization", all_respondent_counsel),
+               contains_org_other = !grepl("Organization", all_other_counsel)) %>%
+        mutate(all_petitioner_counsel = if_else(contains_org_petitioner, sub("\n", "\nOrganization: ", all_petitioner_counsel, fixed = TRUE), all_petitioner_counsel),
+               all_respondent_counsel = if_else(contains_org_respondent, sub("\n", "\nOrganization: ", all_respondent_counsel, fixed = TRUE), all_respondent_counsel),
+               all_other_counsel = if_else(contains_org_other, sub("\n", "\nOrganization: ", all_other_counsel, fixed = TRUE), all_other_counsel)) %>%
+        mutate(all_petitioner_counsel = gsub("\n\nParty", "\nParty", all_petitioner_counsel),
+               all_other_counsel = gsub("\n\nParty", "\nParty", all_other_counsel),
+               all_respondent_counsel = gsub("\n\nParty", "\nParty", all_respondent_counsel))
+
+
+
+
     } #Parsing Counsel
     {
       extract_info <- function(record) {
@@ -749,10 +759,10 @@ clean_docket_frame <- function(docket_frame, include, exclude){
           return(info)
         })
       }
+
       combined_petitioner_counsel <- paste(petitioner_counsel, collapse = "\n")
       docket_entries$all_petitioner_counsel <- combined_petitioner_counsel
 
-      #REPLICATE BELOW FOR OTHER COUNSEL AND ABOVE FOR PETITIONER
       if (is.na(records_other)) {
         nested_other_counsel <- NA
       } else {
@@ -818,7 +828,21 @@ clean_docket_frame <- function(docket_frame, include, exclude){
         mutate(petitioner_counsel = gsub(".*Attorney: ", "", petitioner_counsel),
                respondent_counsel = gsub(".*Attorney: ", "", respondent_counsel)) %>%
         mutate(petitioner_counsel = trimws(petitioner_counsel),
-               respondent_counsel = trimws(respondent_counsel))
+               respondent_counsel = trimws(respondent_counsel)) %>%
+        mutate(petitioner_counsel = gsub("(?:PO\\s|P\\.O\\.|#|\\d+|[^a-zA-Z]|(?:Attorney:))([^A-Z]*)(?:\\s{3}.*)?$", "\\1", petitioner_counsel, perl = TRUE),
+               respondent_counsel = gsub("(?:PO\\s|P\\.O\\.|#|\\d+|[^a-zA-Z]|(?:Attorney:))([^A-Z]*)(?:\\s{3}.*)?$", "\\1", respondent_counsel, perl = TRUE)) %>%
+        mutate(petitioner_counsel = gsub("\\bP\\.O\\.", "", petitioner_counsel),
+               respondent_counsel = gsub("\\bP\\.O\\.", "", respondent_counsel)) %>%
+        mutate(petitioner_counsel = gsub("\\b PO ", "", petitioner_counsel),
+               respondent_counsel = gsub("\\b PO ", "", respondent_counsel)) %>%
+        mutate(petitioner_counsel = gsub("^((?:[^ ]* ){2}[^ ]*(?: Jr\\.| Sr\\.| II| III)\\b).*", "\\1", petitioner_counsel),
+               respondent_counsel = gsub("^((?:[^ ]* ){2}[^ ]*(?: Jr\\.| Sr\\.| II| III)\\b).*", "\\1", respondent_counsel)) %>%
+        mutate(petitioner_counsel = gsub("^((?:[^ ]* ){2}[^ ]*(?: Jr\\.| Sr\\.|II|III)?).*", "\\1", petitioner_counsel),
+               respondent_counsel = gsub("^((?:[^ ]* ){2}[^ ]*(?: Jr\\.| Sr\\.|II|III)?).*", "\\1", respondent_counsel)) %>%
+        mutate(petitioner_counsel = gsub("[0-9]+\\s*$", "", petitioner_counsel),
+               respondent_counsel = gsub("[0-9]+\\s*$", "", respondent_counsel))
+
+
     } #Extracting Counsel Info
   } #Counsel
   {
@@ -849,6 +873,10 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       split_text <- strsplit(modified_row, " \n\n ")[[1]]
       split_text[1]
     })
+    cleaned_rows <- lapply(cleaned_rows, function(row) {
+      str_remove(row, "\\nMain.*")
+    })
+
 
     nested_list <- lapply(cleaned_rows, function(row) list(row))
 
@@ -878,4 +906,4 @@ clean_docket_frame <- function(docket_frame, include, exclude){
 
   return(docket_entries)
 
-} #Parse Individual Docket Entries
+}
