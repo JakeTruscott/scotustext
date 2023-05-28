@@ -1,4 +1,4 @@
-# README: scotustext (CRAN)
+# README: scotustext
 
 <p align="center">
 <img src= "https://github.com/JakeTruscott/scotustext/blob/d658fb53cb22d1304a9137154ece4434567eeb15/Misc/scotutext_coverimage.png"
