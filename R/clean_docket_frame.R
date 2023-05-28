@@ -151,22 +151,6 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       docket_entries$lower_court_decision_date <- sapply(nested_lower_court_decision_date, function(x) paste(unlist(x), collapse = "; "))
     } #Lower Court Case Number
     {
-      ifp <- lapply(split_metadata, function(row) {
-        has_ifp <- grepl("leave to proceed in forma pauperis", row, ignore.case = TRUE)
-        row[has_ifp]
-      })
-      cleaned_ifp <- lapply(split_metadata, function(row) {
-        if (length(row) == 0) {
-          "In Forma Pauperis"
-        } else {
-          NA
-        }
-      })
-
-      nested_ifp <- lapply(cleaned_ifp, function(row) list(row))
-      docket_entries$ifp <- sapply(nested_ifp, function(x) paste(unlist(x), collapse = "; "))
-    } #File Type
-    {
       docket_entries <- docket_entries %>%
         mutate(special_filing = ifelse(
           grepl("mandamus", text_original, ignore.case = T), "Mandamus", ifelse(grepl("habeas", text_original, ignore.case = T), "Habeas", ifelse(grepl("capital case", text_original, ignore.case = T), "Capital Case", ifelse(grepl("o", docket_number, ignore.case = T), "Original Jurisdiction", NA))))) %>%
@@ -189,7 +173,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       original_text <- docket_entries$text_original[i]
 
       for (month in months) {
-        original_text <- gsub(paste0("\\b", month), paste0("\n###\n", month), original_text)
+        original_text <- gsub(paste0("(\n)", month), paste0("\n###\n", month), original_text)
       }
 
 
@@ -240,7 +224,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       original_text <- docket_entries$text_original[i]
 
       for (month in months) {
-        original_text <- gsub(paste0("\\b", month), paste0("\n###\n", month), original_text)
+        original_text <- gsub(paste0("(\n)", month), paste0("\n###\n", month), original_text)
       }
 
       docket_entries$argument_check[i] <- original_text
@@ -271,7 +255,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       original_text <- docket_entries$text_original[i]
 
       for (month in months) {
-        original_text <- gsub(paste0("\\b", month), paste0("\n###\n", month), original_text)
+        original_text <- gsub(paste0("(\n)", month), paste0("\n###\n", month), original_text)
       }
 
       docket_entries$multiple_conference_check[i] <- original_text
@@ -323,7 +307,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       original_text <- docket_entries$text_original[i]
 
       for (month in months) {
-        original_text <- gsub(paste0("\\b", month), paste0("\n###\n", month), original_text)
+        original_text <- gsub(paste0("(\n)", month), paste0("\n###\n", month), original_text)
       }
 
       docket_entries$opinion_writer_check[i] <- original_text
@@ -335,6 +319,9 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       row[has_opinion_writer]
     })
     cleaned_rows <- lapply(filtered_rows, function(row) {
+      gsub("\n\n.*", "", row)
+    })
+    cleaned_rows <- lapply(cleaned_rows, function(row) {
       str_remove(row, " delivered the opinion.*")
     })
     cleaned_rows <- lapply(cleaned_rows, function(row) {
@@ -362,8 +349,8 @@ clean_docket_frame <- function(docket_frame, include, exclude){
     for (i in 1:nrow(docket_entries)) {
       original_text <- docket_entries$text_original[i]
 
-      for (month in months) {
-        original_text <- gsub(paste0("\\b", month), paste0("\n###\n", month), original_text)
+      for (month in months){
+        original_text <- gsub(paste0("(\n)", month), paste0("\n###\n", month), original_text)
       }
 
       docket_entries$opinion_writer_check[i] <- original_text
@@ -375,6 +362,9 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       row[has_opinion_writer]
     })
     cleaned_rows <- lapply(filtered_rows, function(row) {
+      gsub("\n\n.*", "", row)
+    })
+    cleaned_rows <- lapply(cleaned_rows, function(row) {
       gsub(", J\\.,", "", row)
     })
     cleaned_rows <- lapply(cleaned_rows, function(row) {
@@ -384,7 +374,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
     cleaned_rows <- str_count(cleaned_rows, pattern = "delivered") + count_filed
 
     docket_entries$number_of_opinions <- as.integer(cleaned_rows)
-    docket_entries$number_of_opinions <- ifelse(grepl("opinion per curiam", docket_entries$text_original, ignore.case = TRUE), "Per Curiam", docket_entries$number_of_opinions)
+    docket_entries$number_of_opinions <- ifelse(grepl("per curiam", docket_entries$text_original, ignore.case = TRUE), "Per Curiam", docket_entries$number_of_opinions)
 
   } #Number of Opinions Filed
   {
@@ -392,8 +382,8 @@ clean_docket_frame <- function(docket_frame, include, exclude){
     for (i in 1:nrow(docket_entries)) {
       original_text <- docket_entries$text_original[i]
 
-      for (month in months) {
-        original_text <- gsub(paste0("\\b", month), paste0("\n###\n", month), original_text)
+      for (month in months){
+        original_text <- gsub(paste0("(\n)", month), paste0("\n###\n", month), original_text)
       }
 
       docket_entries$opinion_writer_check[i] <- original_text
@@ -405,6 +395,9 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       row[has_opinion_writer]
     })
     cleaned_rows <- lapply(filtered_rows, function(row) {
+      gsub("\n\n.*", "", row)
+    })
+    cleaned_rows <- lapply(cleaned_rows, function(row) {
       gsub(", J\\.,", "", row)
     })
     cleaned_rows <- lapply(cleaned_rows, function(row) {
@@ -437,8 +430,8 @@ clean_docket_frame <- function(docket_frame, include, exclude){
     for (i in 1:nrow(docket_entries)) {
       original_text <- docket_entries$text_original[i]
 
-      for (month in months) {
-        original_text <- gsub(paste0("\\b", month), paste0("\n###\n", month), original_text)
+      for (month in months){
+        original_text <- gsub(paste0("(\n)", month), paste0("\n###\n", month), original_text)
       }
 
       docket_entries$opinion_writer_check[i] <- original_text
@@ -449,6 +442,9 @@ clean_docket_frame <- function(docket_frame, include, exclude){
         row[has_opinion_writer]
       })
       cleaned_rows <- lapply(filtered_rows, function(row) {
+        gsub("\n\n.*", "", row)
+      })
+      cleaned_rows <- lapply(cleaned_rows, function(row) {
         gsub(", J\\.,", "", row)
       })
       cleaned_rows <- lapply(cleaned_rows, function(row) {
@@ -852,7 +848,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       original_text <- docket_entries$text_original[i]
 
       for (month in months) {
-        original_text <- gsub(paste0("\\b", month), paste0("\n###\n", month), original_text)
+        original_text <- gsub(paste0("(\n)", month), paste0("\n###\n", month), original_text)
       }
 
       docket_entries$most_recent_order_check[i] <- original_text
@@ -860,23 +856,29 @@ clean_docket_frame <- function(docket_frame, include, exclude){
 
     split_rows <- strsplit(docket_entries$most_recent_order_check, "\n###\n")
 
+
     filtered_rows <- lapply(split_rows, function(row) {
       most_recent_orders <- grepl(paste(months, collapse = "|"), row, ignore.case = TRUE)
       row[most_recent_orders]
     })
 
-    filtered_rows <- lapply(filtered_rows, function(x) tail(x, 1))
 
+    filtered_rows <- lapply(filtered_rows, function(row) {
+      row <- gsub("\n\n.*", "", row)
+      row <- row[!grepl("Party name", row)]
+      row <- row[!grepl("SEARCH TIPS", row, ignore.case = T)]
+      row
+    })
+
+    filtered_rows <- lapply(filtered_rows, function(x) tail(x, 1))
 
     cleaned_rows <- lapply(filtered_rows, function(row) {
       modified_row <- gsub("\n\n", " \n\n ", row)
+      modified_row <- gsub("\\n", " ", modified_row)
+      modified_row <- gsub(" Main.*", "", modified_row)
       split_text <- strsplit(modified_row, " \n\n ")[[1]]
       split_text[1]
     })
-    cleaned_rows <- lapply(cleaned_rows, function(row) {
-      str_remove(row, "\\nMain.*")
-    })
-
 
     nested_list <- lapply(cleaned_rows, function(row) list(row))
 
@@ -891,15 +893,13 @@ clean_docket_frame <- function(docket_frame, include, exclude){
 
   } #Most Recent Order
   {
-
-
     months <- c("Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec ")
 
     for (i in 1:nrow(docket_entries)) {
       original_text <- docket_entries$text_original[i]
 
       for (month in months) {
-        original_text <- gsub(paste0("\\b", month), paste0("\n###\n", month), original_text)
+        original_text <- gsub(paste0("(\n)", month), paste0("\n###\n", month), original_text)
       }
 
       docket_entries$most_recent_order_check[i] <- original_text
@@ -907,12 +907,20 @@ clean_docket_frame <- function(docket_frame, include, exclude){
 
     split_rows <- strsplit(docket_entries$most_recent_order_check, "\n###\n")
 
+    # Remove lines containing "\nParty name"
+    split_rows <- lapply(split_rows, function(row) {
+      row <- gsub("\n\n.*", "", row)
+      row <- gsub("\n.*", "", row)
+      row <- row[!grepl("Party name", row)]
+      row <- row[!grepl("SEARCH TIPS", row, ignore.case = T)]
+      row
+    })
+
 
     filtered_rows <- lapply(split_rows, function(row) {
       row <- gsub("\n\n.*", "", row, perl = TRUE)
-      row <- row[-1]  # Delete the first row
       row <- gsub("\nMain.*", "", row)
-      row <- gsub("\nAttorneys for Petitioners.*", "", row)
+      row <- gsub("\nAttorneys for (Petitioner|Plaintiff|Petitioners|Plaintiff|Appellant|Appellants|Applicant|Applicants).*", "", row)
       row <- gsub("\n", "", row, perl = TRUE)
       row
     })
@@ -934,7 +942,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
       mutate(docket_number = gsub("No. ", "", docket_number)) %>%
       mutate(petition_type = type) %>%
       mutate(amicus_indicator = ifelse(amicus_indicator == 1, "Yes", "No")) %>%
-      select(docket_number, petition_type, petitioner, petitioner_counsel, all_petitioner_counsel, respondent, respondent_counsel, all_respondent_counsel, all_other_counsel, docketed, submitted_to, referred_to_court, application_type, linked_with, lower_court, lower_court_case_number, lower_court_decision_date, amicus_indicator, amicus_filers, amicus_count, first_conference_date, conference_count, multiple_conference_dates, most_recent_order, all_docket_entries, majority_opinion_writer, opinion_type, number_of_opinions, opinions_by_type, opinion_filings, argument_date, special_filing, ifp, docket_url)
+      select(docket_number, petition_type, petitioner, petitioner_counsel, all_petitioner_counsel, respondent, respondent_counsel, all_respondent_counsel, all_other_counsel, docketed, submitted_to, referred_to_court, application_type, linked_with, lower_court, lower_court_case_number, lower_court_decision_date, amicus_indicator, amicus_filers, amicus_count, first_conference_date, conference_count, multiple_conference_dates, most_recent_order, all_docket_entries, majority_opinion_writer, opinion_type, number_of_opinions, opinions_by_type, opinion_filings, argument_date, special_filing, docket_url)
     docket_entries[docket_entries == ""] <- NA
 
 
