@@ -892,11 +892,49 @@ clean_docket_frame <- function(docket_frame, include, exclude){
   } #Most Recent Order
   {
 
+
+    months <- c("Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Sep ", "Oct ", "Nov ", "Dec ")
+
+    for (i in 1:nrow(docket_entries)) {
+      original_text <- docket_entries$text_original[i]
+
+      for (month in months) {
+        original_text <- gsub(paste0("\\b", month), paste0("\n###\n", month), original_text)
+      }
+
+      docket_entries$most_recent_order_check[i] <- original_text
+    }
+
+    split_rows <- strsplit(docket_entries$most_recent_order_check, "\n###\n")
+
+
+    filtered_rows <- lapply(split_rows, function(row) {
+      row <- gsub("\n\n.*", "", row, perl = TRUE)
+      row <- row[-1]  # Delete the first row
+      row <- gsub("\nMain.*", "", row)
+      row <- gsub("\nAttorneys for Petitioners.*", "", row)
+      row <- gsub("\n", "", row, perl = TRUE)
+      row
+    })
+
+    nested_list <- lapply(filtered_rows, function(row) list(row))
+
+    replace_empty <- function(lst) {
+      modified_lst <- lapply(lst, function(x) ifelse(x == "character(0)", "", x))
+      return(modified_lst)
+    }
+
+    nested_list <- replace_empty(nested_list)
+
+    docket_entries$all_docket_entries <- sapply(nested_list, function(x) paste(unlist(x), collapse = "; "))
+  } #All Dated Entries & Orders
+  {
+
     docket_entries <- docket_entries %>%
       mutate(docket_number = gsub("No. ", "", docket_number)) %>%
       mutate(petition_type = type) %>%
       mutate(amicus_indicator = ifelse(amicus_indicator == 1, "Yes", "No")) %>%
-      select(docket_number, petition_type, petitioner, petitioner_counsel, all_petitioner_counsel, respondent, respondent_counsel, all_respondent_counsel, all_other_counsel, docketed, submitted_to, referred_to_court, application_type, linked_with, lower_court, lower_court_case_number, lower_court_decision_date, amicus_indicator, amicus_filers, amicus_count, first_conference_date, conference_count, multiple_conference_dates, most_recent_order, majority_opinion_writer, opinion_type, number_of_opinions, opinions_by_type, opinion_filings, argument_date, special_filing, ifp, docket_url)
+      select(docket_number, petition_type, petitioner, petitioner_counsel, all_petitioner_counsel, respondent, respondent_counsel, all_respondent_counsel, all_other_counsel, docketed, submitted_to, referred_to_court, application_type, linked_with, lower_court, lower_court_case_number, lower_court_decision_date, amicus_indicator, amicus_filers, amicus_count, first_conference_date, conference_count, multiple_conference_dates, most_recent_order, all_docket_entries, majority_opinion_writer, opinion_type, number_of_opinions, opinions_by_type, opinion_filings, argument_date, special_filing, ifp, docket_url)
     docket_entries[docket_entries == ""] <- NA
 
 
