@@ -1,9 +1,13 @@
 {
     "sortOrder": [
         {
+            "columnIndex": 4,
+            "ascending": false
+        },
+        {
             "columnIndex": 2,
             "ascending": true
         }
     ],
-    "path": "C:/Users/Jake Truscott/OneDrive - University of Georgia/Active/scotustext"
+    "path": "C:/Users/Jake Truscott/OneDrive - University of Georgia/Active/scotustext/R"
 }
