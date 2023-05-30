@@ -1,6 +1,6 @@
 oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type = NULL, docket_id = NULL, party = NULL) {
-  base_url <- "https://github.com/JakeTruscott/scotustext/raw/cc6f46dbddba93634a1781be8a9eb417bd04924f/Data/"
-  rdata_url <- paste0(base_url, "scotus_transcripts_04_22.rdata")
+  base_url <- "https://github.com/JakeTruscott/scotustext/raw/master/Data/"
+  rdata_url <- paste0(base_url, "scotus_transcripts.rdata")
   load(url(rdata_url))
 
   if (!is.null(term)) {
@@ -136,15 +136,8 @@ oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type
     }
   }
 
-  collected_justices <- unique(scotus$speaker)
-  if (!is.null(justice)) {
-    collected_justices <- unique(scotus$speaker)
-    if (length(collected_justices) > 0) {
-      collected_justices <- sort(collected_justices)
-      justices_string <- paste(collected_justices, collapse = ", ")
-      message(paste("Justices:", justices_string))
-    }
-  }
-
   return(scotus)
 }
+
+
+test <- oa_search(term = "2021", justice = "Breyer")

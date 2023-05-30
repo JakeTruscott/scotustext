@@ -729,89 +729,61 @@ clean_docket_frame <- function(docket_frame, include, exclude){
               info$Attorney <- list()
             info$Attorney <- c(info$Attorney, gsub("^Attorney: ", "", line))
           } else if (grepl("^Organization:", line)) {
-            info$Organization <- gsub("^Organization: ", "", line)
+            if (!exists("Organization", info))
+              info$Organization <- list()
+            info$Organization <- c(info$Organization, gsub("^Organization: ", "", line))
           } else if (grepl("^Party name:", line)) {
-            info$PartyName <- gsub("^Party name: ", "", line)
+            if (!exists("PartyName", info))
+              info$PartyName <- list()
+            info$PartyName <- c(info$PartyName, gsub("^Party name: ", "", line))
           }
         }
 
         return(info)
       }
 
+
       {
         if (is.na(counsel$all_petitioner_counsel) || counsel$all_petitioner_counsel == "") {
           records_petitioner <- NA
         } else {
-          records_petitioner <- lapply(counsel$all_petitioner_counsel, function(x) unlist(strsplit(x, "\n\n")))
-        }
-
-        if (is.na(records_petitioner)) {
-          nested_petitioner_counsel <- NA
-        } else {
-          nested_petitioner_counsel <- lapply(records_petitioner, extract_info)
-        }
-
-        if (is.na(nested_petitioner_counsel)) {
-          petitioner_counsel <- NA
-        } else {
-          petitioner_counsel <- sapply(nested_petitioner_counsel, function(x) {
-            # Concatenate key-value pairs with a semi-colon separator
-            info <- paste(names(x), unlist(x), sep = ": ", collapse = "; ")
-            # Remove trailing space if it exists
-            info <- sub(" $", "", info)
-            return(info)
+          records_petitioner <- lapply(counsel$all_petitioner_counsel, function(x) {
+            flattened <- unlist(strsplit(x, "\n\n"))
+            flattened <- lapply(flattened, function(x) {
+              if (grepl("Organization:(.*)\\nParty name:", x, perl = TRUE)) {
+                x <- gsub("Organization:(.*)\\nParty name:", "Organization:\\1\nParty name:", x, perl = TRUE)
+              }
+              x <- gsub("\n(?!\\n)", " ", x, perl = TRUE)
+              trimws(x)
+              x <- gsub(" Organization:", " \nOrganization:", x)
+              x <- gsub(" Party name:", " \nParty name:", x)
+            })
+            paste(flattened, collapse = "; ")
           })
         }
-
-        combined_petitioner_counsel <- paste(petitioner_counsel, collapse = "\n")
-        docket_entries$all_petitioner_counsel <- combined_petitioner_counsel
-
-        docket_entries$petitioner_counsel <- sapply(docket_entries$all_petitioner_counsel, function(x) {
-          dates <- strsplit(x, "\n")[[1]]
-          if (length(dates) > 0) {
-            return(dates[1])
-          } else {
-            return("")
-          }
-        })
+        docket_entries$all_petitioner_counsel <- records_petitioner
 
       } #Petitioner Counsel
 
       {
-
         if (is.na(counsel$all_respondent_counsel) || counsel$all_respondent_counsel == "") {
           records_respondent <- NA
         } else {
-          records_respondent <- lapply(counsel$all_respondent_counsel, function(x) unlist(strsplit(x, "\n\n")))
-        }
-        if (is.na(records_respondent)) {
-          nested_respondent_counsel <- NA
-        } else {
-          nested_respondent_counsel <- lapply(records_respondent, extract_info)
-        }
-
-        if (is.na(nested_respondent_counsel)) {
-          respondent_counsel <- NA
-        } else {
-          respondent_counsel <- sapply(nested_respondent_counsel, function(x) {
-            # Concatenate key-value pairs with a semi-colon separator
-            info <- paste(names(x), unlist(x), sep = ": ", collapse = "; ")
-            # Remove trailing space if it exists
-            info <- sub(" $", "", info)
-            return(info)
+          records_respondent <- lapply(counsel$all_respondent_counsel, function(x) {
+            flattened <- unlist(strsplit(x, "\n\n"))
+            flattened <- lapply(flattened, function(x) {
+              if (grepl("Organization:(.*)\\nParty name:", x, perl = TRUE)) {
+                x <- gsub("Organization:(.*)\\nParty name:", "Organization:\\1\nParty name:", x, perl = TRUE)
+              }
+              x <- gsub("\n(?!\\n)", " ", x, perl = TRUE)
+              trimws(x)
+              x <- gsub(" Organization:", " \nOrganization:", x)
+              x <- gsub(" Party name:", " \nParty name:", x)
+            })
+            paste(flattened, collapse = "; ")
           })
         }
-        combined_respondent_counsel <- paste(respondent_counsel, collapse = "\n")
-        docket_entries$all_respondent_counsel <- combined_respondent_counsel
-
-        docket_entries$respondent_counsel <- sapply(docket_entries$all_respondent_counsel, function(x) {
-          dates <- strsplit(x, "\n")[[1]]
-          if (length(dates) > 0) {
-            return(dates[1])
-          } else {
-            return("")
-          }
-        })
+        docket_entries$all_respondent_counsel <- records_respondent
 
       } #Respondent Counsel
 
@@ -819,35 +791,27 @@ clean_docket_frame <- function(docket_frame, include, exclude){
         if (is.na(counsel$all_other_counsel) || counsel$all_other_counsel == "") {
           records_other <- NA
         } else {
-          records_other <- lapply(counsel$all_other_counsel, function(x) unlist(strsplit(x, "\n\n")))
-        }
-        if (is.na(records_other)) {
-          nested_other_counsel <- NA
-        } else {
-          nested_other_counsel <- lapply(records_other, extract_info)
-        }
-
-        if (is.na(nested_other_counsel)) {
-          other_counsel <- NA
-        } else {
-          other_counsel <- sapply(nested_other_counsel, function(x) {
-            # Concatenate key-value pairs with a semi-colon separator
-            info <- paste(names(x), unlist(x), sep = ": ", collapse = "; ")
-            # Remove trailing space if it exists
-            info <- sub(" $", "", info)
-            return(info)
+          records_other <- lapply(counsel$all_other_counsel, function(x) {
+            flattened <- unlist(strsplit(x, "\n\n"))
+            flattened <- lapply(flattened, function(x) {
+              if (grepl("Organization:(.*)\\nParty name:", x, perl = TRUE)) {
+                x <- gsub("Organization:(.*)\\nParty name:", "Organization:\\1\nParty name:", x, perl = TRUE)
+              }
+              x <- gsub("\n(?!\\n)", " ", x, perl = TRUE)
+              trimws(x)
+              x <- gsub(" Organization:", " \nOrganization:", x)
+              x <- gsub(" Party name:", " \nParty name:", x)
+            })
+            paste(flattened, collapse = "; ")
           })
         }
-
-
-        combined_other_counsel <- paste(other_counsel, collapse = "\n")
-        docket_entries$all_other_counsel <- combined_other_counsel
+        docket_entries$all_other_counsel <- records_other
 
       } #Other Counsel
 
       docket_entries <- docket_entries %>%
-        mutate(petitioner_counsel = gsub("\\;.*", "", petitioner_counsel),
-               respondent_counsel = gsub("\\;.*", "", respondent_counsel)) %>%
+        mutate(petitioner_counsel = gsub("\\;.*", "", all_petitioner_counsel),
+               respondent_counsel = gsub("\\;.*", "", all_respondent_counsel)) %>%
         mutate(petitioner_counsel = gsub(".*Attorney: ", "", petitioner_counsel),
                respondent_counsel = gsub(".*Attorney: ", "", respondent_counsel)) %>%
         mutate(petitioner_counsel = trimws(petitioner_counsel),
