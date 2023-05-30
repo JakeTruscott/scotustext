@@ -139,5 +139,3 @@ oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type
   return(scotus)
 }
 
-
-test <- oa_search(term = "2021", justice = "Breyer")

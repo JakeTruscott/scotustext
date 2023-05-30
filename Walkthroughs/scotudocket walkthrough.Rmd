@@ -1,10 +1,12 @@
 ---
-title: "scotustext (CRAN)"
+title: "scotustext (scotustext.R)"
 author:
 - name: Jake S. Truscott, Ph.D
   affiliation: University of Georgia
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  html_document:
+    css: gray.css
 ---
 
 
@@ -1434,10 +1436,9 @@ print_flattened_list <- function(column) {
 
 ## **Function Description**
 
-The `docket_search` function takes several arguments to customize search queries:
+The `docket_search` function accepts several optional parameters to customize search queries:
 
-- `docket_id`: The docket number of interest - written as a character vector in **R**. This can take the form of filed petitions (e.g., "19-1392"), applications (e.g., "22A948"), or motions (e.g., "22M11"). 
-
+- `docket_id`: The docket number of interest - written as a character vector in **R**. This can take the form of filed petitions (e.g., "19-1392"), applications (e.g., "22A948"), or motions (e.g., "22M11"). `docket_id`  parameter is **REQUIRED** for all searches. 
 *Note*: The function will also accept list objects containing comma-separated character vectors of docket numbers (e.g., docket_ids <- c("19-108", "19-184", "19-199", "19-251"). 
 
 *Further*: The function will accept petitions filed pursuant to the Court's **original** jurisdiction, though it is recommended that docket numbers be written in the style similar to supremecourt.gov (e.g., "22O145").
