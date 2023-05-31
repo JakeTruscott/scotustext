@@ -19,5 +19,3 @@ University of Georgia (until Summer 2023) <br>
 C-Span Center for Scholarship and Engagement <br>
 Purdue University (West Lafayette, IN) <br>
 
-  
-  <iframe src="Walkthroughs/scotudocket-walkthrough.html" width="100%" height="600px"></iframe>
