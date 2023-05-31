@@ -18,3 +18,4 @@ Research Areas: Judicial Politics, Federal Courts, Text as Data & NLP <br>
 University of Georgia (until Summer 2023) <br>
 C-Span Center for Scholarship and Engagement <br>
 Purdue University (West Lafayette, IN) <br>
+
