@@ -1,4 +1,4 @@
-corpus_cleaner <- function(dir_path) {
+oa_corpus_cleaner <- function(dir_path) {
   directory <- trimws(dir_path)
   file_directory <- paste0(directory, "/")
 

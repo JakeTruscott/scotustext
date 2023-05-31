@@ -1,5 +1,5 @@
 ---
-title: "scotustext (scotustext.R)"
+title: "docket_search (scotustext.R)"
 author:
 - name: Jake S. Truscott, Ph.D
   affiliation: University of Georgia
