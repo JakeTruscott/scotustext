@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>scotustext (R)</title>
+  <link rel="icon" type="image/x-icon" href="C:\Users\Jake Truscott\Documents\GitHub\scotustext\docs\favicon_JT.ico">
+  <link rel="stylesheet" type="text/css" href="mystyle.css" />
+
+</head>
+<body>
+    <header>
+        <div class="header">
+            <div class="left-column">
+                <div class="scotustext">scotustext (R)</div> <br><br>
+                <div class="developer">Developed by Jake S. Truscott, Ph.D</div> <br class="single-line-break">
+                <div class="center-name">C-SPAN Center for Scholarship &amp; Engagement <br class="single-line-break"> Purdue University <br class="single-line-break"> West Lafayette, IN <br class="single-line-break"> (Beginning Summer 2023) </div>
+            </div>
+            <div class="right-column">
+                <img src="https://raw.githubusercontent.com/JakeTruscott/scotustext/347e1c3c77ba9423c003db7fb21f009590f6dd53/Misc/scotustext_hex.png" alt="scotustext logo" class="logo">
+            </div>
+        </div>
+    </header>
+
+
+
+
+
+
+<div class="tabs">
+  <div class="tab-1">
+    <label for="tab1-1">OVERVIEW</label>
+    <input id="tab1-1" name="tabs-two" type="radio" checked="checked">
+    <div>
+        <p>In the code above, we use the sapply() function to iterate over each element of the "all_respondent_counsel" column and apply the paste() function to collapse the elements into a single string separated by "; ". This operation converts the list column into a flattened character vector. Finally, we use the write.csv() function to export the modified dataframe to a CSV file named "output.csv" while excluding row names.</p>
+    </div>
+  </div>
+
+<div class="tab-2">
+  <label for="tab2-2">SCOTUS DOCKET</label>
+  <input id="tab2-2" name="tabs-two" type="radio">
+  <div>
+  <link rel="import" href="https://github.com/JakeTruscott/scotustext/raw/4203ee2e677ecbfda8f5f157d742cd4d9a1dc262/Walkthroughs/scotudocket-walkthrough.html">
+
+  </div>
+</div>
+
+    <div class="tab-3">
+    <label for="tab3-1">ORAL ARGUMENTS</label>
+    <input id="tab3-1" name="tabs-two" type="radio">
+    <div>
+      <p> In the code above, we use the sapply() function to iterate over each element of the "all_respondent_counsel" column and apply the paste() function to collapse the elements into a single string separated by "; ". This operation converts the list column into a flattened character vector. Finally, we use the write.csv() function to export the modified dataframe to a CSV file named "output.csv" while excluding row names. </p>
+    </div>
+  </div>
+
+         <div class="tab-4">
+    <label for="tab4-1">SCOTUS OPINIONS</label>
+    <input id="tab4-1" name="tabs-two" type="radio">
+    <div>
+      <p> In the code above, we use the sapply() function to iterate over each element of the "all_respondent_counsel" column and apply the paste() function to collapse the elements into a single string separated by "; ". This operation converts the list column into a flattened character vector. Finally, we use the write.csv() function to export the modified dataframe to a CSV file named "output.csv" while excluding row names. </p>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
+
+
+</body>
+</html>

@@ -754,12 +754,16 @@ clean_docket_frame <- function(docket_frame, include, exclude){
                 x <- gsub("Organization:(.*)\\nParty name:", "Organization:\\1\nParty name:", x, perl = TRUE)
               }
               x <- gsub("\n(?!\\n)", " ", x, perl = TRUE)
-              trimws(x)
+              x <- trimws(x)
               x <- gsub(" Organization:", " \nOrganization:", x)
               x <- gsub(" Party name:", " \nParty name:", x)
+              x
             })
-            paste(flattened, collapse = "; ")
+            flattened <- unlist(flattened)
+            flattened
           })
+          records_petitioner <- unlist(records_petitioner)
+          records_petitioner <- paste(records_petitioner, collapse = "; ")
         }
         docket_entries$all_petitioner_counsel <- records_petitioner
 
@@ -776,15 +780,18 @@ clean_docket_frame <- function(docket_frame, include, exclude){
                 x <- gsub("Organization:(.*)\\nParty name:", "Organization:\\1\nParty name:", x, perl = TRUE)
               }
               x <- gsub("\n(?!\\n)", " ", x, perl = TRUE)
-              trimws(x)
+              x <- trimws(x)
               x <- gsub(" Organization:", " \nOrganization:", x)
               x <- gsub(" Party name:", " \nParty name:", x)
+              x
             })
-            paste(flattened, collapse = "; ")
+            flattened <- unlist(flattened)
+            flattened
           })
+          records_respondent <- unlist(records_respondent)
+          records_respondent <- paste(records_respondent, collapse = "; ")
         }
         docket_entries$all_respondent_counsel <- records_respondent
-
       } #Respondent Counsel
 
       {
@@ -798,15 +805,18 @@ clean_docket_frame <- function(docket_frame, include, exclude){
                 x <- gsub("Organization:(.*)\\nParty name:", "Organization:\\1\nParty name:", x, perl = TRUE)
               }
               x <- gsub("\n(?!\\n)", " ", x, perl = TRUE)
-              trimws(x)
+              x <- trimws(x)
               x <- gsub(" Organization:", " \nOrganization:", x)
               x <- gsub(" Party name:", " \nParty name:", x)
+              x
             })
-            paste(flattened, collapse = "; ")
+            flattened <- unlist(flattened)
+            flattened
           })
+          records_other <- unlist(records_other)
+          records_other <- paste(records_other, collapse = "; ")
         }
         docket_entries$all_other_counsel <- records_other
-
       } #Other Counsel
 
       docket_entries <- docket_entries %>%
