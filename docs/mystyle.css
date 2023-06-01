@@ -7,146 +7,93 @@ body {
   letter-spacing: 0.01em;
   line-height: 1.6em;
   margin: 0;
-  padding: 0;
-}
-
+  padding: 100px; }
 h1 {
   font-size: 40px;
   line-height: 0.8em;
-  color: rgba(255, 255, 255, 0.2);
-}
+  color: rgba(255,255,255,0.2);}
 
 .header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 20px;
-}
-
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
 .left-column {
-  text-align: center;
-}
-
+            text-align: center;
+        }
 .right-column {
-  text-align: center;
-  padding-left: 20px;
-}
-
+            text-align: center;
+            padding-left: 20px;
+        }
 .scotustext {
-  font-size: 60pt;
-  color: #cdcfd1;
+            font-size: 60pt;
+            color: #cdcfd1;
   top: 0;
   z-index: 999;
-}
-
+        }
 .developer {
-  font-size: 20pt;
-  color: #fff;
-}
-
+            font-size: 20pt;
+                        color: #fff;
+        }
 .center-name {
-  font-size: 10pt;
-  color: #fff;
-}
-
+            font-size: 10pt;
+                        color: #fff;
+        }
 .beginning {
-  font-size: 10pt;
-  color: #fff;
-}
-
+            font-size: 10pt;
+                        color: #fff;
+        }
 .logo {
-  width: 200pt;
-  display: block;
-  margin: 0 auto;
-}
-
+            width: 200pt;
+            display: block;
+            margin: 0 auto;
+        }
 .single-line-break {
-  line-height: 1em;
-}
+      line-height: 1em;
+    }
 
 .documentation {
-  color: #fd264f;
+    color: #fd264f;
 }
-
 button:focus,
 input:focus,
 textarea:focus,
 select:focus {
-  outline: none;
-}
+  outline: #fff; }
+
 
 .tabs {
   display: flex;
-  margin: 0;
-  width: 100%;
-  overflow: hidden;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-.tabs .tab {
-  flex-grow: 1;
-  text-align: center;
-  padding: 2rem 0;
+.tab {
+  background-color: #f1f1f1;
+  border: none;
+  color: #000;
+  padding: 15px 20px;
   cursor: pointer;
-  color: #efedef;
-  font-size: 1.1em;
-  font-weight: 300;
-  line-height: 1em;
-  border-bottom: 1px solid rgba(239, 237, 239, 0.5);
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
+  font-size: 16px;
+  margin-right: 10px;
 }
 
-.tabs .tab:last-child {
-  border-bottom: none;
+.tab:hover {
+  background-color: #ddd;
 }
 
-.tabs .tab.active {
-  border-bottom: 2px solid #fd264f;
-}
-
-.tabs .tab-content-wrapper {
+.content {
   display: none;
   padding: 20px;
-  height: calc(100vh - 200px);
-  overflow-y: scroll;
+  background-color: none;
 }
 
-.tabs .tab-content-wrapper iframe {
-  width: 100%;
-  height: 500px;
-  border: none;
+h2 {
+  margin-top: 0;
 }
 
-.tabs input[type="radio"] {
-  display: none;
+p {
+  margin-bottom: 0;
 }
 
-.tabs input[type="radio"]:checked + .tab {
-  border-bottom: 2px solid #fd264f;
-}
-
-.tabs input[type="radio"]:checked + .tab-content-wrapper {
-  display: block;
-}
-
-
-/* Add the following CSS rules to the existing code */
-
-.tabs .tab {
-  display: none;
-}
-
-.tabs .tab-3 [type="radio"]:checked + label {
-  color: #fd264f;
-}
-
-.tabs .tab-3 [type="radio"]:checked + label::after {
-  border-bottom: 2px solid #fd264f;
-}
-
-.tabs .tab-3 [type="radio"]:checked + label + div {
-  display: block;
-}

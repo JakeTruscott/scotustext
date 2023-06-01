@@ -1,15 +1,20 @@
-// Function to open the selected tab and load content
-function openPage(pageName) {
-  // Get all tab content elements
-  var tabContent = document.getElementsByClassName("tabcontent");
-  // Hide all tab content
-  for (var i = 0; i < tabContent.length; i++) {
-    tabContent[i].style.display = "none";
+function openTab(tabNumber) {
+  // Hide all content elements
+  var contentElements = document.getElementsByClassName('content');
+  for (var i = 0; i < contentElements.length; i++) {
+    contentElements[i].style.display = 'none';
   }
 
-  // Show the selected tab content
-  document.getElementById(pageName).style.display = "block";
-}
+  // Show the selected content element
+  var selectedContent = document.getElementById('content' + tabNumber);
+  if (selectedContent) {
+    selectedContent.style.display = 'block';
 
-// Set the initial tab
-openPage('home');
+    // Adjust iframe size to fill the entire page
+    var iframe = selectedContent.querySelector('iframe');
+    if (iframe) {
+      iframe.style.width = '100%';
+      iframe.style.height = '1000px'; // Adjust the height value as needed
+    }
+  }
+}
