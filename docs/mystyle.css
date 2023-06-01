@@ -7,11 +7,14 @@ body {
   letter-spacing: 0.01em;
   line-height: 1.6em;
   margin: 0;
-  padding: 100px; }
+  padding: 100px;
+}
+
 h1 {
   font-size: 40px;
   line-height: 0.8em;
-  color: rgba(255,255,255,0.2);}
+  color: rgba(255, 255, 255, 0.2);
+}
 
 .center {
   position: absolute;
@@ -23,62 +26,71 @@ h1 {
 }
 
 .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 .left-column {
-            text-align: center;
-        }
+  text-align: center;
+}
+
 .right-column {
-            text-align: center;
-            padding-left: 20px;
-        }
+  text-align: center;
+  padding-left: 20px;
+}
+
 .scotustext {
-            font-size: 60pt;
-            color: #cdcfd1;
+  font-size: 6vw; /* Changed font size to viewport width unit */
+  color: #cdcfd1;
   top: 0;
   z-index: 999;
-        }
+}
+
 .developer {
-            font-size: 20pt;
-                        color: #fff;
-        }
+  font-size: 20pt;
+  color: #fff;
+}
+
 .center-name {
-            font-size: 10pt;
-                        color: #fff;
-        }
+  font-size: 10pt;
+  color: #fff;
+}
+
 .beginning {
-            font-size: 10pt;
-                        color: #fff;
-        }
+  font-size: 10pt;
+  color: #fff;
+}
+
 .logo {
-            width: 250pt;
-            height: 250pt;
-            display: block;
-            margin: 0 auto;
-        }
+  width: 250pt;
+  height: 250pt;
+  display: block;
+  margin: 0 auto;
+}
+
 .single-line-break {
-      line-height: 1em;
-    }
+  line-height: 1em;
+}
 
 .documentation {
-    color: #fd264f;
+  color: #fd264f;
 }
+
 button:focus,
 input:focus,
 textarea:focus,
 select:focus {
-  outline: #fff; }
-
+  outline: #fff;
+}
 
 .tabs {
   display: flex;
   justify-content: center;
-  align-items: center; /* Added line */
+  align-items: center;
   margin-bottom: 20px;
-  width: 100%; /* Added line */
+  width: 100%;
 }
 
 .tab {
@@ -95,7 +107,6 @@ select:focus {
   background-color: #ddd;
 }
 
-
 .content {
   display: none;
   padding: 20px;
@@ -109,4 +120,3 @@ h2 {
 p {
   margin-bottom: 0;
 }
-
