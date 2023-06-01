@@ -1,7 +1,7 @@
 # README: scotustext
 
 <p align="center">
-  <img src="https://github.com/JakeTruscott/scotustext/blob/347e1c3c77ba9423c003db7fb21f009590f6dd53/Misc/scotustext_hex.png" width="350px">
+  <img src= https://github.com/JakeTruscott/scotustext/blob/f42bcc9a7e15686c454cfe38b4bdada560efaac0/Misc/scotustext_hex.png width="350px">
 </p>
 
 ## Description
