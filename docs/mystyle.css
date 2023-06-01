@@ -45,7 +45,8 @@ h1 {
                         color: #fff;
         }
 .logo {
-            width: 200pt;
+            width: 250pt;
+            height: 250pt;
             display: block;
             margin: 0 auto;
         }
