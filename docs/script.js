@@ -16,5 +16,11 @@ function openTab(tabNumber) {
       iframe.style.width = '100%';
       iframe.style.height = '1000px'; // Adjust the height value as needed
     }
+
+    // Hide the "Select Tool" h3 element
+    var selectTool = document.getElementById('selectTool');
+    if (selectTool) {
+      selectTool.style.display = 'none';
+    }
   }
 }
