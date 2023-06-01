@@ -5,7 +5,7 @@ author:
   affiliation: University of Georgia
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_document: 
     css: gray.css
 ---
 

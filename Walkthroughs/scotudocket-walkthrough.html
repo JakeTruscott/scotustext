@@ -10,9 +10,9 @@
 
 
 
-<meta name="date" content="2023-05-30" />
+<meta name="date" content="2023-06-01" />
 
-<title>scotustext (CRAN)</title>
+<title>docket_search (scotustext.R)</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -253,6 +253,7 @@ if (window.hljs) {
 
 
 
+<style type="text/css">body {background-color: #212121;color: #ffffff;}:not(pre) > code:not(.r), :not(pre) > code:not(.r) > span {background-color: transparent;color: inherit;}</style>
 
 
 
@@ -349,10 +350,10 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">scotustext (CRAN)</h1>
+<h1 class="title toc-ignore">docket_search (scotustext.R)</h1>
 <h4 class="author">Jake S. Truscott, Ph.D</h4>
 <address class="author_afil">
-University of Georgia<br><h4 class="date">2023-05-30</h4>
+University of Georgia<br><h4 class="date">2023-06-01</h4>
 
 </div>
 
@@ -376,17 +377,18 @@ character vectors. For more information on the Supreme Court docket,
 </div>
 <div id="function-description" class="section level2">
 <h2><strong>Function Description</strong></h2>
-<p>The <code>docket_search</code> function takes several arguments to
-customize search queries:</p>
+<p>The <code>docket_search</code> function accepts several optional
+parameters to customize search queries:</p>
 <ul>
 <li><code>docket_id</code>: The docket number of interest - written as a
 character vector in <strong>R</strong>. This can take the form of filed
 petitions (e.g., “19-1392”), applications (e.g., “22A948”), or motions
-(e.g., “22M11”).</li>
+(e.g., “22M11”). <code>docket_id</code> parameter is
+<strong>REQUIRED</strong> for all searches. <em>Note</em>: The function
+will also accept list objects containing comma-separated character
+vectors of docket numbers (e.g., docket_ids &lt;- c(“19-108”, “19-184”,
+“19-199”, “19-251”).</li>
 </ul>
-<p><em>Note</em>: The function will also accept list objects containing
-comma-separated character vectors of docket numbers (e.g., docket_ids
-&lt;- c(“19-108”, “19-184”, “19-199”, “19-251”).</p>
 <p><em>Further</em>: The function will accept petitions filed pursuant
 to the Court’s <strong>original</strong> jurisdiction, though it is
 recommended that docket numbers be written in the style similar to
