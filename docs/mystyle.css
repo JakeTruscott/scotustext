@@ -1,5 +1,5 @@
 body {
-  background: #191828;
+  background: #212121;
   color: #efedef;
   font-family: "Roboto", Arial, Helvetica, sans-serif;
   font-size: 16px;
@@ -7,175 +7,146 @@ body {
   letter-spacing: 0.01em;
   line-height: 1.6em;
   margin: 0;
-  padding: 100px; }
+  padding: 0;
+}
+
 h1 {
   font-size: 40px;
   line-height: 0.8em;
-  color: rgba(255,255,255,0.2);}
+  color: rgba(255, 255, 255, 0.2);
+}
 
 .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
 .left-column {
-            text-align: center;
-        }
+  text-align: center;
+}
+
 .right-column {
-            text-align: center;
-            padding-left: 20px;
-        }
+  text-align: center;
+  padding-left: 20px;
+}
+
 .scotustext {
-            font-size: 60pt;
-            color: #cdcfd1;
+  font-size: 60pt;
+  color: #cdcfd1;
   top: 0;
   z-index: 999;
-        }
+}
+
 .developer {
-            font-size: 20pt;
-                        color: #fff;
-        }
+  font-size: 20pt;
+  color: #fff;
+}
+
 .center-name {
-            font-size: 10pt;
-                        color: #fff;
-        }
+  font-size: 10pt;
+  color: #fff;
+}
+
 .beginning {
-            font-size: 10pt;
-                        color: #fff;
-        }
+  font-size: 10pt;
+  color: #fff;
+}
+
 .logo {
-            width: 200pt;
-            display: block;
-            margin: 0 auto;
-        }
+  width: 200pt;
+  display: block;
+  margin: 0 auto;
+}
+
 .single-line-break {
-      line-height: 1em;
-    }
+  line-height: 1em;
+}
 
 .documentation {
-    color: #fd264f;
+  color: #fd264f;
 }
+
 button:focus,
 input:focus,
 textarea:focus,
 select:focus {
-  outline: #fff; }
-
+  outline: none;
+}
 
 .tabs {
   display: flex;
   margin: 0;
-  overflow: hidden;
   width: 100%;
+  overflow: hidden;
 }
 
-.tabs [class^="tab"] label,
-.tabs [class*=" tab"] label {
-  color: #efedef;
+.tabs .tab {
+  flex-grow: 1;
+  text-align: center;
+  padding: 2rem 0;
   cursor: pointer;
-  display: block;
+  color: #efedef;
   font-size: 1.1em;
   font-weight: 300;
   line-height: 1em;
-  padding: 2rem 0;
-  text-align: center;
-}
-
-.tabs [class^="tab"] [type="radio"],
-.tabs [class*=" tab"] [type="radio"] {
   border-bottom: 1px solid rgba(239, 237, 239, 0.5);
-  cursor: pointer;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  display: block;
-  width: 100%;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
 
-.tabs [class^="tab"] [type="radio"]:hover,
-.tabs [class^="tab"] [type="radio"]:focus,
-.tabs [class*=" tab"] [type="radio"]:hover,
-.tabs [class*=" tab"] [type="radio"]:focus {
-  border-bottom: 1px solid #fd264f;
+.tabs .tab:last-child {
+  border-bottom: none;
 }
 
-.tabs [class^="tab"] [type="radio"]:checked,
-.tabs [class*=" tab"] [type="radio"]:checked {
+.tabs .tab.active {
   border-bottom: 2px solid #fd264f;
 }
 
-.tabs [class^="tab"] [type="radio"]:checked + div,
-.tabs [class*=" tab"] [type="radio"]:checked + div {
-  opacity: 1;
+.tabs .tab-content-wrapper {
+  display: none;
+  padding: 20px;
+  height: calc(100vh - 200px);
+  overflow-y: scroll;
 }
 
-.tabs [class^="tab"] [type="radio"] + div,
-.tabs [class*=" tab"] [type="radio"] + div {
-  display: block;
-  opacity: 0;
-  padding: 2rem 0;
-  width: 400%; /* Change width to 400% */
-  margin-left: calc((100% - 400%) / 2); /* Calculate the margin-left value */
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-}
-
-.tabs .tab-1 {
-    width: 100%; }
-.tabs .tab-1 [type="radio"] + div {
-      width: 400%;
-      margin-left: 200%; }
-.tabs .tab-1 [type="radio"]:checked + div {
-      margin-left: 0; }
-.tabs .tab-1:last-child [type="radio"] + div {
-      margin-left: 100%; }
-.tabs .tab-1:last-child [type="radio"]:checked + div {
-      margin-left: -100%; }
-
-.tabs .tab-2 {
-  width: 100%;}
-.tabs .tab-2 [type="radio"] + div {
-  width: 400%;
-  margin-left: 0;}
-.tabs .tab-2 [type="radio"]:checked + div {
-  margin-left: -100%;}
-.tabs .tab-2:last-child [type="radio"] + div {
-  margin-left: 100%;}
-.tabs .tab-2:last-child [type="radio"]:checked + div {
-  margin-left: -200%;}
-
-.tabs .tab-3 {
+.tabs .tab-content-wrapper iframe {
   width: 100%;
-    padding-bottom: 0;
+  height: 500px;
+  border: none;
+}
 
+.tabs input[type="radio"] {
+  display: none;
 }
-.tabs .tab-3 [type="radio"] + div {
-  width: 400%;
-  margin-left: 0;
-}
-.tabs .tab-3 [type="radio"]:checked + div {
-  margin-left: -200%;
-}
-.tabs .tab-3:last-child [type="radio"] + div {
-  margin-left: 100%;}
-.tabs .tab-3:last-child [type="radio"]:checked + div {
-  margin-left: -100%;}
 
-.tabs .tab-4 {
-  width: 100%;}
-.tabs .tab-4 [type="radio"] + div {
-  width: 400%;
-  margin-left: 0;}
-.tabs .tab-4 [type="radio"]:checked + div {
-  margin-left: -300%;}
-.tabs .tab-4:last-child [type="radio"] + div {
-  margin-left: 100%;}
-.tabs .tab-4:last-child [type="radio"]:checked + div {
-  margin-left: -300%;}
+.tabs input[type="radio"]:checked + .tab {
+  border-bottom: 2px solid #fd264f;
+}
+
+.tabs input[type="radio"]:checked + .tab-content-wrapper {
+  display: block;
+}
+
+
+/* Add the following CSS rules to the existing code */
+
+.tabs .tab {
+  display: none;
+}
+
+.tabs .tab-3 [type="radio"]:checked + label {
+  color: #fd264f;
+}
+
+.tabs .tab-3 [type="radio"]:checked + label::after {
+  border-bottom: 2px solid #fd264f;
+}
+
+.tabs .tab-3 [type="radio"]:checked + label + div {
+  display: block;
+}
