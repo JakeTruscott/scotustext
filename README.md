@@ -5,11 +5,11 @@
 </p>
 
 ## Description
-This is a package designed for use in **R** that contains automated tools to retrieve, parse, clean, and analyze documents from the United States Supreme Court - including: oral argument transcripts, motions, applications, orders, and decisions. Navigate [here](https://github.com/JakeTruscott/scotustext/tree/04c9e25f162fd3202155184ca12c764acf79eb99/Walkthroughs) to see walkhroughs and other relevent package documentation.
+This is a package designed for use in **R** that contains automated tools to retrieve, parse, clean, and analyze documents from the United States Supreme Court - including: oral argument transcripts, motions, applications, orders, and decisions. Navigate [here](https://jaketruscott.github.io/scotustext/) to see walkhroughs and other relevent package documentation.
 
 
 ## *Notice* 
-This package is currently in Beta testing (as of May 24, 2023). Please feel free to use the package as needed and send any concerns/recommendations to jake.truscott@uga.edu. 
+This package is currently in development (as of June 1, 2023). For early access (or if you would like to test the package materials), please contact: jake.truscott@uga.edu. 
 
 ## About Package Developer
   
