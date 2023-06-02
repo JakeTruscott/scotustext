@@ -8,7 +8,7 @@ process_docket_id <- function(docket_id) {
     mutate(type = ifelse(grepl("a", docket_id, ignore.case = T), 1, type)) %>%
     mutate(type = ifelse(grepl("o", docket_id, ignore.case = T), 4, type)) %>%
     mutate(year = as.numeric(gsub("\\-.*|a.*|A.*|m.*|M.*|Original.*|original.*|o.*|O.*|Orig.*|orig.*", "", docket_id))) %>%
-    mutate(year = ifelse(as.numeric(year) %in% 0:9, as.character(paste0("0", year)), as.character(year))) %>%
+    mutate(year = ifelse(as.numeric(year) %in% 0:9, as.character(paste0(sprintf("%02d", year))), as.character(year))) %>%
     mutate(docket_number = gsub(".*\\-|.*a|.*A|.*m|.*M|.*Original|.*original|.*o|.*O|.*Orig|.*orig", "", docket_id)) %>%
     mutate(year = gsub("[^0-9]", "", year),
            docket_number = gsub("[^0-9]", "", docket_number)) %>% #Delete Non-Numbers

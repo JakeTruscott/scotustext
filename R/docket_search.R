@@ -55,9 +55,9 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
       message(paste("Error Retrieving and Cleaning Docket Information from Docket ID:", docket_number))
       retry_urls <<- c(retry_urls, url)
       message("Saving URL Information and Trying Again Later")
-      message("Waiting 10 Seconds Before Moving On...")
-      Sys.sleep(10)
-      cat("Resuming Collection Effort\n")
+      #message("Waiting 10 Seconds Before Moving On...")
+      #Sys.sleep(10)
+      #cat("Resuming Collection Effort\n")
     })
   }
 
