@@ -16,7 +16,7 @@ decision_processor <- function(dir_path) {
   cat("\nSuccess!")
   cat("\n - - - - - - - Summary - - - - - - - ")
   cat("\nCompletion Time: ", round(as.numeric(elapsed_time), 2), "Seconds")
-  cat("\nNumber of Unique Opinions: ", length(unique(all_decisions$argument)))
+  cat("\nNumber of Unique Decisions: ", length(unique(all_decisions$argument)))
   cat("\nNumber of Majority Opinions: ", sum(all_decisions$opinion_type == "Majority Opinion"))
   cat("\nNumber of Dissents: ", sum(all_decisions$opinion_type == "Dissent"))
   cat("\nNumber of Concurrences: ", sum(all_decisions$opinion_type == "Concurrence"))
