@@ -6,7 +6,7 @@ author:
 date: "`r Sys.Date()`"
 output:
   html_document: 
-    css: "C:/Users/Jake Truscott/OneDrive - University of Georgia/Active/scotustext/docs/mystyle.css"
+    css: gray.css
 ---
 
 ```{=html}
@@ -338,7 +338,7 @@ It is rare to find non-scanned PDFs of oral arguments, even those on supremecour
 
 `oa_parser`is still capable of accurately locating these demarcations, but the ability to assess which justice is actually engaging with counsel is no longer possible.
 
-## **oa_search()** Walkthrough
+## `docket_search` **Walkthrough**
 
 `oa_search` accepts several optional parameters to customize and curtail search queries:
 
@@ -356,7 +356,7 @@ It is rare to find non-scanned PDFs of oral arguments, even those on supremecour
 
 **NOTE**: Search queries limited to October Terms 2004 to 2022 (as of May 2023). Queries will return all matches to provided parameters. Not providing any parameters will retrieve *all* transcript data from OT04 to OT22.
 
-### **oa_search()** Examples
+### `docket_search` **Examples**
 
 Below is a collection of example code highlighting the functionality of `oa_search` and how optional parameters can curtail queries.
 

@@ -1,3 +1,98 @@
+---
+title: "Decision Processor (scotustext.R)"
+author:
+- name: Jake S. Truscott, Ph.D
+  affiliation: University of Georgia
+date: "`r Sys.Date()`"
+output:
+  html_document: 
+    css: gray.css
+---
+
+
+```{=html}
+<style type="text/css">
+  body{
+  font-size: 12pt;
+}
+</style>
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#library(scotustext)
+library(tidyverse)
+library(tidytext)
+library(tm)
+library(plyr)
+library(textdata)
+library(dplyr)
+library(purrr)
+library(tidyr)
+library(ggplot2)
+library(data.table)
+library(ggrepel)
+library(lubridate)
+library(strex)
+library(utils)
+library(anytime)
+library(zoo)
+library(rvest)
+library(webshot)
+library(htmltools)
+library(pdftools)
+library(stringr)
+library(htm2txt)
+library(sjPlot)
+library(reactable)
+library(reactablefmtr)
+library(httr)
+library(devtools)
+
+decision_processor <- function(dir_path) {
+  files <- list.files(dir_path, full.names = TRUE)
+  num_files <- length(files)
+  cat("\nDecisions to Process: ", num_files)
+  all_decisions <- NULL
+
+  start_time <- Sys.time()
+  for (i in files) {
+    cleaned_decisions <- suppressWarnings(decisions_cleaner(file_path = i, dir_path = i))
+    all_decisions <- rbind(all_decisions, cleaned_decisions)
+  }
+
+  end_time <- Sys.time()
+  elapsed_time <- end_time - start_time
+
+  cat("\nSuccess!")
+  cat("\n - - - - - - - Summary - - - - - - - ")
+  cat("\nCompletion Time: ", round(as.numeric(elapsed_time), 2), "Seconds")
+  cat("\nNumber of Unique Opinions: ", length(unique(all_decisions$argument)))
+  cat("\nNumber of Majority Opinions: ", sum(all_decisions$opinion_type == "Majority Opinion"))
+  cat("\nNumber of Dissents: ", sum(all_decisions$opinion_type == "Dissent"))
+  cat("\nNumber of Concurrences: ", sum(all_decisions$opinion_type == "Concurrence"))
+  cat("\nNumber of Per Curiam: ", sum(all_decisions$opinion_type == "Per Curiam"))
+
+  return(all_decisions)
+}
+
+decision_processor_2 <- function(dir_path) {
+  files <- list.files(dir_path, full.names = TRUE)
+  num_files <- length(files)
+  all_decisions <- NULL
+
+  start_time <- Sys.time()
+  for (i in files) {
+    cleaned_decisions <- suppressWarnings(decisions_cleaner(file_path = i, dir_path = i))
+    all_decisions <- rbind(all_decisions, cleaned_decisions)
+  }
+
+  end_time <- Sys.time()
+  elapsed_time <- end_time - start_time
+
+  return(all_decisions)
+}
+
 decisions_cleaner <- function(file_path, dir_path) {
 
   {
@@ -129,3 +224,71 @@ decisions_cleaner <- function(file_path, dir_path) {
   } #Process & Clean Docket Frame
 
 } #Process Opinions
+
+
+```
+
+```{r, eval = F}
+#Load scotustext package
+install.packages("scotustext")
+library(scotustext)
+```
+
+## `decision_processor` **Overview** 
+
+`decision_processer`serves as an automated tool for cleaning and parsing information from opinions at the United States Supreme Court. Implementation of the `decision_processor()` tool only requires a single parameter, `dir_path`, which provides a file path to the folder on your local machine containing opinions saved as PDFs. 
+
+- `dir_path`: A character object denoting the relevant folder directory containing PDFs of Supreme Court decisions saved to your local machine    (e.g., `dir_path` = "C:/User/Name/Folder").
+
+**NOTE**: `decision_processor()` should work for any non-scanned decision PDF and is not restricted term-specific conditions (e.g., the presence of particular justices, decisions, etc...). However, this tool does **not** employ the use of Optical Character Recognition (OCR) software. As such, the tool can only process **non-scanned** PDF opinions. Further, this tool is **not** capable of parsing US Reports Volumes. Functionality for these volumes will become available in future iterations of the package, though it should be capable of parsing opinions so long as any non-Opinion materials are removed from the Report volumes (e.g., preface, docket order, etc...)
+
+## `decision_processor` **Variables** 
+
+```{r, echo = F}
+decisions_sample <- decision_processor_2(dir_path = "C:/Users/Jake Truscott/OneDrive - University of Georgia/Active/Justices Oral Argument Rhetoric/SCOTUS_Transcripts/decision_sample")
+suppressMessages(names(decisions_sample))
+```
+- `argument`: Case name (e.g., *Becerra v. Empire Health Foundation, For Valley Hospital Medical Center*). 
+- `docket_id`: Docket ID number assigned to the litigation by the Supreme Court (e.g., "19-1392").
+- `published`: Date stamp assigned to the most recent version of the PDFs publishing on [supremecourt.gov](https://www.supremecourt.gov/docket/docket.aspx). 
+- `text`: Opinion text (character string). 
+- `footnotes`: Footnotes found in opinion text (if any). 
+- `opinion_writer`: Denotes which justice authored the opinion of interest.    **NOTE**: Majority opinions denote a single justice as author, though concurrences and dissents will note any justices who joined the opinion (if any). However, the first justice listed is the primary author. 
+- `opinion_type`: Factor type of decision published (**Majority Opinion**, **Concurrence**, **Dissent**, or **Per Curiam**. )
+
+**NOTE**: `argument`, `docket_id`, and `published` are retrived using metadata stored within the individual PDFs. PDFs without accompanying metadata will return **NA** for these terms.  
+
+
+## `decision_processor` **Examples** 
+
+Below is an example of three decisions from the Court's 2021 and 2022 terms:  
+
+-   *Twitter, Inc. v. Taamneh* (21-1496)
+-   *Andy Warhol Foundation for Visual Arts, Inc. v. Goldsmith* (21-869)
+-   *Dobbs v. Jackson Women’s Health Organization* (19-1392)
+
+The processor will provide a completion report that includes summary statistics for the processed decisions: 
+
+```{r, warning = F, eval = F}
+#Replace <FOLDER DIRECTORY> with Relevant File Path
+decisions_sample <- decision_processor(dir_path = <FOLDER DIRECTORY>)
+```
+```{r, echo = FALSE, warning = F, message = F, eval = T}
+decisions_sample <- decision_processor(dir_path = "C:/Users/Jake Truscott/OneDrive - University of Georgia/Active/Justices Oral Argument Rhetoric/SCOTUS_Transcripts/decision_sample")
+```
+
+**Sample Text from Justice Kavanaugh's Concurrence in Dobbs v. Jackson Women's Health Clinic**
+```{r, warning = F, echo = F}
+filtered_data <- subset(decisions_sample, opinion_writer == "JUSTICE KAVANAUGH" & docket_id == "19-1392")
+text_data <- filtered_data$text
+words <- strsplit(text_data, "\\s+")
+words <- c(words)
+kavanaugh_words <- paste(words[[1]][1:200], collapse = " ")
+cat(paste0(kavanaugh_words, "..."))
+```
+
+**Footnotes from Justice Sotomayor's Majority Opinion in *Andy Warhol Foundation for Visual Arts, Inc. v. Goldsmith* **
+```{r, warning = F, echo = F}
+sotomayor_footnotes <- subset(decisions_sample, opinion_writer == "JUSTICE SOTOMAYOR" & docket_id == "21-869")
+cat(sotomayor_footnotes$footnotes)
+```

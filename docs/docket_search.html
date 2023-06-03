@@ -10,9 +10,9 @@
 
 
 
-<meta name="date" content="2023-05-30" />
+<meta name="date" content="2023-06-02" />
 
-<title>scotustext (CRAN)</title>
+<title>docket_search (scotustext.R)</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -251,11 +251,9 @@ if (window.hljs) {
 
 
 
+
+
 <style type="text/css">body {background-color: #212121;color: #ffffff;}:not(pre) > code:not(.r), :not(pre) > code:not(.r) > span {background-color: transparent;color: inherit;}</style>
-
-
-
-
 
 
 
@@ -352,21 +350,12 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Docket Search (scotustext.R)</h1>
+<h1 class="title toc-ignore">docket_search (scotustext.R)</h1>
 <h4 class="author">Jake S. Truscott, Ph.D</h4>
 <address class="author_afil">
-University of Georgia<br><h4>Updated June 2023</h4>
+University of Georgia<br><h4 class="date">2023-06-02</h4>
 
 </div>
-
-<style type="text/css">
-body{
-font-size: 12pt;
-}
-</style>
-<pre class="r"><code>#Load scotustext package
-install.packages(&quot;scotustext&quot;)
-library(scotustext)</code></pre>
 
 
 <style type="text/css">
@@ -388,17 +377,18 @@ character vectors. For more information on the Supreme Court docket,
 </div>
 <div id="function-description" class="section level2">
 <h2><strong>Function Description</strong></h2>
-<p>The <code>docket_search</code> function takes several arguments to
-customize search queries:</p>
+<p>The <code>docket_search</code> function accepts several optional
+parameters to customize search queries:</p>
 <ul>
 <li><code>docket_id</code>: The docket number of interest - written as a
 character vector in <strong>R</strong>. This can take the form of filed
 petitions (e.g., “19-1392”), applications (e.g., “22A948”), or motions
-(e.g., “22M11”).</li>
+(e.g., “22M11”). <code>docket_id</code> parameter is
+<strong>REQUIRED</strong> for all searches. <em>Note</em>: The function
+will also accept list objects containing comma-separated character
+vectors of docket numbers (e.g., docket_ids &lt;- c(“19-108”, “19-184”,
+“19-199”, “19-251”).</li>
 </ul>
-<p><em>Note</em>: The function will also accept list objects containing
-comma-separated character vectors of docket numbers (e.g., docket_ids
-&lt;- c(“19-108”, “19-184”, “19-199”, “19-251”).</p>
 <p><em>Further</em>: The function will accept petitions filed pursuant
 to the Court’s <strong>original</strong> jurisdiction, though it is
 recommended that docket numbers be written in the style similar to
@@ -434,22 +424,22 @@ print code to convert the output dataframe to a .html file using
 </div>
 <div id="docket_search-variables" class="section level2">
 <h2><code>docket_search</code> <strong>Variables</strong></h2>
-<pre><code>##  [1] &quot;docket_number&quot;             &quot;petition_type&quot;
-##  [3] &quot;petitioner&quot;                &quot;petitioner_counsel&quot;
-##  [5] &quot;all_petitioner_counsel&quot;    &quot;respondent&quot;
-##  [7] &quot;respondent_counsel&quot;        &quot;all_respondent_counsel&quot;
-##  [9] &quot;all_other_counsel&quot;         &quot;docketed&quot;
-## [11] &quot;submitted_to&quot;              &quot;referred_to_court&quot;
-## [13] &quot;application_type&quot;          &quot;linked_with&quot;
-## [15] &quot;lower_court&quot;               &quot;lower_court_case_number&quot;
-## [17] &quot;lower_court_decision_date&quot; &quot;amicus_indicator&quot;
-## [19] &quot;amicus_filers&quot;             &quot;amicus_count&quot;
-## [21] &quot;first_conference_date&quot;     &quot;conference_count&quot;
-## [23] &quot;multiple_conference_dates&quot; &quot;most_recent_order&quot;
-## [25] &quot;all_docket_entries&quot;        &quot;majority_opinion_writer&quot;
-## [27] &quot;opinion_type&quot;              &quot;number_of_opinions&quot;
-## [29] &quot;opinions_by_type&quot;          &quot;opinion_filings&quot;
-## [31] &quot;argument_date&quot;             &quot;special_filing&quot;
+<pre><code>##  [1] &quot;docket_number&quot;             &quot;petition_type&quot;            
+##  [3] &quot;petitioner&quot;                &quot;petitioner_counsel&quot;       
+##  [5] &quot;all_petitioner_counsel&quot;    &quot;respondent&quot;               
+##  [7] &quot;respondent_counsel&quot;        &quot;all_respondent_counsel&quot;   
+##  [9] &quot;all_other_counsel&quot;         &quot;docketed&quot;                 
+## [11] &quot;submitted_to&quot;              &quot;referred_to_court&quot;        
+## [13] &quot;application_type&quot;          &quot;linked_with&quot;              
+## [15] &quot;lower_court&quot;               &quot;lower_court_case_number&quot;  
+## [17] &quot;lower_court_decision_date&quot; &quot;amicus_indicator&quot;         
+## [19] &quot;amicus_filers&quot;             &quot;amicus_count&quot;             
+## [21] &quot;first_conference_date&quot;     &quot;conference_count&quot;         
+## [23] &quot;multiple_conference_dates&quot; &quot;most_recent_order&quot;        
+## [25] &quot;all_docket_entries&quot;        &quot;majority_opinion_writer&quot;  
+## [27] &quot;opinion_type&quot;              &quot;number_of_opinions&quot;       
+## [29] &quot;opinions_by_type&quot;          &quot;opinion_filings&quot;          
+## [31] &quot;argument_date&quot;             &quot;special_filing&quot;           
 ## [33] &quot;docket_url&quot;</code></pre>
 <ul>
 <li><code>docket_id</code>: The docket number corresponding with the
@@ -541,8 +531,8 @@ Execution</em></strong>) or is a petition filed under the Court’s
 docket of interest on supremecourt.gov.</li>
 </ul>
 </div>
-<div id="example-walkthrough" class="section level2">
-<h2><strong>Example Walkthrough</strong></h2>
+<div id="docket_search-example-walkthrough" class="section level2">
+<h2><code>docket_search</code> <strong>Example Walkthrough</strong></h2>
 <p>Here’s an example of how to use the <code>docket_search</code>
 function using <em>Dobbs v. Jackson Women’s Health Clinic</em> (2022),
 one of the largest docket sheets hosted by the Supreme Court:</p>
@@ -551,9 +541,9 @@ install.packages(&quot;scotustext&quot;)
 library(scotustext)</code></pre>
 <pre class="r"><code>#Call to Docket Using Docket Number for Dobbs v. Jackson (19-1392)
 dobbs_test &lt;- docket_search(docket_id = &quot;19-1392&quot;)</code></pre>
-<pre><code>##
-## Docket Sheets to Collect:  1
-##
+<pre><code>## 
+## Docket Sheets to Collect:  1 
+## 
 ## - - - - - - - - COMPLETION SUMMARY - - - - - - - -
 ## Total Docket Sheets Successfully Retrieved: 1
 ## Total Docket Sheets Failed to Retrieve: 0
@@ -585,160 +575,160 @@ below:</p>
 print_flattened_list(&lt;DOCKET OBJECT AND INDEX COLUMN&gt;)</code></pre>
 <pre class="r"><code>#List of Conferences Where Dobbs Was Considered
 print_flattened_list(dobbs_test$multiple_conference_dates)</code></pre>
-<pre><code>##  [1] &quot;9/29/2020&quot;  &quot;10/9/2020&quot;  &quot;10/16/2020&quot; &quot;10/30/2020&quot; &quot;11/6/2020&quot;
-##  [6] &quot;11/13/2020&quot; &quot;11/20/2020&quot; &quot;12/4/2020&quot;  &quot;12/11/2020&quot; &quot;1/8/2021&quot;
-## [11] &quot;1/15/2021&quot;  &quot;1/22/2021&quot;  &quot;2/19/2021&quot;  &quot;2/26/2021&quot;  &quot;3/5/2021&quot;
-## [16] &quot;3/19/2021&quot;  &quot;3/26/2021&quot;  &quot;4/1/2021&quot;   &quot;4/16/2021&quot;  &quot;4/23/2021&quot;
+<pre><code>##  [1] &quot;9/29/2020&quot;  &quot;10/9/2020&quot;  &quot;10/16/2020&quot; &quot;10/30/2020&quot; &quot;11/6/2020&quot; 
+##  [6] &quot;11/13/2020&quot; &quot;11/20/2020&quot; &quot;12/4/2020&quot;  &quot;12/11/2020&quot; &quot;1/8/2021&quot;  
+## [11] &quot;1/15/2021&quot;  &quot;1/22/2021&quot;  &quot;2/19/2021&quot;  &quot;2/26/2021&quot;  &quot;3/5/2021&quot;  
+## [16] &quot;3/19/2021&quot;  &quot;3/26/2021&quot;  &quot;4/1/2021&quot;   &quot;4/16/2021&quot;  &quot;4/23/2021&quot; 
 ## [21] &quot;4/30/2021&quot;  &quot;5/13/2021&quot;</code></pre>
 <pre class="r"><code>#List of Opinions Filed
 print_flattened_list(dobbs_test$opinion_filings)</code></pre>
 <pre><code>## [1] &quot;Alito delivered the opinion of the Court, in which Thomas, Gorsuch, Kavanaugh, and Barrett joined&quot;
-## [2] &quot;Thomas and Kavanaugh filed concurring opinions&quot;
-## [3] &quot;Roberts filed an opinion concurring in the judgment&quot;
+## [2] &quot;Thomas and Kavanaugh filed concurring opinions&quot;                                                   
+## [3] &quot;Roberts filed an opinion concurring in the judgment&quot;                                              
 ## [4] &quot;Breyer, Sotomayor, and Kagan filed a dissenting opinion.&quot;</code></pre>
 <pre class="r"><code>#List of Amicus Filers
 print_flattened_list(dobbs_test$amicus_filers)</code></pre>
-<pre><code>##   [1] &quot;Roman Catholic Diocese of Jackson and Roman Catholic Diocese of Biloxi&quot;
-##   [2] &quot;American Center for Law &amp; Justice&quot;
-##   [3] &quot;375 Women Injured By Second and Third Trimester Late Term Abortions and Melinda Thybault, Individually and Acting on Behalf of 336,214 Signers of The Moral Outcry Petition&quot;
-##   [4] &quot;The States of Texas, Alabama, Alaska, Arizona, Arkansas, Georgia, Idaho, Indiana, Kansas, Kentucky, Louisiana, Missouri, Nebraska, Ohio, Oklahoma, South Carolina, Tennessee and West Virginia&quot;
-##   [5] &quot;Illinois Right to Life&quot;
-##   [6] &quot;American Association of Pro-Life Obstetricians &amp; Gynecologists, et al.&quot;
-##   [7] &quot;Inner Life Fund and Institute for Faith and Family&quot;
-##   [8] &quot;Cleveland Lawyers for Life&quot;
-##   [9] &quot;David Boyle&quot;
-##  [10] &quot;Jewish Pro-life Foundation, The Coalition for Jewish Values, Rabbi Yacov David Cohen, Rabbi Chananya Weissman, and Bonnie Chernin (President, Jewish Life League)&quot;
-##  [11] &quot;Alabama Center for Law and Liberty&quot;
-##  [12] &quot;375 Women Injured By Second And Third Trimester Late Term Abortions and Abortion Recovery Leaders&quot;
-##  [13] &quot;National Right to Life Committee and Louisiana Right to Life Federation&quot;
-##  [14] &quot;Jewish Coalition For Religious Liberty&quot;
-##  [15] &quot;Catholic Medical Association, National Association of Catholic Nurses-USA, Idaho Chooses Life and Texas Alliance for Life&quot;
-##  [16] &quot;African American, Hispanic, Roman Catholic and Protestant Religious and Civil Rights Organizations and Leaders&quot;
-##  [17] &quot;Senators Josh Hawley, Mike Lee, and Ted Cruz&quot;
-##  [18] &quot;Trinity Legal Center&quot;
-##  [19] &quot;Thomas More Society&quot;
-##  [20] &quot;Melinda Thybault, Founder of The Moral Outcry Petition, et al.&quot;
-##  [21] &quot;The Becket Fund for Religious Liberty&quot;
-##  [22] &quot;U.S. Conference of Catholic Bishops and Other Religious Organizations&quot;
-##  [23] &quot;LONANG Institute&quot;
-##  [24] &quot;Claremont Institute&#39;s Center for Constitutional Jurisprudence&quot;
-##  [25] &quot;22 State Policy Organizations&quot;
-##  [26] &quot;Connie Weiskopf and Kristine L. Brown&quot;
-##  [27] &quot;Professor Kurt T. Lash&quot;
-##  [28] &quot;Robin Pierucci, M.D., and Life Legal Defense Foundation&quot;
-##  [29] &quot;Priests for Life&quot;
-##  [30] &quot;Amicus Curiae Hannah S., John S. and Marlene S&quot;
-##  [31] &quot;The Center for Medical Progress and David Daleiden&quot;
-##  [32] &quot;European Legal Scholars in support of neither party&quot;
-##  [33] &quot;396 State Legislators from 41 States&quot;
-##  [34] &quot;141 International Legal Scholars&quot;
-##  [35] &quot;Prolife Center at the University of St. Thomas&quot;
-##  [36] &quot;Mary Kay Bacallao Advocating for Unborn Children as Persons in support of neither party&quot;
-##  [37] &quot;Professor Randy Beck&quot;
-##  [38] &quot;Christian Legal Society and Robertson Center for Constitutional Law&quot;
-##  [39] &quot;Center for Religious Expression&quot;
-##  [40] &quot;Center for Family and Human Rights&quot;
-##  [41] &quot;Concerned Women for America&quot;
-##  [42] &quot;Foundation for Moral Law, Lutherans for Life&quot;
-##  [43] &quot;Americans United for Life&quot;
-##  [44] &quot;Ethics and Public Policy Center&quot;
-##  [45] &quot;Pennsylvania Pro-Life Federation&quot;
-##  [46] &quot;Family Research Council&quot;
-##  [47] &quot;Human Coalition Action and Students for Life of America&quot;
-##  [48] &quot;Lee J. Strang&quot;
-##  [49] &quot;Biologists in support of neither party&quot;
-##  [50] &quot;Professors Mary Ann Glendon and O. Carter Snead&quot;
-##  [51] &quot;Monique Chireau Wubbenhorst, M.D., M.P.H., et al.&quot;
-##  [52] &quot;Commissioner Andy Gipson, Former Representative and Chair of Mississippi House Judiciary B Committee&quot;
-##  [53] &quot;Care Net, a National Affiliation Organization of 1,200 Pregnancy Help Centers, and Alpha Center, a South Dakota Registered Pregnancy Help Center&quot;
-##  [54] &quot;Reason for Life&quot;
-##  [55] &quot;Illinois Right to Life, et al.&quot;
-##  [56] &quot;Jonathan English&quot;
-##  [57] &quot;Intercessors for America including its Intercessor Prayer Partners&quot;
-##  [58] &quot;228 Members of Congress&quot;
-##  [59] &quot;Governor Henry McMaster and Eleven Additional Governors&quot;
-##  [60] &quot;The European Centre for Law and Justice&quot;
-##  [61] &quot;National Catholic Bioethics Center, et al.&quot;
-##  [62] &quot;Professor Stephen G. Gilles&quot;
-##  [63] &quot;Scholars of Jurisprudence John M. Finnis and Robert P. George&quot;
-##  [64] &quot;States of Texas, et al.&quot;
-##  [65] &quot;The American Cornerstone Institute and its founder Dr. Benjamin S. Carson&quot;
-##  [66] &quot;Advancing American Freedom, Inc., et al.&quot;
-##  [67] &quot;Democrats for Life of America Five Democratic Legislators from Five Individual State Legislatures&quot;
-##  [68] &quot;American Association of Pro-Life Obstetricians and Gynecologists&quot;
-##  [69] &quot;Women Legislators, The Susan B. Anthony List&quot;
-##  [70] &quot;Christian Medical &amp; Dental Associations&quot;
-##  [71] &quot;Conservative Legal Defense and Education Fund&quot;
-##  [72] &quot;Judicial Watch, Inc.&quot;
-##  [73] &quot;Maureen L. Condic, Ph.D. and the Charlotte Lozier Institute&quot;
-##  [74] &quot;American College of Pediatricians and Association of American Physicians &amp; Surgeons&quot;
-##  [75] &quot;CatholicVote.org Education Fund&quot;
-##  [76] &quot;Heartbeat International, Inc.&quot;
-##  [77] &quot;Rep. Steve Carra and 320 State Legislators from 35 States&quot;
-##  [78] &quot;Foundation to Abolish Abortion, et al.&quot;
-##  [79] &quot;World Faith Foundation and Institute for Faith and Family&quot;
-##  [80] &quot;March for Life Education and Defense Fund&quot;
-##  [81] &quot;Elliot Institute&quot;
-##  [82] &quot;Texas Right to Life&quot;
-##  [83] &quot;American Center for Law and Justice and Bioethics Defense Fund&quot;
-##  [84] &quot;Billy Graham Evangelistic Association, et al.&quot;
-##  [85] &quot;Pacific Justice Institute&quot;
-##  [86] &quot;Joseph W. Dellapenna&quot;
-##  [87] &quot;240 Women Scholars and Professionals, and Prolife Feminist Organizations&quot;
-##  [88] &quot;Good Counsel, Inc.&quot;
-##  [89] &quot;Anthony Hawks&quot;
-##  [90] &quot;Experts, Researchers, and Advocates Opposing the Criminalization of People Who Have Abortions&quot;
-##  [91] &quot;Advocates for Youth, Inc. and Neo Philanthropy, Inc. d/b/a We Testify&quot;
-##  [92] &quot;The Freedom From Religion Foundation, Center for Inquiry, and American Atheists&quot;
-##  [93] &quot;Cecilia Fire Thunder&quot;
-##  [94] &quot;et al.&quot;
-##  [95] &quot;Lawyers&#39; Committee for Civil Rights Under Law, et al.&quot;
-##  [96] &quot;National Advocates for Pregnant Women, et al.&quot;
-##  [97] &quot;Americans United for Separation of Church and State, American Humanist Association, Bend the Arc: A Jewish Partnership for Justice, and Interfaith Alliance Foundation&quot;
-##  [98] &quot;American College of Obstetricians and Gynecologists, American Medical Association, et al.&quot;
-##  [99] &quot;Scholars of Court Procedure&quot;
-## [100] &quot;Yale Law School Information Society Project&quot;
-## [101] &quot;National Asian Pacific American Womens Forum, Asian Americans Advancing Justice | AAJC, and Organizations Representing the Interests of Asian American and Pacific Islander Women&quot;
-## [102] &quot;Reproductive Justice Scholars&quot;
-## [103] &quot;Local Governments&quot;
-## [104] &quot;Catholics for Choice, et al.&quot;
-## [105] &quot;Campaa Nacional por el Aborto Libre, Seguro y Accesible and other Puerto Rican Organizations&quot;
-## [106] &quot;The Autistic Self Advocacy Network and The Disability Rights Education and Defense Fund&quot;
-## [107] &quot;Birth Equity Organizations and Scholars&quot;
-## [108] &quot;The American Civil Liberties Union and The American Civil Liberties Union of Mississippi&quot;
-## [109] &quot;Organizations of Women Lawyers-Women Lawyers on Guard Inc., Womens Bar Association of the District of Columbia and National Association of Women Lawyers et al.&quot;
-## [110] &quot;Social Science Experts&quot;
-## [111] &quot;Economists&quot;
-## [112] &quot;United States&quot;
-## [113] &quot;Constitutional Law Scholars Lee C. Bollinger, et al.&quot;
+<pre><code>##   [1] &quot;Roman Catholic Diocese of Jackson and Roman Catholic Diocese of Biloxi&quot;                                                                                                                                             
+##   [2] &quot;American Center for Law &amp; Justice&quot;                                                                                                                                                                                  
+##   [3] &quot;375 Women Injured By Second and Third Trimester Late Term Abortions and Melinda Thybault, Individually and Acting on Behalf of 336,214 Signers of The Moral Outcry Petition&quot;                                        
+##   [4] &quot;The States of Texas, Alabama, Alaska, Arizona, Arkansas, Georgia, Idaho, Indiana, Kansas, Kentucky, Louisiana, Missouri, Nebraska, Ohio, Oklahoma, South Carolina, Tennessee and West Virginia&quot;                     
+##   [5] &quot;Illinois Right to Life&quot;                                                                                                                                                                                             
+##   [6] &quot;American Association of Pro-Life Obstetricians &amp; Gynecologists, et al.&quot;                                                                                                                                             
+##   [7] &quot;Inner Life Fund and Institute for Faith and Family&quot;                                                                                                                                                                 
+##   [8] &quot;Cleveland Lawyers for Life&quot;                                                                                                                                                                                         
+##   [9] &quot;David Boyle&quot;                                                                                                                                                                                                        
+##  [10] &quot;Jewish Pro-life Foundation, The Coalition for Jewish Values, Rabbi Yacov David Cohen, Rabbi Chananya Weissman, and Bonnie Chernin (President, Jewish Life League)&quot;                                                  
+##  [11] &quot;Alabama Center for Law and Liberty&quot;                                                                                                                                                                                 
+##  [12] &quot;375 Women Injured By Second And Third Trimester Late Term Abortions and Abortion Recovery Leaders&quot;                                                                                                                  
+##  [13] &quot;National Right to Life Committee and Louisiana Right to Life Federation&quot;                                                                                                                                            
+##  [14] &quot;Jewish Coalition For Religious Liberty&quot;                                                                                                                                                                             
+##  [15] &quot;Catholic Medical Association, National Association of Catholic Nurses-USA, Idaho Chooses Life and Texas Alliance for Life&quot;                                                                                          
+##  [16] &quot;African American, Hispanic, Roman Catholic and Protestant Religious and Civil Rights Organizations and Leaders&quot;                                                                                                     
+##  [17] &quot;Senators Josh Hawley, Mike Lee, and Ted Cruz&quot;                                                                                                                                                                       
+##  [18] &quot;Trinity Legal Center&quot;                                                                                                                                                                                               
+##  [19] &quot;Thomas More Society&quot;                                                                                                                                                                                                
+##  [20] &quot;Melinda Thybault, Founder of The Moral Outcry Petition, et al.&quot;                                                                                                                                                     
+##  [21] &quot;The Becket Fund for Religious Liberty&quot;                                                                                                                                                                              
+##  [22] &quot;U.S. Conference of Catholic Bishops and Other Religious Organizations&quot;                                                                                                                                              
+##  [23] &quot;LONANG Institute&quot;                                                                                                                                                                                                   
+##  [24] &quot;Claremont Institute&#39;s Center for Constitutional Jurisprudence&quot;                                                                                                                                                      
+##  [25] &quot;22 State Policy Organizations&quot;                                                                                                                                                                                      
+##  [26] &quot;Connie Weiskopf and Kristine L. Brown&quot;                                                                                                                                                                              
+##  [27] &quot;Professor Kurt T. Lash&quot;                                                                                                                                                                                             
+##  [28] &quot;Robin Pierucci, M.D., and Life Legal Defense Foundation&quot;                                                                                                                                                            
+##  [29] &quot;Priests for Life&quot;                                                                                                                                                                                                   
+##  [30] &quot;Amicus Curiae Hannah S., John S. and Marlene S&quot;                                                                                                                                                                     
+##  [31] &quot;The Center for Medical Progress and David Daleiden&quot;                                                                                                                                                                 
+##  [32] &quot;European Legal Scholars in support of neither party&quot;                                                                                                                                                                
+##  [33] &quot;396 State Legislators from 41 States&quot;                                                                                                                                                                               
+##  [34] &quot;141 International Legal Scholars&quot;                                                                                                                                                                                   
+##  [35] &quot;Prolife Center at the University of St. Thomas&quot;                                                                                                                                                                     
+##  [36] &quot;Mary Kay Bacallao Advocating for Unborn Children as Persons in support of neither party&quot;                                                                                                                            
+##  [37] &quot;Professor Randy Beck&quot;                                                                                                                                                                                               
+##  [38] &quot;Christian Legal Society and Robertson Center for Constitutional Law&quot;                                                                                                                                                
+##  [39] &quot;Center for Religious Expression&quot;                                                                                                                                                                                    
+##  [40] &quot;Center for Family and Human Rights&quot;                                                                                                                                                                                 
+##  [41] &quot;Concerned Women for America&quot;                                                                                                                                                                                        
+##  [42] &quot;Foundation for Moral Law, Lutherans for Life&quot;                                                                                                                                                                       
+##  [43] &quot;Americans United for Life&quot;                                                                                                                                                                                          
+##  [44] &quot;Ethics and Public Policy Center&quot;                                                                                                                                                                                    
+##  [45] &quot;Pennsylvania Pro-Life Federation&quot;                                                                                                                                                                                   
+##  [46] &quot;Family Research Council&quot;                                                                                                                                                                                            
+##  [47] &quot;Human Coalition Action and Students for Life of America&quot;                                                                                                                                                            
+##  [48] &quot;Lee J. Strang&quot;                                                                                                                                                                                                      
+##  [49] &quot;Biologists in support of neither party&quot;                                                                                                                                                                             
+##  [50] &quot;Professors Mary Ann Glendon and O. Carter Snead&quot;                                                                                                                                                                    
+##  [51] &quot;Monique Chireau Wubbenhorst, M.D., M.P.H., et al.&quot;                                                                                                                                                                  
+##  [52] &quot;Commissioner Andy Gipson, Former Representative and Chair of Mississippi House Judiciary B Committee&quot;                                                                                                               
+##  [53] &quot;Care Net, a National Affiliation Organization of 1,200 Pregnancy Help Centers, and Alpha Center, a South Dakota Registered Pregnancy Help Center&quot;                                                                   
+##  [54] &quot;Reason for Life&quot;                                                                                                                                                                                                    
+##  [55] &quot;Illinois Right to Life, et al.&quot;                                                                                                                                                                                     
+##  [56] &quot;Jonathan English&quot;                                                                                                                                                                                                   
+##  [57] &quot;Intercessors for America including its Intercessor Prayer Partners&quot;                                                                                                                                                 
+##  [58] &quot;228 Members of Congress&quot;                                                                                                                                                                                            
+##  [59] &quot;Governor Henry McMaster and Eleven Additional Governors&quot;                                                                                                                                                            
+##  [60] &quot;The European Centre for Law and Justice&quot;                                                                                                                                                                            
+##  [61] &quot;National Catholic Bioethics Center, et al.&quot;                                                                                                                                                                         
+##  [62] &quot;Professor Stephen G. Gilles&quot;                                                                                                                                                                                        
+##  [63] &quot;Scholars of Jurisprudence John M. Finnis and Robert P. George&quot;                                                                                                                                                      
+##  [64] &quot;States of Texas, et al.&quot;                                                                                                                                                                                            
+##  [65] &quot;The American Cornerstone Institute and its founder Dr. Benjamin S. Carson&quot;                                                                                                                                          
+##  [66] &quot;Advancing American Freedom, Inc., et al.&quot;                                                                                                                                                                           
+##  [67] &quot;Democrats for Life of America Five Democratic Legislators from Five Individual State Legislatures&quot;                                                                                                                  
+##  [68] &quot;American Association of Pro-Life Obstetricians and Gynecologists&quot;                                                                                                                                                   
+##  [69] &quot;Women Legislators, The Susan B. Anthony List&quot;                                                                                                                                                                       
+##  [70] &quot;Christian Medical &amp; Dental Associations&quot;                                                                                                                                                                            
+##  [71] &quot;Conservative Legal Defense and Education Fund&quot;                                                                                                                                                                      
+##  [72] &quot;Judicial Watch, Inc.&quot;                                                                                                                                                                                               
+##  [73] &quot;Maureen L. Condic, Ph.D. and the Charlotte Lozier Institute&quot;                                                                                                                                                        
+##  [74] &quot;American College of Pediatricians and Association of American Physicians &amp; Surgeons&quot;                                                                                                                                
+##  [75] &quot;CatholicVote.org Education Fund&quot;                                                                                                                                                                                    
+##  [76] &quot;Heartbeat International, Inc.&quot;                                                                                                                                                                                      
+##  [77] &quot;Rep. Steve Carra and 320 State Legislators from 35 States&quot;                                                                                                                                                          
+##  [78] &quot;Foundation to Abolish Abortion, et al.&quot;                                                                                                                                                                             
+##  [79] &quot;World Faith Foundation and Institute for Faith and Family&quot;                                                                                                                                                          
+##  [80] &quot;March for Life Education and Defense Fund&quot;                                                                                                                                                                          
+##  [81] &quot;Elliot Institute&quot;                                                                                                                                                                                                   
+##  [82] &quot;Texas Right to Life&quot;                                                                                                                                                                                                
+##  [83] &quot;American Center for Law and Justice and Bioethics Defense Fund&quot;                                                                                                                                                     
+##  [84] &quot;Billy Graham Evangelistic Association, et al.&quot;                                                                                                                                                                      
+##  [85] &quot;Pacific Justice Institute&quot;                                                                                                                                                                                          
+##  [86] &quot;Joseph W. Dellapenna&quot;                                                                                                                                                                                               
+##  [87] &quot;240 Women Scholars and Professionals, and Prolife Feminist Organizations&quot;                                                                                                                                           
+##  [88] &quot;Good Counsel, Inc.&quot;                                                                                                                                                                                                 
+##  [89] &quot;Anthony Hawks&quot;                                                                                                                                                                                                      
+##  [90] &quot;Experts, Researchers, and Advocates Opposing the Criminalization of People Who Have Abortions&quot;                                                                                                                      
+##  [91] &quot;Advocates for Youth, Inc. and Neo Philanthropy, Inc. d/b/a We Testify&quot;                                                                                                                                              
+##  [92] &quot;The Freedom From Religion Foundation, Center for Inquiry, and American Atheists&quot;                                                                                                                                    
+##  [93] &quot;Cecilia Fire Thunder&quot;                                                                                                                                                                                               
+##  [94] &quot;et al.&quot;                                                                                                                                                                                                             
+##  [95] &quot;Lawyers&#39; Committee for Civil Rights Under Law, et al.&quot;                                                                                                                                                              
+##  [96] &quot;National Advocates for Pregnant Women, et al.&quot;                                                                                                                                                                      
+##  [97] &quot;Americans United for Separation of Church and State, American Humanist Association, Bend the Arc: A Jewish Partnership for Justice, and Interfaith Alliance Foundation&quot;                                             
+##  [98] &quot;American College of Obstetricians and Gynecologists, American Medical Association, et al.&quot;                                                                                                                          
+##  [99] &quot;Scholars of Court Procedure&quot;                                                                                                                                                                                        
+## [100] &quot;Yale Law School Information Society Project&quot;                                                                                                                                                                        
+## [101] &quot;National Asian Pacific American Womens Forum, Asian Americans Advancing Justice | AAJC, and Organizations Representing the Interests of Asian American and Pacific Islander Women&quot;                                  
+## [102] &quot;Reproductive Justice Scholars&quot;                                                                                                                                                                                      
+## [103] &quot;Local Governments&quot;                                                                                                                                                                                                  
+## [104] &quot;Catholics for Choice, et al.&quot;                                                                                                                                                                                       
+## [105] &quot;Campaa Nacional por el Aborto Libre, Seguro y Accesible and other Puerto Rican Organizations&quot;                                                                                                                       
+## [106] &quot;The Autistic Self Advocacy Network and The Disability Rights Education and Defense Fund&quot;                                                                                                                            
+## [107] &quot;Birth Equity Organizations and Scholars&quot;                                                                                                                                                                            
+## [108] &quot;The American Civil Liberties Union and The American Civil Liberties Union of Mississippi&quot;                                                                                                                           
+## [109] &quot;Organizations of Women Lawyers-Women Lawyers on Guard Inc., Womens Bar Association of the District of Columbia and National Association of Women Lawyers et al.&quot;                                                    
+## [110] &quot;Social Science Experts&quot;                                                                                                                                                                                             
+## [111] &quot;Economists&quot;                                                                                                                                                                                                         
+## [112] &quot;United States&quot;                                                                                                                                                                                                      
+## [113] &quot;Constitutional Law Scholars Lee C. Bollinger, et al.&quot;                                                                                                                                                               
 ## [114] &quot;Abortion Care Network, Bixby Center for Global Reproductive Health, Medical Students for Choice, National Abortion Federation, Physicians for Reproductive Health and Planned Parenthood Federation of America Inc.&quot;
-## [115] &quot;American Historical Association and Organization of American Historians&quot;
-## [116] &quot;LGBTQ Organizations&quot;
-## [117] &quot;LGBTQ Organizations&quot;
-## [118] &quot;International and Comparative Legal Scholars&quot;
-## [119] &quot;Equal Protection Constitutional Law Scholars Serena Mayeri, Melissa Murray, and Reva Siegel&quot;
-## [120] &quot;Organizations Dedicated to the Fight for Reproductive Justice Mississippi in Action, et al.&quot;
-## [121] &quot;European Law Professors&quot;
-## [122] &quot;Howard University School of Law Human and Civil Rights Clinic&quot;
-## [123] &quot;States of California, et al.&quot;
-## [124] &quot;International Federation of Gynecology and Obstetrics&quot;
-## [125] &quot;YWCA USA, Girls Inc., Supermajority Education Fund, and United State of Women&quot;
-## [126] &quot;Constitutional Accountability Center&quot;
-## [127] &quot;United Nations Mandate Holders&quot;
-## [128] &quot;Human Rights Watch, Global Justice Center, and Amnesty International&quot;
-## [129] &quot;California Women&#39;s Law Center&quot;
-## [130] &quot;Scott Pyles&quot;
-## [131] &quot;American Bar Association&quot;
-## [132] &quot;Current and Former Prosecutors and Law Enforcement Leaders, et al.&quot;
-## [133] &quot;Over 500 Women Athletes, The Womens National Basketball Players Association, et al.&quot;
-## [134] &quot;Legal Voice, Asian Pacific Institute On Gender-based Violence, et at.&quot;
-## [135] &quot;National Women&#39;s Law Center, et al.&quot;
-## [136] &quot;Feminist Majority Foundation, Abortion Access Front, C.A. Goldberg, PLLC, The National Organization For Women Foundation, The Southern Poverty Law Center, We Engage, Professor David S. Cohen, and Krysten Connon&quot;
-## [137] &quot;236 Members of Congress&quot;
-## [138] &quot;Society for Maternal-Fetal Medicine, et al.&quot;
-## [139] &quot;547 Deans, Chairs, Scholars, et al.&quot;
-## [140] &quot;896 State Legislators&quot;
-## [141] &quot;American Society for Legal History and Other Scholars&quot;
+## [115] &quot;American Historical Association and Organization of American Historians&quot;                                                                                                                                            
+## [116] &quot;LGBTQ Organizations&quot;                                                                                                                                                                                                
+## [117] &quot;LGBTQ Organizations&quot;                                                                                                                                                                                                
+## [118] &quot;International and Comparative Legal Scholars&quot;                                                                                                                                                                       
+## [119] &quot;Equal Protection Constitutional Law Scholars Serena Mayeri, Melissa Murray, and Reva Siegel&quot;                                                                                                                        
+## [120] &quot;Organizations Dedicated to the Fight for Reproductive Justice Mississippi in Action, et al.&quot;                                                                                                                        
+## [121] &quot;European Law Professors&quot;                                                                                                                                                                                            
+## [122] &quot;Howard University School of Law Human and Civil Rights Clinic&quot;                                                                                                                                                      
+## [123] &quot;States of California, et al.&quot;                                                                                                                                                                                       
+## [124] &quot;International Federation of Gynecology and Obstetrics&quot;                                                                                                                                                              
+## [125] &quot;YWCA USA, Girls Inc., Supermajority Education Fund, and United State of Women&quot;                                                                                                                                      
+## [126] &quot;Constitutional Accountability Center&quot;                                                                                                                                                                               
+## [127] &quot;United Nations Mandate Holders&quot;                                                                                                                                                                                     
+## [128] &quot;Human Rights Watch, Global Justice Center, and Amnesty International&quot;                                                                                                                                               
+## [129] &quot;California Women&#39;s Law Center&quot;                                                                                                                                                                                      
+## [130] &quot;Scott Pyles&quot;                                                                                                                                                                                                        
+## [131] &quot;American Bar Association&quot;                                                                                                                                                                                           
+## [132] &quot;Current and Former Prosecutors and Law Enforcement Leaders, et al.&quot;                                                                                                                                                 
+## [133] &quot;Over 500 Women Athletes, The Womens National Basketball Players Association, et al.&quot;                                                                                                                                
+## [134] &quot;Legal Voice, Asian Pacific Institute On Gender-based Violence, et at.&quot;                                                                                                                                              
+## [135] &quot;National Women&#39;s Law Center, et al.&quot;                                                                                                                                                                                
+## [136] &quot;Feminist Majority Foundation, Abortion Access Front, C.A. Goldberg, PLLC, The National Organization For Women Foundation, The Southern Poverty Law Center, We Engage, Professor David S. Cohen, and Krysten Connon&quot; 
+## [137] &quot;236 Members of Congress&quot;                                                                                                                                                                                            
+## [138] &quot;Society for Maternal-Fetal Medicine, et al.&quot;                                                                                                                                                                        
+## [139] &quot;547 Deans, Chairs, Scholars, et al.&quot;                                                                                                                                                                                
+## [140] &quot;896 State Legislators&quot;                                                                                                                                                                                              
+## [141] &quot;American Society for Legal History and Other Scholars&quot;                                                                                                                                                              
 ## [142] &quot;Abortion Funds and Practical Support Organizations&quot;</code></pre>
 <pre class="r"><code>#List Counsel (Petitioner)
 print_flattened_list(dobbs_test$all_petitioner_counsel)</code></pre>
@@ -749,153 +739,153 @@ print_flattened_list(dobbs_test$all_respondent_counsel)</code></pre>
 ## [2] &quot;Attorney: Julie Rikelman Center for Reproductive Rights 199 Water Street 22nd Floor New York, NY 10038 jrikelman@reprorights.org 917-637-3670 \nParty name: Jackson Women&#39;s Health Organization, et al.&quot;</code></pre>
 <pre class="r"><code>#List Counsel (Other)
 print_flattened_list(dobbs_test$all_other_counsel)</code></pre>
-<pre><code>##   [1] &quot;Attorney: Elizabeth B. Prelogar \nOrganization: Solicitor General United States Department of Justice 950 Pennsylvania Avenue, NW Washington, DC 20530-0001 SupremeCtBriefs@USDOJ.gov 202-514-2217 \nParty name: United States &quot;
-##   [2] &quot;Attorney: Steven Henry Aden \nOrganization: Americans United for Life 1150 Connecticut Ave. NW Suite 500 Washington, DC 20036 Steven.Aden@aul.org 2526732282 \nParty name: 228 Members of Congress &quot;
-##   [3] &quot;Attorney: Brigitte Adrienne Amiri \nOrganization: American Civil Liberties Union Foundation 125 Broad Street 18th Floor New York, NY 10004-2427 bamiri@aclu.org 2125197897 \nParty name: The American Civil Liberties Union and The American Civil Liberties Union of Mississippi &quot;
-##   [4] &quot;Attorney: Jessica Ring Amunson \nOrganization: Jenner &amp; Block LLP 1099 New York Avenue NW Suite 900 Washington, DC 20001 JAmunson@jenner.com 202-639-6023 \nParty name: Organizations Dedicated to the Fight for Reproductive Justice Mississippi in Action, et al. &quot;
-##   [5] &quot;Attorney: David A. Barrett \nOrganization: Boies Schiller Flexner LLP 55 Hudson Yards New York, NY 10001 dbarrett@bsfllp.com 212-446-2300 \nParty name: Over 500 Women Athletes, The Womens National Basketball Players Association, et al. &quot;
-##   [6] &quot;Attorney: H. Christopher Bartolomucci \nOrganization: Schaerr | Jaffe LLP 1717 K Street NW Suite 900 Washington, DC 20006 cbartolomucci@schaerr-jaffe.com 202-787-1060 \nParty name: Women Legislators and The Susan B. Anthony List &quot;
-##   [7] &quot;Attorney: James Bopp Jr. \nOrganization: The Bopp Law Firm, PC The National Building 1 South Sixth Street Terre Haute, IN 47807 jboppjr@aol.com 8122322434 \nParty name: National Right to Life Committee and Louisiana Right to Life Federation &quot;
-##   [8] &quot;Attorney: David Christopher Boyle \nOrganization: PO Box 15143 Long Beach, CA 90815 dbo@boyleslaw.org (734)-904-6132 \nParty name: David Boyle &quot;
-##   [9] &quot;Attorney: Kristine Lee Brown \nOrganization: Attorney At Law 8700 E Jefferson Ave #371703 Denver, CO 80237 kristi@kristiburtonbrown.com 302-515-2721 \nParty name: Connie Weiskopf and Kristine L. Brown &quot;
-##  [10] &quot;Attorney: Mary Jane Browning \nOrganization: MaryBrowning, LLC 214 Cherry Street Jefferson, MO 65101 mary@maryjbrowninglaw.com 5732306945 \nParty name: Amicus Curiae Hannah S., John S. and Marlene S &quot;
-##  [11] &quot;Attorney: Leah R. Bruno \nOrganization: Dentons US LLP 233 South Wacker Drive Suite 5900 Chicago, IL 60606 leah.bruno@dentons.com 312-876-8000 \nParty name: Social Science Experts &quot;
-##  [12] &quot;Attorney: Renee Kristine Carlson \nOrganization: True North Legal 2855 Anthony Lane South Minneapolis, MN 55418 rcarlson@truenorthlegalmn.org 6127898811 \nParty name: Advancing American Freedom, Inc.&quot;
-##  [13] &quot;Minnesota Family Council&quot;
-##  [14] &quot;Center for Political Renewal&quot;
-##  [15] &quot;The Family Leader (Iowa)&quot;
-##  [16] &quot;Family Heritage Alliance&quot;
-##  [17] &quot;and Nebraska Family Alliance &quot;
-##  [18] &quot;Attorney: Anthony Thomas Caso \nOrganization: Constitutional Counsel Group 174 W. Lincoln Ave., #620 Anaheim, CA 92805 atcaso@ccg1776.com 916-601-1916 \nParty name: Claremont Institute&#39;s Center for Constitutional Jurisprudence &quot;
-##  [19] &quot;Attorney: Harold J. Cassidy \nOrganization: The Cassidy Law Firm 750 Broad Street Suite 3 Shrewsbury, NJ 07702 hjc@haroldcassidy.com 7327473999 \nParty name: Care Net, a National Affiliation Organization of 1,200 Pregnancy Help Centers, and Alpha Center, a South Dakota Registered Pregnancy Help Center &quot;
-##  [20] &quot;Attorney: Kim Christensen Clark \nOrganization: Legal Voice 907 Pine Street, Suite 500 Seattle, WA 98101 kclark@legalvoice.org 16026258896 \nParty name: Legal Voice, Asian Pacific Institute On Gender-based Violence, et at., &quot;
-##  [21] &quot;Attorney: Matthew James Clark \nOrganization: Alabama Center for Law and Liberty 2213 Morris Ave. Floor 1 Birmingham, AL 35203 matt@alabamalawandliberty.org 256-510-1828 \nParty name: Alabama Center for Law and Liberty &quot;
-##  [22] &quot;Attorney: Frederick W. Claybrook Jr. \nOrganization: Claybrook, LLC 700 Sixth St., NW, Ste. 430 Washington, DC 20001 rick@claybrooklaw.com 202-250-3833 \nParty name: Pacific Justice Institute &quot;
-##  [23] &quot;Attorney: Frederick W. Claybrook Jr. \nOrganization: Claybrook, LLC 700 Sixth St., NW, Ste. 430 Washington, DC 20001 rick@claybrooklaw.com 202-250-3833 \nParty name: Joseph W. Dellapenna &quot;
-##  [24] &quot;Attorney: Frederick W. Claybrook Jr. \nOrganization: Claybrook, LLC 700 Sixth St., NW, Ste. 430 Washington, DC 20001 rick@claybrooklaw.com 202-250-3833 \nParty name: Billy Graham Evangelistic Association, et al. &quot;
-##  [25] &quot;Attorney: Kimberlee Wood Colby \nOrganization: Christian Legal Society 8001 Braddock Rd., Suite 302 Springfield, VA 22151 kcolby@clsnet.org 703-894-1087 \nParty name: Christian Legal Society and Robertson Center for Constitutional Law &quot;
-##  [26] &quot;Attorney: Teresa Stanton Collett \nOrganization: University of St. Thomas School of Law MSL 400 1000 LaSalle Avenue Minneapolis, MN 55403 tscollett@stthomas.edu 6512712958 \nParty name: Prolife Center at the University of St. Thomas &quot;
-##  [27] &quot;Attorney: Teresa Stanton Collett \nOrganization: 2189 Sargent Avenue Saint Paul, MN 55105 tscollett@stthomas.edu 6512712958 \nParty name: 240 Women Scholars and Professionals, and Prolife Feminist Organizations &quot;
-##  [28] &quot;Attorney: Sean Richard Collier \nOrganization: Collier Legal, LLC 12 Granary Road Stockton, NJ 08559 sean.collier@gmail.com 9085817180 \nParty name: Good Counsel, Inc. &quot;
-##  [29] &quot;Attorney: Charles Justin Cooper \nOrganization: Cooper &amp; Kirk, PLLC 1523 New Hampshire Avenue, N.W. Washington, DC 20036 ccooper@cooperkirk.com 202-220-9600 \nParty name: Ethics and Public Policy Center &quot;
-##  [30] &quot;Attorney: Carolyn Frances Corwin \nOrganization: Covington and Burling LLP One City Center 850 Tenth Street, NW Washington, DC 20001-4956 ccorwin@cov.com 202-662-5338 \nParty name: Birth Equity Organizations and Scholars &quot;
-##  [31] &quot;Attorney: Meredith Leigh Di Liberto \nOrganization: Judicial Watch, Inc. 425 Third Street SW Suite 800 Washington, DC 20024 mdiliberto@judicialwatch.org 2026465172 \nParty name: Judicial Watch, Inc. &quot;
-##  [32] &quot;Attorney: Mario Alberto Diaz \nOrganization: Concerned Women for America 1000 N. Payne St. Alexandria, VA 22314 mdiaz@cwfa.org 2024887000 \nParty name: Concerned Women for America &quot;
-##  [33] &quot;Attorney: Farah Christina Diaz-Tello \nOrganization: If/When/How: Lawyering for Reproductive Justice 1714 Franklin Street #100-393 Oakland, CA 94612 farah@ifwhenhow.org 347-974-7337 \nParty name: Experts, Researchers, and Advocates Opposing the Criminalization of People Who Have Abortions &quot;
-##  [34] &quot;Attorney: Lynn Downey Dowd \nOrganization: Law Offices of Lynn D. Dowd 29 W Benton Ave Naperville, IL 60540 ldowd@msn.com 6306657851 \nParty name: Biologists &quot;
-##  [35] &quot;Attorney: Lael Ruth Echo-Hawk \nOrganization: MThirtysix PLLC 700 Pennsylvania Ave. SE 2nd FL The Yard Washington, DC 20003 lael@mthirtysixpllc.com (206) 271-0106 \nParty name: Cecilia Fire Thunder&quot;
-##  [36] &quot;National Indigenous Womens Resource Center&quot;
-##  [37] &quot;the Native American Community Board&quot;
-##  [38] &quot;and Additional Advocacy Organizations and Individuals &quot;
-##  [39] &quot;Attorney: John Allen Eidsmoe \nOrganization: Foundation for Moral Law One Dexter Avenue Montgomery, AL 36064 eidsmoeja@juno.com 3343241812 \nParty name: Foundation for Moral Law, Lutherans for Life &quot;
-##  [40] &quot;Attorney: John Allen Eidsmoe \nOrganization: Foundation for Moral Law One Dexter Avenue Montgomery, AL 36104 eidsmoeja@juno.com 3342621245 \nParty name: Foundation for Moral Law &quot;
-##  [41] &quot;Attorney: Jessica Lynn Ellsworth \nOrganization: Hogan Lovells US LLP 555 13th Street, N. W. Washington, DC 20004 jessica.ellsworth@hoganlovells.com 202-637-5886 \nParty name: American Historical Association and Organization of American Historians &quot;
-##  [42] &quot;Attorney: Jonathan English \nOrganization: 451 7th Street SW Washington, DC 20410 jenglish2@gmail.com 202-469-0116 \nParty name: Jonathan English &quot;
-##  [43] &quot;Attorney: Andrew Nathan Ferguson \nOrganization: Attorney at Law 202 North Ninth Street Richmond, VA 23219 AFerguson@oag.state.va.us 8047867704 \nParty name: Commonwealth of Virginia &quot;
-##  [44] &quot;Attorney: Brian James Field \nOrganization: Schaerr Jaffe 1717 K Street NW Suite 900 Washington, DC 20006 bfield@schaerr-jaffe.com 202-787-1060 \nParty name: European Legal Scholars &quot;
-##  [45] &quot;Attorney: Clarke David Forsythe \nOrganization: Americans United for Life 1150 Connecticut Ave. NW Suite 500 Washington, DC 20036 clarke.forsythe@aul.org 3122854568 \nParty name: Americans United for Life &quot;
-##  [46] &quot;Attorney: David F. Forte \nOrganization: Cleveland-Marshall College of Law, Cleveland State University 1801 Euclid Avenue Cleveland, OH 44115 d.forte@csuohio.edu 216 403-3298 \nParty name: Cleveland Lawyers for Life &quot;
-##  [47] &quot;Attorney: Catherine M. Foti \nOrganization: Morvillo, Abramowitz, et al. 565 Fifth Avenue New York, NY 10017 cfoti@maglaw.com 212-856-9600 \nParty name: American Society for Legal History and Other Scholars &quot;
-##  [48] &quot;Attorney: Alexis Irene Fragosa \nOrganization: Center for Family and Human Rights 776 Walker Road, Suite E Great Falls, VA 22066 iyc@c-fam.org 6262410594 \nParty name: Center for Family and Human Rights &quot;
-##  [49] &quot;Attorney: John Arak Freedman \nOrganization: Arnold &amp; Porter Kaye Scholer, LLP 601 Mass. Ave., NW Washington, DC 20001 John.Freedman@arnoldporter.com 202-942-5316 \nParty name: 236 Members of Congress &quot;
-##  [50] &quot;Attorney: Gary N. Frischling \nOrganization: Milbank LLP 2029 Century Park East 33rd Floor Los Angeles, CA 90067 gfrischling@milbank.com 424-386-4316 \nParty name: Reproductive Justice Scholars &quot;
-##  [51] &quot;Attorney: Scott William Gaylord \nOrganization: Elon University School of Law 201 North Greene Street Greensboro, NC 27401 sgaylord@elon.edu 3362799331 \nParty name: CatholicVote.org Education Fund &quot;
-##  [52] &quot;Attorney: Eugene Martin Gelernter \nOrganization: Patterson Belknap Webb &amp; Tyler LLP 1133 Avenue of the Americas New York, NY 10036 emgelernter@pbwt.com (212) 336-2000 \nParty name: Catholics for Choice, et al. &quot;
-##  [53] &quot;Attorney: Robert P. George \nOrganization: Robinson &amp; McElwee, PLLC 700 Virginia Street East, Suite 400 Charleston, WV 25301 rgeorge@princeton.edu 6096584510 \nParty name: Scholars of Jurisprudence John M. Finnis and Robert P. George &quot;
-##  [54] &quot;Attorney: Adam Scott Gershenson \nOrganization: Cooley LLP 500 Boylston Street, 14th Floor Boston, MA 02116 agershenson@cooley.com (617) 937-2379 \nParty name: International Federation of Gynecology and Obstetrics &quot;
-##  [55] &quot;Attorney: Stephen Gilles \nOrganization: Quinnipiac University School of Law 275 Mount Carmel Ave. Hamden, CT 06518 stephen.gerard.gilles@gmail.com 8609928130 \nParty name: Professor Stephen G. Gilles &quot;
-##  [56] &quot;Attorney: Brianne Jenna Gorod \nOrganization: Constitutional Accountability Center 1200 18th Street, NW Suite 501 Washington, DC 20036 brianne@theusconstitution.org 202 296 6889 \nParty name: Constitutional Accountability Center &quot;
-##  [57] &quot;Attorney: Samuel David Green \nOrganization: Reason for Life P.O. Box 500040 Palmdale, CA 93550 sgreen@reasonforlife.org (661) 524-5770 \nParty name: Reason for Life &quot;
-##  [58] &quot;Attorney: Jon M. Greenbaum \nOrganization: Lawyers&#39; Committee for Civil Rights Under Law 1500 K Street, NW 9th Floor Washington, DC 20005 jgreenbaum@lawyerscommittee.org 202-662-8315 \nParty name: Lawyers&#39; Committee for Civil Rights Under Law&quot;
-##  [59] &quot;et al. &quot;
-##  [60] &quot;Attorney: Matthew Edwin Gronda \nOrganization: Attorney at Law P.O. Box 70 Saint Charles, MI 48655 matt@matthewgronda.com 989-249-0350 \nParty name: Rep. Steve Carra and 320 State Legislators from 35 States &quot;
-##  [61] &quot;Attorney: Mia Tobin Guizzetti Hayes \nOrganization: Willkie Farr &amp; Gallagher LLP 1875 K Street, NW Washington, DC 20006 mhayes@willkie.com 202-303-1197 \nParty name: Organizations of Women Lawyers-Women Lawyers on Guard Inc., Womens Bar Association of the District of Columbia and National Association of Women Lawyers et al. &quot;
-##  [62] &quot;Attorney: Heather Gebelin Hacker \nOrganization: Hacker Stephens LLP 108 Wild Basin Rd Suite 250 Austin, TX 78746 heather@hackerstephens.com 512-399-3022 \nParty name: Professors Mary Ann Glendon and O. Carter Snead &quot;
-##  [63] &quot;Attorney: Heather Gebelin Hacker \nOrganization: Hacker Stephens LLP 108 Wild Basin Rd Suite 250 Austin, TX 78746 heather@hackerstephens.com 512-399-3022 \nParty name: Monique Chireau Wubbenhorst, M.D., M.P.H., et al. &quot;
-##  [64] &quot;Attorney: John Edward Hall \nOrganization: Covington &amp; Burling One CityCenter, 850 Tenth Street NW Washington, DC 20001 jhall@cov.com 2026626000 \nParty name: Feminist Majority Foundation, Abortion Access Front, C.A. Goldberg, PLLC, The National Organization For Women Foundation, The Southern Poverty Law Center, We Engage, Professor David S. Cohen, and Krysten Connon &quot;
-##  [65] &quot;Attorney: Erica Worth Harris \nOrganization: Susman Godfrey, LLP 1000 Louisiana, Suite 5100 Houston, TX 77002-5096 eharris@susmangodfrey.com 7136519366 \nParty name: Advocates for Youth, Inc. and Neo Philanthropy, Inc. d/b/a We Testify &quot;
-##  [66] &quot;Attorney: Joshua David Hawley \nOrganization: N/A 115 Russell Senate Office Bldg. Washington, DC 20510 ellen_james@hawley.senate.gov 202-224-6154 \nParty name: Senators Josh Hawley, Mike Lee, and Ted Cruz &quot;
-##  [67] &quot;Attorney: James L. Hirsen \nOrganization: 505 S. Villa Real Drive, Suite 101 Anaheim Hills, CA 92807 james@jameshirsen.com 714-283-8880 \nParty name: World Faith Foundation and Institute for Faith and Family &quot;
-##  [68] &quot;Attorney: Helen H. Hong \nOrganization: California Department of Justice, Office of Solicitor General 600 West Broadway Street, Suite 1805 San Diego, CA 92101 helen.hong@doj.ca.gov 6197389693 \nParty name: States of California, et al. &quot;
-##  [69] &quot;Attorney: Roberta A. Kaplan \nOrganization: Kaplan Hecker &amp; Fink LLP 350 Fifth Avenue, 63rd Floor New York, NY 10118 rkaplan@kaplanhecker.com 2127630883 \nParty name: Equal Protection Constitutional Law Scholars Serena Mayeri, Melissa Murray, and Reva Siegel &quot;
-##  [70] &quot;Attorney: Theane Evangelis Kapur \nOrganization: Gibson, Dunn and Crutcher LLP 333 South Grand Avenue 48th Floor Los Angeles, CA 90071 tevangelis@gibsondunn.com (213) 229-7000 \nParty name: California Women&#39;s Law Center &quot;
-##  [71] &quot;Attorney: Richard Brian Katskee \nOrganization: Americans United for Separation of Church and State 1310 L Street, N.W. Suite 200 Washington, DC 20005 katskee@au.org 202-466-3234 \nParty name: Americans United for Separation of Church and State, American Humanist Association, Bend the Arc: A Jewish Partnership for Justice, and Interfaith Alliance Foundation &quot;
-##  [72] &quot;Attorney: Nathan W. Kellum \nOrganization: Center for Religious Expression 699 Oakleaf Office Lane Suite 107 Memphis, TN 38117 nkellum@crelaw.org 9016845485 \nParty name: Center for Religious Expression &quot;
-##  [73] &quot;Attorney: Antony B. Kolenc \nOrganization: 106 S Harwood St Dallas, TX 75201 antony.kolenc@untdallas.edu 2142431781 \nParty name: 141 International Legal Scholars &quot;
-##  [74] &quot;Attorney: William Grayson Lambert \nOrganization: Office of the Governor South Carolina State House 1100 Gervais Street Columbia, SC 29201 glambert@governor.sc.gov 8037342100 \nParty name: Governor Henry McMaster and Eleven Additional Governors &quot;
-##  [75] &quot;Attorney: Stephen C. Leckar \nOrganization: Kalbain Hagerty LLP 888 17th Street. NW Twelfth Floor Washington, DC 20006 sleckar@kalbianhagerty.com (202) 223-5600 \nParty name: Anthony Hawks &quot;
-##  [76] &quot;Attorney: Jonathan Philip Lienhard \nOrganization: Holtzman Vogel Baran Torchinsky &amp; Josefiak PLLC 15405 John Marshall Highway Haymarket, VA 20169 jlienhard@holtzmanvogel.com 15403418808 \nParty name: March for Life Education and Defense Fund &quot;
-##  [77] &quot;Attorney: Emma Lindsay \nOrganization: Withers Bergman LLP 430 Park Avenue New York, NY 10022 emma.lindsay@withersworldwide.com 212-848-9883 \nParty name: United Nations Mandate Holders &quot;
-##  [78] &quot;Attorney: Paul Benjamin Linton \nOrganization: 921 Keystone Avenue Northbrook, IL 60062 pblconlaw@aol.com 8472913848 \nParty name: Thomas More Society &quot;
-##  [79] &quot;Attorney: George Lester Lyon Jr. \nOrganization: Lukas, Nace, Gutierrez &amp; Sachs, Chartered 1929 Biltmore Street, NW Washington, DC 20009 GLYON@FCCLAW.COM 202-669-0442 \nParty name: Mary Kay Bacallao Advocating for Unborn Children as Persons &quot;
-##  [80] &quot;Attorney: Janice Marie Mac Avoy \nOrganization: Fried, Frank, Harris, Shriver &amp; Jacobson LLP 0ne New York Plaza New York, NY 10004 janice.macavoy@friedfrank.com 212-859-8182 \nParty name: Society for Maternal-Fetal Medicine, Royal College of Obstetricians and Gynaecologists, U.S. Association for the Study of Pain, and 27 Scientific and Medical Experts &quot;
-##  [81] &quot;Attorney: Rebecca Susan Markert \nOrganization: Freedom form Religion Foundation P.O. Box 750 Madison, WI 53701 rmarkert@ffrf.org (608) 256-8900 \nParty name: The Freedom From Religion Foundation, Center for Inquiry, and American Atheists &quot;
-##  [82] &quot;Attorney: John P. Mastando III \nOrganization: Weil, Gotshal &amp; Manges LLP 767 Fifth Avenue New York, NY 10153 john.mastando@weil.com 2123108064 \nParty name: Current and Former Prosecutors and Law Enforcement Leaders, et al., &quot;
-##  [83] &quot;Attorney: Anna-Rose Mathieson \nOrganization: California Appellate Law Group LLP 96 Jessie Street San Francisco, CA 94105 annarose.mathieson@calapplaw.com 4156496700 \nParty name: Scholars of Court Procedure &quot;
-##  [84] &quot;Attorney: Deanne Elizabeth Maynard \nOrganization: Morrison &amp; Foerster LLP 2100 L Street, NW Suite 900 Washington, DC 20037 dmaynard@mofo.com 202-887-8740 \nParty name: LGBTQ Organizations &quot;
-##  [85] &quot;Attorney: Thomas Ryan McCarthy \nOrganization: Consovoy McCarthy PLLC 1600 Wilson Boulevard Suite 700 Arlington, VA 22209 tom@consovoymccarthy.com (703) 243-9423 \nParty name: Family Research Council &quot;
-##  [86] &quot;Attorney: Julian Lenwood McPhillips Jr. \nOrganization: McPhillips Shinbaum, LLP 516 S Perry St Montgomery, AL 36104 julianmcphillips@icloud.com 3342621911 \nParty name: Democrats for Life of America Five Democratic Legislators from Five Individual State Legislatures &quot;
-##  [87] &quot;Attorney: Patrick Michael McSweeney \nOrganization: McSweeney, Cynkar &amp; Kachouroff, PLLC 3358 John Tree Hill Rd Powhatan, VA 23139 patrick@mck-lawyers.com 7036213300 \nParty name: Conservative Legal Defense and Education Fund &quot;
-##  [88] &quot;Attorney: Hiram Alberto Melendez-Juarbe \nOrganization: P.O. Box 193063 San Juan, PR 00919-3063 hiram@melendezjuarbe.com 787-415-5192 \nParty name: Campaa Nacional por el Aborto Libre, Seguro y Accesible and other Puerto Rican Organizations &quot;
-##  [89] &quot;Attorney: Jonathan B. Miller \nOrganization: Public Rights Project 4096 Piedmont Avenue, #149 Oakland, CA 94611 jon@publicrightsproject.org 6468316113 \nParty name: Local Governments &quot;
-##  [90] &quot;Attorney: Christopher Ernest Mills \nOrganization: Spero Law LLC 1050 Johnnie Dodds Blvd. #83 Mt. Pleasant, SC 29465 cmills@spero.law 8436060640 \nParty name: American College of Pediatricians and Association of American Physicians &amp; Surgeons &quot;
-##  [91] &quot;Attorney: Jonathan F. Mitchell \nOrganization: Mitchell Law PLLC 111 Congress Avenue Suite 400 Austin, TX 78701 jonathan@mitchell.law (512) 686-3940 \nParty name: Texas Right to Life &quot;
-##  [92] &quot;Attorney: Kerry Lee Morgan \nOrganization: Kerry L. Morgan 2915 Biddle Avenue Suite 200 Wyandotte, MI 48192 kmorgan@pck-law.com (734) 281-7100 \nParty name: LONANG Institute &quot;
-##  [93] &quot;Attorney: Robert Joseph Muise \nOrganization: American Freedom Law Center PO Box 131098 Ann Arbor, MI 48113 rmuise@americanfreedomlawcenter.org 7346353756 \nParty name: Priests for Life &quot;
-##  [94] &quot;Attorney: Andrew C. Nichols \nOrganization: Charis Lex P.C. 4250 N. Fairfax Dr. Suite 600 Arlington, VA 22203 anichols@charislex.com 571-549-2645 \nParty name: American Association of Pro-Life Obstetricians and Gynecologists &quot;
-##  [95] &quot;Attorney: Thomas Gerald Olp \nOrganization: Thomas More Society 309 W. Washington Street Suite 1250 Chicago, IL 60606 tolp@thomasmoresociety.org 3127821680 \nParty name: Illinois Right to Life, et al. &quot;
-##  [96] &quot;Attorney: William Jeffrey Olson \nOrganization: William J. Olson, P.C. 370 Maple Ave. W., Suite 4 Vienna, VA 22180 wjo@mindspring.com 7033565070 \nParty name: Intercessors for America including its Intercessor Prayer Partners &quot;
-##  [97] &quot;Attorney: Lynn Mara Paltrow \nOrganization: National Advocates for Pregnant Women 575 8th Avenue, 7th Floor New York, NY 10018 LMP@advocatesforpregnantwomen.org 212-255-9252 \nParty name: National Advocates for Pregnant Women, et al. &quot;
-##  [98] &quot;Attorney: Robert M. Palumbos \nOrganization: Duane Morris LLP 30 South 17th Street Philadelphia, PA 19103 rmpalumbos@duanemorris.com (215) 979-1000 \nParty name: National Asian Pacific American Womens Forum, Asian Americans Advancing Justice | AAJC, and Organizations Representing the Interests of Asian American and Pacific Islander Women &quot;
-##  [99] &quot;Attorney: Allan E. Parker Jr. \nOrganization: The Justice Foundation 8023 Vantage Dr. Suite 1275 San Antonio, TX 78230 aparker@txjf.org 2106147157 \nParty name: Jewish Prolife Foundation, The Coalition for Jewish Values, Rabbi Yacov David Cohen, Rabbi Chananya Weissman, and Bonnie Chernin (President, Jewish Life League) &quot;
-## [100] &quot;Attorney: Allan E. Parker Jr. \nOrganization: The Justice Foundation 8023 Vantage Dr. Suite 1275 San Antonio, TX 78230 aparker@txjf.org 2106147157 \nParty name: 375 Women Injured By Second And Third Trimester Late Term Abortions and Abortion Recovery Leaders &quot;
-## [101] &quot;Attorney: Allan E. Parker Jr. \nOrganization: The Justice Foundation 8023 Vantage Dr. Suite 1275 San Antonio, TX 78230 aparker@txjf.org 2106147157 \nParty name: Melinda Thybault, Founder of The Moral Outcry Petition, et al. &quot;
-## [102] &quot;Attorney: Allan E. Parker Jr. \nOrganization: The Justice Foundation 8023 Vantage Drive Suite 1275 San Antonio, TX 78230 aparker@txjf.org 2106147157 \nParty name: 375 Women Injured By Second and Third Trimester Late Term Abortions and Melinda Thybault, Individually and Acting on Behalf of 336,214 Signers of The Moral Outcry Petition &quot;
-## [103] &quot;Attorney: Kimberly A. Parker \nOrganization: Wilmer, Cutler &amp; Pickering 2445 M St., NW. Washington, DC 20037 kimberly.parker@wilmerhale.com 202-663-6987 \nParty name: American College of Obstetricians and Gynecologists, American Medical Association, et al. &quot;
-## [104] &quot;Attorney: Anthony Richard Picarello Jr. \nOrganization: United States Conference of Catholic Bishops, Office of General Counsel 3211 4th Street, NE Washignton, DC 20017 apicarello@usccb.org 202-541-3311 \nParty name: U.S. Conference of Catholic Bishops and Other Religious Organizations &quot;
-## [105] &quot;Attorney: Bradley Wayne Pierce \nOrganization: Foundation to Abolish Abortion P.O. Box 402 Liberty Hill, TX 78642 bpierce@abolishabortiontx.org (512) 598-1092 \nParty name: Foundation to Abolish Abortion, et al &quot;
-## [106] &quot;Attorney: Gary Scott Pyles \nOrganization: 2364 Essington Rd, Box 373 Joliet, IL 60435 spyles081@gmail.com 8153422856 \nParty name: Scott Pyles &quot;
-## [107] &quot;Attorney: Maura Katherine Quinlan \nOrganization: 38 Golfview Road Camp Hill, PA 17011 maurakquinlan@outlook.com 717-460-8565 \nParty name: Pennsylvania Pro-Life Federation &quot;
-## [108] &quot;Attorney: Maura Katherine Quinlan \nOrganization: 38 Golfview Road Camp Hill, PA 17011 maurakquinlan@outlook.com 717-460-8565 \nParty name: Catholic Medical Association, National Association of Catholic Nurses-USA, Idaho Chooses Life and Texas Alliance for Life &quot;
-## [109] &quot;Attorney: Mark Leonard Rienzi \nOrganization: The Becket Fund for Religious Liberty 1919 Pennsylvania Avenue NW Suite 400 Washington, DC 20006 mrienzi@becketlaw.org (202) 955-0095 \nParty name: The Becket Fund for Religious Liberty &quot;
-## [110] &quot;Attorney: Arlaine Inez Rockey \nOrganization: Law Office of Arlaine Rockey P.O. Box 656 Marshall, NC 28753 AttorneyRockey@gmail.com 8282796735 \nParty name: ERA-NC Alliance &quot;
+<pre><code>##   [1] &quot;Attorney: Elizabeth B. Prelogar \nOrganization: Solicitor General United States Department of Justice 950 Pennsylvania Avenue, NW Washington, DC 20530-0001 SupremeCtBriefs@USDOJ.gov 202-514-2217 \nParty name: United States &quot;                                                                                                                                                                
+##   [2] &quot;Attorney: Steven Henry Aden \nOrganization: Americans United for Life 1150 Connecticut Ave. NW Suite 500 Washington, DC 20036 Steven.Aden@aul.org 2526732282 \nParty name: 228 Members of Congress &quot;                                                                                                                                                                                            
+##   [3] &quot;Attorney: Brigitte Adrienne Amiri \nOrganization: American Civil Liberties Union Foundation 125 Broad Street 18th Floor New York, NY 10004-2427 bamiri@aclu.org 2125197897 \nParty name: The American Civil Liberties Union and The American Civil Liberties Union of Mississippi &quot;                                                                                                             
+##   [4] &quot;Attorney: Jessica Ring Amunson \nOrganization: Jenner &amp; Block LLP 1099 New York Avenue NW Suite 900 Washington, DC 20001 JAmunson@jenner.com 202-639-6023 \nParty name: Organizations Dedicated to the Fight for Reproductive Justice Mississippi in Action, et al. &quot;                                                                                                                           
+##   [5] &quot;Attorney: David A. Barrett \nOrganization: Boies Schiller Flexner LLP 55 Hudson Yards New York, NY 10001 dbarrett@bsfllp.com 212-446-2300 \nParty name: Over 500 Women Athletes, The Womens National Basketball Players Association, et al. &quot;                                                                                                                                                   
+##   [6] &quot;Attorney: H. Christopher Bartolomucci \nOrganization: Schaerr | Jaffe LLP 1717 K Street NW Suite 900 Washington, DC 20006 cbartolomucci@schaerr-jaffe.com 202-787-1060 \nParty name: Women Legislators and The Susan B. Anthony List &quot;                                                                                                                                                          
+##   [7] &quot;Attorney: James Bopp Jr. \nOrganization: The Bopp Law Firm, PC The National Building 1 South Sixth Street Terre Haute, IN 47807 jboppjr@aol.com 8122322434 \nParty name: National Right to Life Committee and Louisiana Right to Life Federation &quot;                                                                                                                                              
+##   [8] &quot;Attorney: David Christopher Boyle \nOrganization: PO Box 15143 Long Beach, CA 90815 dbo@boyleslaw.org (734)-904-6132 \nParty name: David Boyle &quot;                                                                                                                                                                                                                                                
+##   [9] &quot;Attorney: Kristine Lee Brown \nOrganization: Attorney At Law 8700 E Jefferson Ave #371703 Denver, CO 80237 kristi@kristiburtonbrown.com 302-515-2721 \nParty name: Connie Weiskopf and Kristine L. Brown &quot;                                                                                                                                                                                      
+##  [10] &quot;Attorney: Mary Jane Browning \nOrganization: MaryBrowning, LLC 214 Cherry Street Jefferson, MO 65101 mary@maryjbrowninglaw.com 5732306945 \nParty name: Amicus Curiae Hannah S., John S. and Marlene S &quot;                                                                                                                                                                                        
+##  [11] &quot;Attorney: Leah R. Bruno \nOrganization: Dentons US LLP 233 South Wacker Drive Suite 5900 Chicago, IL 60606 leah.bruno@dentons.com 312-876-8000 \nParty name: Social Science Experts &quot;                                                                                                                                                                                                           
+##  [12] &quot;Attorney: Renee Kristine Carlson \nOrganization: True North Legal 2855 Anthony Lane South Minneapolis, MN 55418 rcarlson@truenorthlegalmn.org 6127898811 \nParty name: Advancing American Freedom, Inc.&quot;                                                                                                                                                                                        
+##  [13] &quot;Minnesota Family Council&quot;                                                                                                                                                                                                                                                                                                                                                                       
+##  [14] &quot;Center for Political Renewal&quot;                                                                                                                                                                                                                                                                                                                                                                   
+##  [15] &quot;The Family Leader (Iowa)&quot;                                                                                                                                                                                                                                                                                                                                                                       
+##  [16] &quot;Family Heritage Alliance&quot;                                                                                                                                                                                                                                                                                                                                                                       
+##  [17] &quot;and Nebraska Family Alliance &quot;                                                                                                                                                                                                                                                                                                                                                                  
+##  [18] &quot;Attorney: Anthony Thomas Caso \nOrganization: Constitutional Counsel Group 174 W. Lincoln Ave., #620 Anaheim, CA 92805 atcaso@ccg1776.com 916-601-1916 \nParty name: Claremont Institute&#39;s Center for Constitutional Jurisprudence &quot;                                                                                                                                                            
+##  [19] &quot;Attorney: Harold J. Cassidy \nOrganization: The Cassidy Law Firm 750 Broad Street Suite 3 Shrewsbury, NJ 07702 hjc@haroldcassidy.com 7327473999 \nParty name: Care Net, a National Affiliation Organization of 1,200 Pregnancy Help Centers, and Alpha Center, a South Dakota Registered Pregnancy Help Center &quot;                                                                                
+##  [20] &quot;Attorney: Kim Christensen Clark \nOrganization: Legal Voice 907 Pine Street, Suite 500 Seattle, WA 98101 kclark@legalvoice.org 16026258896 \nParty name: Legal Voice, Asian Pacific Institute On Gender-based Violence, et at., &quot;                                                                                                                                                               
+##  [21] &quot;Attorney: Matthew James Clark \nOrganization: Alabama Center for Law and Liberty 2213 Morris Ave. Floor 1 Birmingham, AL 35203 matt@alabamalawandliberty.org 256-510-1828 \nParty name: Alabama Center for Law and Liberty &quot;                                                                                                                                                                    
+##  [22] &quot;Attorney: Frederick W. Claybrook Jr. \nOrganization: Claybrook, LLC 700 Sixth St., NW, Ste. 430 Washington, DC 20001 rick@claybrooklaw.com 202-250-3833 \nParty name: Pacific Justice Institute &quot;                                                                                                                                                                                               
+##  [23] &quot;Attorney: Frederick W. Claybrook Jr. \nOrganization: Claybrook, LLC 700 Sixth St., NW, Ste. 430 Washington, DC 20001 rick@claybrooklaw.com 202-250-3833 \nParty name: Joseph W. Dellapenna &quot;                                                                                                                                                                                                    
+##  [24] &quot;Attorney: Frederick W. Claybrook Jr. \nOrganization: Claybrook, LLC 700 Sixth St., NW, Ste. 430 Washington, DC 20001 rick@claybrooklaw.com 202-250-3833 \nParty name: Billy Graham Evangelistic Association, et al. &quot;                                                                                                                                                                           
+##  [25] &quot;Attorney: Kimberlee Wood Colby \nOrganization: Christian Legal Society 8001 Braddock Rd., Suite 302 Springfield, VA 22151 kcolby@clsnet.org 703-894-1087 \nParty name: Christian Legal Society and Robertson Center for Constitutional Law &quot;                                                                                                                                                    
+##  [26] &quot;Attorney: Teresa Stanton Collett \nOrganization: University of St. Thomas School of Law MSL 400 1000 LaSalle Avenue Minneapolis, MN 55403 tscollett@stthomas.edu 6512712958 \nParty name: Prolife Center at the University of St. Thomas &quot;                                                                                                                                                      
+##  [27] &quot;Attorney: Teresa Stanton Collett \nOrganization: 2189 Sargent Avenue Saint Paul, MN 55105 tscollett@stthomas.edu 6512712958 \nParty name: 240 Women Scholars and Professionals, and Prolife Feminist Organizations &quot;                                                                                                                                                                            
+##  [28] &quot;Attorney: Sean Richard Collier \nOrganization: Collier Legal, LLC 12 Granary Road Stockton, NJ 08559 sean.collier@gmail.com 9085817180 \nParty name: Good Counsel, Inc. &quot;                                                                                                                                                                                                                       
+##  [29] &quot;Attorney: Charles Justin Cooper \nOrganization: Cooper &amp; Kirk, PLLC 1523 New Hampshire Avenue, N.W. Washington, DC 20036 ccooper@cooperkirk.com 202-220-9600 \nParty name: Ethics and Public Policy Center &quot;                                                                                                                                                                                    
+##  [30] &quot;Attorney: Carolyn Frances Corwin \nOrganization: Covington and Burling LLP One City Center 850 Tenth Street, NW Washington, DC 20001-4956 ccorwin@cov.com 202-662-5338 \nParty name: Birth Equity Organizations and Scholars &quot;                                                                                                                                                                  
+##  [31] &quot;Attorney: Meredith Leigh Di Liberto \nOrganization: Judicial Watch, Inc. 425 Third Street SW Suite 800 Washington, DC 20024 mdiliberto@judicialwatch.org 2026465172 \nParty name: Judicial Watch, Inc. &quot;                                                                                                                                                                                        
+##  [32] &quot;Attorney: Mario Alberto Diaz \nOrganization: Concerned Women for America 1000 N. Payne St. Alexandria, VA 22314 mdiaz@cwfa.org 2024887000 \nParty name: Concerned Women for America &quot;                                                                                                                                                                                                           
+##  [33] &quot;Attorney: Farah Christina Diaz-Tello \nOrganization: If/When/How: Lawyering for Reproductive Justice 1714 Franklin Street #100-393 Oakland, CA 94612 farah@ifwhenhow.org 347-974-7337 \nParty name: Experts, Researchers, and Advocates Opposing the Criminalization of People Who Have Abortions &quot;                                                                                             
+##  [34] &quot;Attorney: Lynn Downey Dowd \nOrganization: Law Offices of Lynn D. Dowd 29 W Benton Ave Naperville, IL 60540 ldowd@msn.com 6306657851 \nParty name: Biologists &quot;                                                                                                                                                                                                                                 
+##  [35] &quot;Attorney: Lael Ruth Echo-Hawk \nOrganization: MThirtysix PLLC 700 Pennsylvania Ave. SE 2nd FL The Yard Washington, DC 20003 lael@mthirtysixpllc.com (206) 271-0106 \nParty name: Cecilia Fire Thunder&quot;                                                                                                                                                                                          
+##  [36] &quot;National Indigenous Womens Resource Center&quot;                                                                                                                                                                                                                                                                                                                                                     
+##  [37] &quot;the Native American Community Board&quot;                                                                                                                                                                                                                                                                                                                                                            
+##  [38] &quot;and Additional Advocacy Organizations and Individuals &quot;                                                                                                                                                                                                                                                                                                                                         
+##  [39] &quot;Attorney: John Allen Eidsmoe \nOrganization: Foundation for Moral Law One Dexter Avenue Montgomery, AL 36064 eidsmoeja@juno.com 3343241812 \nParty name: Foundation for Moral Law, Lutherans for Life &quot;                                                                                                                                                                                         
+##  [40] &quot;Attorney: John Allen Eidsmoe \nOrganization: Foundation for Moral Law One Dexter Avenue Montgomery, AL 36104 eidsmoeja@juno.com 3342621245 \nParty name: Foundation for Moral Law &quot;                                                                                                                                                                                                             
+##  [41] &quot;Attorney: Jessica Lynn Ellsworth \nOrganization: Hogan Lovells US LLP 555 13th Street, N. W. Washington, DC 20004 jessica.ellsworth@hoganlovells.com 202-637-5886 \nParty name: American Historical Association and Organization of American Historians &quot;                                                                                                                                       
+##  [42] &quot;Attorney: Jonathan English \nOrganization: 451 7th Street SW Washington, DC 20410 jenglish2@gmail.com 202-469-0116 \nParty name: Jonathan English &quot;                                                                                                                                                                                                                                             
+##  [43] &quot;Attorney: Andrew Nathan Ferguson \nOrganization: Attorney at Law 202 North Ninth Street Richmond, VA 23219 AFerguson@oag.state.va.us 8047867704 \nParty name: Commonwealth of Virginia &quot;                                                                                                                                                                                                        
+##  [44] &quot;Attorney: Brian James Field \nOrganization: Schaerr Jaffe 1717 K Street NW Suite 900 Washington, DC 20006 bfield@schaerr-jaffe.com 202-787-1060 \nParty name: European Legal Scholars &quot;                                                                                                                                                                                                         
+##  [45] &quot;Attorney: Clarke David Forsythe \nOrganization: Americans United for Life 1150 Connecticut Ave. NW Suite 500 Washington, DC 20036 clarke.forsythe@aul.org 3122854568 \nParty name: Americans United for Life &quot;                                                                                                                                                                                  
+##  [46] &quot;Attorney: David F. Forte \nOrganization: Cleveland-Marshall College of Law, Cleveland State University 1801 Euclid Avenue Cleveland, OH 44115 d.forte@csuohio.edu 216 403-3298 \nParty name: Cleveland Lawyers for Life &quot;                                                                                                                                                                       
+##  [47] &quot;Attorney: Catherine M. Foti \nOrganization: Morvillo, Abramowitz, et al. 565 Fifth Avenue New York, NY 10017 cfoti@maglaw.com 212-856-9600 \nParty name: American Society for Legal History and Other Scholars &quot;                                                                                                                                                                                
+##  [48] &quot;Attorney: Alexis Irene Fragosa \nOrganization: Center for Family and Human Rights 776 Walker Road, Suite E Great Falls, VA 22066 iyc@c-fam.org 6262410594 \nParty name: Center for Family and Human Rights &quot;                                                                                                                                                                                    
+##  [49] &quot;Attorney: John Arak Freedman \nOrganization: Arnold &amp; Porter Kaye Scholer, LLP 601 Mass. Ave., NW Washington, DC 20001 John.Freedman@arnoldporter.com 202-942-5316 \nParty name: 236 Members of Congress &quot;                                                                                                                                                                                      
+##  [50] &quot;Attorney: Gary N. Frischling \nOrganization: Milbank LLP 2029 Century Park East 33rd Floor Los Angeles, CA 90067 gfrischling@milbank.com 424-386-4316 \nParty name: Reproductive Justice Scholars &quot;                                                                                                                                                                                             
+##  [51] &quot;Attorney: Scott William Gaylord \nOrganization: Elon University School of Law 201 North Greene Street Greensboro, NC 27401 sgaylord@elon.edu 3362799331 \nParty name: CatholicVote.org Education Fund &quot;                                                                                                                                                                                         
+##  [52] &quot;Attorney: Eugene Martin Gelernter \nOrganization: Patterson Belknap Webb &amp; Tyler LLP 1133 Avenue of the Americas New York, NY 10036 emgelernter@pbwt.com (212) 336-2000 \nParty name: Catholics for Choice, et al. &quot;                                                                                                                                                                            
+##  [53] &quot;Attorney: Robert P. George \nOrganization: Robinson &amp; McElwee, PLLC 700 Virginia Street East, Suite 400 Charleston, WV 25301 rgeorge@princeton.edu 6096584510 \nParty name: Scholars of Jurisprudence John M. Finnis and Robert P. George &quot;                                                                                                                                                     
+##  [54] &quot;Attorney: Adam Scott Gershenson \nOrganization: Cooley LLP 500 Boylston Street, 14th Floor Boston, MA 02116 agershenson@cooley.com (617) 937-2379 \nParty name: International Federation of Gynecology and Obstetrics &quot;                                                                                                                                                                         
+##  [55] &quot;Attorney: Stephen Gilles \nOrganization: Quinnipiac University School of Law 275 Mount Carmel Ave. Hamden, CT 06518 stephen.gerard.gilles@gmail.com 8609928130 \nParty name: Professor Stephen G. Gilles &quot;                                                                                                                                                                                      
+##  [56] &quot;Attorney: Brianne Jenna Gorod \nOrganization: Constitutional Accountability Center 1200 18th Street, NW Suite 501 Washington, DC 20036 brianne@theusconstitution.org 202 296 6889 \nParty name: Constitutional Accountability Center &quot;                                                                                                                                                          
+##  [57] &quot;Attorney: Samuel David Green \nOrganization: Reason for Life P.O. Box 500040 Palmdale, CA 93550 sgreen@reasonforlife.org (661) 524-5770 \nParty name: Reason for Life &quot;                                                                                                                                                                                                                         
+##  [58] &quot;Attorney: Jon M. Greenbaum \nOrganization: Lawyers&#39; Committee for Civil Rights Under Law 1500 K Street, NW 9th Floor Washington, DC 20005 jgreenbaum@lawyerscommittee.org 202-662-8315 \nParty name: Lawyers&#39; Committee for Civil Rights Under Law&quot;                                                                                                                                             
+##  [59] &quot;et al. &quot;                                                                                                                                                                                                                                                                                                                                                                                        
+##  [60] &quot;Attorney: Matthew Edwin Gronda \nOrganization: Attorney at Law P.O. Box 70 Saint Charles, MI 48655 matt@matthewgronda.com 989-249-0350 \nParty name: Rep. Steve Carra and 320 State Legislators from 35 States &quot;                                                                                                                                                                                
+##  [61] &quot;Attorney: Mia Tobin Guizzetti Hayes \nOrganization: Willkie Farr &amp; Gallagher LLP 1875 K Street, NW Washington, DC 20006 mhayes@willkie.com 202-303-1197 \nParty name: Organizations of Women Lawyers-Women Lawyers on Guard Inc., Womens Bar Association of the District of Columbia and National Association of Women Lawyers et al. &quot;                                                         
+##  [62] &quot;Attorney: Heather Gebelin Hacker \nOrganization: Hacker Stephens LLP 108 Wild Basin Rd Suite 250 Austin, TX 78746 heather@hackerstephens.com 512-399-3022 \nParty name: Professors Mary Ann Glendon and O. Carter Snead &quot;                                                                                                                                                                       
+##  [63] &quot;Attorney: Heather Gebelin Hacker \nOrganization: Hacker Stephens LLP 108 Wild Basin Rd Suite 250 Austin, TX 78746 heather@hackerstephens.com 512-399-3022 \nParty name: Monique Chireau Wubbenhorst, M.D., M.P.H., et al. &quot;                                                                                                                                                                     
+##  [64] &quot;Attorney: John Edward Hall \nOrganization: Covington &amp; Burling One CityCenter, 850 Tenth Street NW Washington, DC 20001 jhall@cov.com 2026626000 \nParty name: Feminist Majority Foundation, Abortion Access Front, C.A. Goldberg, PLLC, The National Organization For Women Foundation, The Southern Poverty Law Center, We Engage, Professor David S. Cohen, and Krysten Connon &quot;             
+##  [65] &quot;Attorney: Erica Worth Harris \nOrganization: Susman Godfrey, LLP 1000 Louisiana, Suite 5100 Houston, TX 77002-5096 eharris@susmangodfrey.com 7136519366 \nParty name: Advocates for Youth, Inc. and Neo Philanthropy, Inc. d/b/a We Testify &quot;                                                                                                                                                   
+##  [66] &quot;Attorney: Joshua David Hawley \nOrganization: N/A 115 Russell Senate Office Bldg. Washington, DC 20510 ellen_james@hawley.senate.gov 202-224-6154 \nParty name: Senators Josh Hawley, Mike Lee, and Ted Cruz &quot;                                                                                                                                                                                  
+##  [67] &quot;Attorney: James L. Hirsen \nOrganization: 505 S. Villa Real Drive, Suite 101 Anaheim Hills, CA 92807 james@jameshirsen.com 714-283-8880 \nParty name: World Faith Foundation and Institute for Faith and Family &quot;                                                                                                                                                                               
+##  [68] &quot;Attorney: Helen H. Hong \nOrganization: California Department of Justice, Office of Solicitor General 600 West Broadway Street, Suite 1805 San Diego, CA 92101 helen.hong@doj.ca.gov 6197389693 \nParty name: States of California, et al. &quot;                                                                                                                                                    
+##  [69] &quot;Attorney: Roberta A. Kaplan \nOrganization: Kaplan Hecker &amp; Fink LLP 350 Fifth Avenue, 63rd Floor New York, NY 10118 rkaplan@kaplanhecker.com 2127630883 \nParty name: Equal Protection Constitutional Law Scholars Serena Mayeri, Melissa Murray, and Reva Siegel &quot;                                                                                                                            
+##  [70] &quot;Attorney: Theane Evangelis Kapur \nOrganization: Gibson, Dunn and Crutcher LLP 333 South Grand Avenue 48th Floor Los Angeles, CA 90071 tevangelis@gibsondunn.com (213) 229-7000 \nParty name: California Women&#39;s Law Center &quot;                                                                                                                                                                   
+##  [71] &quot;Attorney: Richard Brian Katskee \nOrganization: Americans United for Separation of Church and State 1310 L Street, N.W. Suite 200 Washington, DC 20005 katskee@au.org 202-466-3234 \nParty name: Americans United for Separation of Church and State, American Humanist Association, Bend the Arc: A Jewish Partnership for Justice, and Interfaith Alliance Foundation &quot;                       
+##  [72] &quot;Attorney: Nathan W. Kellum \nOrganization: Center for Religious Expression 699 Oakleaf Office Lane Suite 107 Memphis, TN 38117 nkellum@crelaw.org 9016845485 \nParty name: Center for Religious Expression &quot;                                                                                                                                                                                    
+##  [73] &quot;Attorney: Antony B. Kolenc \nOrganization: 106 S Harwood St Dallas, TX 75201 antony.kolenc@untdallas.edu 2142431781 \nParty name: 141 International Legal Scholars &quot;                                                                                                                                                                                                                            
+##  [74] &quot;Attorney: William Grayson Lambert \nOrganization: Office of the Governor South Carolina State House 1100 Gervais Street Columbia, SC 29201 glambert@governor.sc.gov 8037342100 \nParty name: Governor Henry McMaster and Eleven Additional Governors &quot;                                                                                                                                          
+##  [75] &quot;Attorney: Stephen C. Leckar \nOrganization: Kalbain Hagerty LLP 888 17th Street. NW Twelfth Floor Washington, DC 20006 sleckar@kalbianhagerty.com (202) 223-5600 \nParty name: Anthony Hawks &quot;                                                                                                                                                                                                  
+##  [76] &quot;Attorney: Jonathan Philip Lienhard \nOrganization: Holtzman Vogel Baran Torchinsky &amp; Josefiak PLLC 15405 John Marshall Highway Haymarket, VA 20169 jlienhard@holtzmanvogel.com 15403418808 \nParty name: March for Life Education and Defense Fund &quot;                                                                                                                                            
+##  [77] &quot;Attorney: Emma Lindsay \nOrganization: Withers Bergman LLP 430 Park Avenue New York, NY 10022 emma.lindsay@withersworldwide.com 212-848-9883 \nParty name: United Nations Mandate Holders &quot;                                                                                                                                                                                                     
+##  [78] &quot;Attorney: Paul Benjamin Linton \nOrganization: 921 Keystone Avenue Northbrook, IL 60062 pblconlaw@aol.com 8472913848 \nParty name: Thomas More Society &quot;                                                                                                                                                                                                                                        
+##  [79] &quot;Attorney: George Lester Lyon Jr. \nOrganization: Lukas, Nace, Gutierrez &amp; Sachs, Chartered 1929 Biltmore Street, NW Washington, DC 20009 GLYON@FCCLAW.COM 202-669-0442 \nParty name: Mary Kay Bacallao Advocating for Unborn Children as Persons &quot;                                                                                                                                              
+##  [80] &quot;Attorney: Janice Marie Mac Avoy \nOrganization: Fried, Frank, Harris, Shriver &amp; Jacobson LLP 0ne New York Plaza New York, NY 10004 janice.macavoy@friedfrank.com 212-859-8182 \nParty name: Society for Maternal-Fetal Medicine, Royal College of Obstetricians and Gynaecologists, U.S. Association for the Study of Pain, and 27 Scientific and Medical Experts &quot;                             
+##  [81] &quot;Attorney: Rebecca Susan Markert \nOrganization: Freedom form Religion Foundation P.O. Box 750 Madison, WI 53701 rmarkert@ffrf.org (608) 256-8900 \nParty name: The Freedom From Religion Foundation, Center for Inquiry, and American Atheists &quot;                                                                                                                                                
+##  [82] &quot;Attorney: John P. Mastando III \nOrganization: Weil, Gotshal &amp; Manges LLP 767 Fifth Avenue New York, NY 10153 john.mastando@weil.com 2123108064 \nParty name: Current and Former Prosecutors and Law Enforcement Leaders, et al., &quot;                                                                                                                                                             
+##  [83] &quot;Attorney: Anna-Rose Mathieson \nOrganization: California Appellate Law Group LLP 96 Jessie Street San Francisco, CA 94105 annarose.mathieson@calapplaw.com 4156496700 \nParty name: Scholars of Court Procedure &quot;                                                                                                                                                                               
+##  [84] &quot;Attorney: Deanne Elizabeth Maynard \nOrganization: Morrison &amp; Foerster LLP 2100 L Street, NW Suite 900 Washington, DC 20037 dmaynard@mofo.com 202-887-8740 \nParty name: LGBTQ Organizations &quot;                                                                                                                                                                                                  
+##  [85] &quot;Attorney: Thomas Ryan McCarthy \nOrganization: Consovoy McCarthy PLLC 1600 Wilson Boulevard Suite 700 Arlington, VA 22209 tom@consovoymccarthy.com (703) 243-9423 \nParty name: Family Research Council &quot;                                                                                                                                                                                       
+##  [86] &quot;Attorney: Julian Lenwood McPhillips Jr. \nOrganization: McPhillips Shinbaum, LLP 516 S Perry St Montgomery, AL 36104 julianmcphillips@icloud.com 3342621911 \nParty name: Democrats for Life of America Five Democratic Legislators from Five Individual State Legislatures &quot;                                                                                                                   
+##  [87] &quot;Attorney: Patrick Michael McSweeney \nOrganization: McSweeney, Cynkar &amp; Kachouroff, PLLC 3358 John Tree Hill Rd Powhatan, VA 23139 patrick@mck-lawyers.com 7036213300 \nParty name: Conservative Legal Defense and Education Fund &quot;                                                                                                                                                             
+##  [88] &quot;Attorney: Hiram Alberto Melendez-Juarbe \nOrganization: P.O. Box 193063 San Juan, PR 00919-3063 hiram@melendezjuarbe.com 787-415-5192 \nParty name: Campaa Nacional por el Aborto Libre, Seguro y Accesible and other Puerto Rican Organizations &quot;                                                                                                                                              
+##  [89] &quot;Attorney: Jonathan B. Miller \nOrganization: Public Rights Project 4096 Piedmont Avenue, #149 Oakland, CA 94611 jon@publicrightsproject.org 6468316113 \nParty name: Local Governments &quot;                                                                                                                                                                                                        
+##  [90] &quot;Attorney: Christopher Ernest Mills \nOrganization: Spero Law LLC 1050 Johnnie Dodds Blvd. #83 Mt. Pleasant, SC 29465 cmills@spero.law 8436060640 \nParty name: American College of Pediatricians and Association of American Physicians &amp; Surgeons &quot;                                                                                                                                            
+##  [91] &quot;Attorney: Jonathan F. Mitchell \nOrganization: Mitchell Law PLLC 111 Congress Avenue Suite 400 Austin, TX 78701 jonathan@mitchell.law (512) 686-3940 \nParty name: Texas Right to Life &quot;                                                                                                                                                                                                        
+##  [92] &quot;Attorney: Kerry Lee Morgan \nOrganization: Kerry L. Morgan 2915 Biddle Avenue Suite 200 Wyandotte, MI 48192 kmorgan@pck-law.com (734) 281-7100 \nParty name: LONANG Institute &quot;                                                                                                                                                                                                                 
+##  [93] &quot;Attorney: Robert Joseph Muise \nOrganization: American Freedom Law Center PO Box 131098 Ann Arbor, MI 48113 rmuise@americanfreedomlawcenter.org 7346353756 \nParty name: Priests for Life &quot;                                                                                                                                                                                                     
+##  [94] &quot;Attorney: Andrew C. Nichols \nOrganization: Charis Lex P.C. 4250 N. Fairfax Dr. Suite 600 Arlington, VA 22203 anichols@charislex.com 571-549-2645 \nParty name: American Association of Pro-Life Obstetricians and Gynecologists &quot;                                                                                                                                                              
+##  [95] &quot;Attorney: Thomas Gerald Olp \nOrganization: Thomas More Society 309 W. Washington Street Suite 1250 Chicago, IL 60606 tolp@thomasmoresociety.org 3127821680 \nParty name: Illinois Right to Life, et al. &quot;                                                                                                                                                                                      
+##  [96] &quot;Attorney: William Jeffrey Olson \nOrganization: William J. Olson, P.C. 370 Maple Ave. W., Suite 4 Vienna, VA 22180 wjo@mindspring.com 7033565070 \nParty name: Intercessors for America including its Intercessor Prayer Partners &quot;                                                                                                                                                             
+##  [97] &quot;Attorney: Lynn Mara Paltrow \nOrganization: National Advocates for Pregnant Women 575 8th Avenue, 7th Floor New York, NY 10018 LMP@advocatesforpregnantwomen.org 212-255-9252 \nParty name: National Advocates for Pregnant Women, et al. &quot;                                                                                                                                                     
+##  [98] &quot;Attorney: Robert M. Palumbos \nOrganization: Duane Morris LLP 30 South 17th Street Philadelphia, PA 19103 rmpalumbos@duanemorris.com (215) 979-1000 \nParty name: National Asian Pacific American Womens Forum, Asian Americans Advancing Justice | AAJC, and Organizations Representing the Interests of Asian American and Pacific Islander Women &quot;                                           
+##  [99] &quot;Attorney: Allan E. Parker Jr. \nOrganization: The Justice Foundation 8023 Vantage Dr. Suite 1275 San Antonio, TX 78230 aparker@txjf.org 2106147157 \nParty name: Jewish Prolife Foundation, The Coalition for Jewish Values, Rabbi Yacov David Cohen, Rabbi Chananya Weissman, and Bonnie Chernin (President, Jewish Life League) &quot;                                                             
+## [100] &quot;Attorney: Allan E. Parker Jr. \nOrganization: The Justice Foundation 8023 Vantage Dr. Suite 1275 San Antonio, TX 78230 aparker@txjf.org 2106147157 \nParty name: 375 Women Injured By Second And Third Trimester Late Term Abortions and Abortion Recovery Leaders &quot;                                                                                                                            
+## [101] &quot;Attorney: Allan E. Parker Jr. \nOrganization: The Justice Foundation 8023 Vantage Dr. Suite 1275 San Antonio, TX 78230 aparker@txjf.org 2106147157 \nParty name: Melinda Thybault, Founder of The Moral Outcry Petition, et al. &quot;                                                                                                                                                               
+## [102] &quot;Attorney: Allan E. Parker Jr. \nOrganization: The Justice Foundation 8023 Vantage Drive Suite 1275 San Antonio, TX 78230 aparker@txjf.org 2106147157 \nParty name: 375 Women Injured By Second and Third Trimester Late Term Abortions and Melinda Thybault, Individually and Acting on Behalf of 336,214 Signers of The Moral Outcry Petition &quot;                                                
+## [103] &quot;Attorney: Kimberly A. Parker \nOrganization: Wilmer, Cutler &amp; Pickering 2445 M St., NW. Washington, DC 20037 kimberly.parker@wilmerhale.com 202-663-6987 \nParty name: American College of Obstetricians and Gynecologists, American Medical Association, et al. &quot;                                                                                                                              
+## [104] &quot;Attorney: Anthony Richard Picarello Jr. \nOrganization: United States Conference of Catholic Bishops, Office of General Counsel 3211 4th Street, NE Washignton, DC 20017 apicarello@usccb.org 202-541-3311 \nParty name: U.S. Conference of Catholic Bishops and Other Religious Organizations &quot;                                                                                                
+## [105] &quot;Attorney: Bradley Wayne Pierce \nOrganization: Foundation to Abolish Abortion P.O. Box 402 Liberty Hill, TX 78642 bpierce@abolishabortiontx.org (512) 598-1092 \nParty name: Foundation to Abolish Abortion, et al &quot;                                                                                                                                                                            
+## [106] &quot;Attorney: Gary Scott Pyles \nOrganization: 2364 Essington Rd, Box 373 Joliet, IL 60435 spyles081@gmail.com 8153422856 \nParty name: Scott Pyles &quot;                                                                                                                                                                                                                                               
+## [107] &quot;Attorney: Maura Katherine Quinlan \nOrganization: 38 Golfview Road Camp Hill, PA 17011 maurakquinlan@outlook.com 717-460-8565 \nParty name: Pennsylvania Pro-Life Federation &quot;                                                                                                                                                                                                                  
+## [108] &quot;Attorney: Maura Katherine Quinlan \nOrganization: 38 Golfview Road Camp Hill, PA 17011 maurakquinlan@outlook.com 717-460-8565 \nParty name: Catholic Medical Association, National Association of Catholic Nurses-USA, Idaho Chooses Life and Texas Alliance for Life &quot;                                                                                                                         
+## [109] &quot;Attorney: Mark Leonard Rienzi \nOrganization: The Becket Fund for Religious Liberty 1919 Pennsylvania Avenue NW Suite 400 Washington, DC 20006 mrienzi@becketlaw.org (202) 955-0095 \nParty name: The Becket Fund for Religious Liberty &quot;                                                                                                                                                       
+## [110] &quot;Attorney: Arlaine Inez Rockey \nOrganization: Law Office of Arlaine Rockey P.O. Box 656 Marshall, NC 28753 AttorneyRockey@gmail.com 8282796735 \nParty name: ERA-NC Alliance &quot;                                                                                                                                                                                                                  
 ## [111] &quot;Attorney: E. Joshua Rosenkranz \nOrganization: Orrick, Herrington &amp; Sutcliffe LLP 51 West 52nd Street New York, NY 10019 jrosenkranz@orrick.com 212-506-5380 \nParty name: Abortion Care Network, Bixby Center for Global Reproductive Health, Medical Students for Choice, National Abortion Federation, Physicians for Reproductive Health and Planned Parenthood Federation of America Inc. &quot;
-## [112] &quot;Attorney: D. Kent Safriet \nOrganization: Holtzman Vogel Baran Torchinsky &amp; Josefiak PLLC 15405 John Marshall Highway Haymarket, VA 20169 kent@holtzmanvogel.com (540) 341-8808 \nParty name: Christian Medical &amp; Dental Associations &quot;
-## [113] &quot;Attorney: Gene Clayton Schaerr \nOrganization: Schaerr | Jaffe 1717 K Street NW, Suite 900 Washington, DC 20006 gschaerr@schaerr-jaffe.com 202-787-1060 \nParty name: Maureen L. Condic, Ph.D. and the Charlotte Lozier Institute &quot;
-## [114] &quot;Attorney: Elizabeth Brooks Scherer \nOrganization: P.O. Box 27525 Raleigh, NC 27611 scherer.appeals@gmail.com 919.755.8790 \nParty name: Professor Randy Beck &quot;
-## [115] &quot;Attorney: Linda Boston Schlueter \nOrganization: Trinity Legal Center 1150 N. Loop 1604 W. Suite 108-208 San Antonio, TX 78248 TLC4Linda@aol.com 210-274-5274 \nParty name: Trinity Legal Center &quot;
-## [116] &quot;Attorney: Jay Alan Sekulow \nOrganization: American Center for Law and Justice 201 Maryland Avenue, N.E. Washington, DC 20002 jsekulow@claglaw.com 2022485407 \nParty name: American Center for Law &amp; Justice &quot;
-## [117] &quot;Attorney: Jay Alan Sekulow \nOrganization: American Center for Law and Justice 201 Maryland Avenue, N.E. Washington, DC 20002 sekulow@aclj.org 2025468890 \nParty name: Elliot Institute &quot;
-## [118] &quot;Attorney: Jay Alan Sekulow \nOrganization: American Center for Law and Justice 201 Maryland Avenue, N.E. Washington, DC 20002 sekulow@aclj.org 20225468890 \nParty name: American Center for Law and Justice and Bioethics Defense Fund &quot;
-## [119] &quot;Attorney: Jordan Adam Sekulow \nOrganization: American Center for Law and Justice 201 Maryland Avenue, NE Washington, DC 20002 sekulow.jas@aclj.org 202-546-8890 \nParty name: The European Centre for Law and Justice &quot;
-## [120] &quot;Attorney: Shannon Rose Selden \nOrganization: Debevoise &amp; Plimpton LLP 919 3rd Avenue New York, NY 10022 srselden@debevoise.com 212-909-6000 \nParty name: International and Comparative Legal Scholars &quot;
-## [121] &quot;Attorney: Jeffrey A. Shafer \nOrganization: Langdon Law LLC 8913 Cincinnati-Dayton Rd. West Chester, OH 45069 jshafer@langdonlaw.com 513-577-7380 \nParty name: 396 State Legislators from 41 States &quot;
-## [122] &quot;Attorney: Catherine Wynne Short \nOrganization: Life Legal Defense Foundation P.O. Box 2105 Napa, CA 94558 kshort@lldf.org (707) 224-6675 \nParty name: Robin Pierucci, M.D., and Life Legal Defense Foundation &quot;
-## [123] &quot;Attorney: Heather Dorothy Shumaker \nOrganization: National Women&#39;s Law Center 11 Dupont Cir Nw Suite 800 Washington, DC 20036 hshumaker@nwlc.org 202-588-5180 \nParty name: National Women&#39;s Law Center and 72 Additional Organizations Committed to Gender Equality &quot;
-## [124] &quot;Attorney: Howard Nathan Slugh \nOrganization: 2400 Virginia Ave NW Apt C619 Washington, DC 20037 hslugh@jcrl.org 954-328-9461 \nParty name: Jewish Coalition For Religious Liberty &quot;
-## [125] &quot;Attorney: J. Thomas Smith Jr. \nOrganization: Constitutional Government Defense Fund 1113 Murfreesboro Road 106-167 Franklin, TN 37064 jthomsmith@cgdfund.com 202-669-1452 \nParty name: 22 State Policy Organizations &quot;
-## [126] &quot;Attorney: Priscilla J. Smith \nOrganization: Yale Law School 319 Sterling Place 18th Floor Brooklyn, NY 11238 priscilla.smith@yale.edu 3472625177 \nParty name: Yale Law School Information Society Project &quot;
-## [127] &quot;Attorney: William Lucien Smith \nOrganization: Balch &amp; Bingham LLP 188 East Capitol Street, Suite 1400 Jackson, MS 39201 bsmith@balch.com 6019658175 \nParty name: Commissioner Andy Gipson, et al. &quot;
-## [128] &quot;Attorney: Orin Samuel Snyder \nOrganization: Gibson, Dunn &amp; Crutcher LLp 200 Park Avenue New York, NY 10166 osnyder@gibsondunn.com (212) 351-4000 \nParty name: Constitutional Law Scholars Lee C. Bollinger, et al., &quot;
-## [129] &quot;Attorney: Anjali Srinivasan \nOrganization: Keker, Van Nest &amp; Peters LLP 633 Battery Street San Francisco, CA 94111 asrinivasan@keker.com 415-391-5400 \nParty name: Economists &quot;
-## [130] &quot;Attorney: Mathew D. Staver \nOrganization: Liberty Counsel PO Box 540774 Orlando, FL 32854 court@lc.org 407-875-1776 \nParty name: African American, Hispanic, Roman Catholic and Protestant Religious and Civil Rights Organizations and Leaders &quot;
-## [131] &quot;Attorney: Simon Arthur Steel \nOrganization: Dentons US LLP 1900 K Street, NW Washington, DC 20006 simon.steel@dentons.com 2029776249 \nParty name: European Law Professors &quot;
-## [132] &quot;Attorney: Judd Edward Stone II \nOrganization: Texas Attorney General&#39;s Office P.O. Box 12548 (MC 059) Austin, TX 78711-2548 judd.stone@oag.texas.gov 512-936-1700 \nParty name: States of Texas, et al. &quot;
-## [133] &quot;Attorney: Judd Edward Stone II \nOrganization: Texas Attorney General&#39;s Office P.O. Box 12548 (MC 059) Austin, TX 78711-2548 judd.stone@oag.texas.gov 512-936-1700 \nParty name: States of Texas, et al., &quot;
-## [134] &quot;Attorney: Christian Janet Strickland \nOrganization: Schwartz, Orgler &amp; Jordan, PLLC 2355 Pass Road Biloxi, MS 39531 christian@sojlaw.net 228-388-7441 \nParty name: Roman Catholic Diocese of Jackson and Roman Catholic Diocese of Biloxi &quot;
-## [135] &quot;Attorney: Claude G. Szyfer \nOrganization: Stroock &amp; Stroock &amp; Lavan LLP 180 Maiden Lane New York, NY 10038 cszyfer@stroock.com (212) 806-5400 \nParty name: 896 State Legislators &quot;
-## [136] &quot;Attorney: Stephanie Toti \nOrganization: Lawyering Project 41 Schermerhorn Street No. 1056 New York, NY 11201 stoti@lawyeringproject.org (646) 490-1083 \nParty name: Abortion Funds and Practical Support Organizations &quot;
-## [137] &quot;Attorney: Reginald M. Turner Jr. \nOrganization: American Bar Association 321 North Clark St. Chicago, IL 60654 abapresident@americanbar.org 3129885000 \nParty name: American Bar Association &quot;
-## [138] &quot;Attorney: Angela C. Vigil \nOrganization: Baker and McKenzie LLP 1111 Brickell Avenue Suite 1700 Miami, FL 33131 angela.vigil@bakermckenzie.com 305-789-8904 \nParty name: Ywca USA, Girls Inc., Supermajority Education Fund, and United State of Women &quot;
-## [139] &quot;Attorney: William Wagner \nOrganization: Great Lakes Justice Center 5600 W. Mount Hope Hwy. Upper Level Lansing, MI 48917 Prof.WWJD@gmail.com 517-643-1765 \nParty name: National Catholic Bioethics Center, et al. &quot;
-## [140] &quot;Attorney: Kevin Christian Walsh \nOrganization: University of Richmond School of Law 203 Richmond Way Richmond, VA 23173 kwalsh@richmond.edu 804-287-6018 \nParty name: Professor Kurt T. Lash &quot;
-## [141] &quot;Attorney: Xiao Wang \nOrganization: Northwestern University Pritzker School of Law 375 E. Chicago Avenue, 8th Floor Chicago, IL 60611 x.wang@law.northwestern.edu 3125031486 \nParty name: Human Rights Watch, Global Justice Center, and Amnesty International &quot;
-## [142] &quot;Attorney: Edward Todd Waters \nOrganization: Feldesman Tucker Leifer Fidell LLP 1129 20th Street, NW. 4th Floor Washington, DC 20036 ewaters@feldesmantucker.com 202 466 8960 \nParty name: 547 Deans, Chairs, Scholars, et al. &quot;
-## [143] &quot;Attorney: Edward Mark Wenger \nOrganization: Holtzman Vogel Baran Torchinsky &amp; Josefiak PLLC 2300 N Street NW Suite 643-A Washington, DC 20037 emwenger@holtzmanvogel.com 2027378808 \nParty name: The American Cornerstone Institute and its founder Dr. Benjamin S. Carson &quot;
-## [144] &quot;Attorney: Danielle Merry White \nOrganization: Heartbeat International, Inc. 5000 Arlington Centre Blvd., Suite 2277 Columbus, OH 43220 dwhite@heartbeatinternational.org 6148857577 \nParty name: Heartbeat International, Inc. &quot;
-## [145] &quot;Attorney: Philip Daniel Williamson \nOrganization: Taft Stettinius &amp; Hollister LLP 425 Walnut Street, Suite 1800 Cincinnati, OH 45202 pwilliamson@taftlaw.com 5133579417 \nParty name: Lee J. Strang &quot;
-## [146] &quot;Attorney: Tiffany Regina Wright \nOrganization: Howard University School of Law Human and Civil Rights Clinic 2900 Van Ness Street NW Washington, DC 20008 tiffany.wright@orrick.com 202-643-7204 \nParty name: Howard University School of Law Human and Civil Rights Clinic &quot;
-## [147] &quot;Attorney: Geoffrey M. Wyatt \nOrganization: Skadden, Arps, Slate, Meagher &amp; Flom, LLP 1440 New York Avenue, N.W. Washington, DC 20005 geoffrey.wyatt@skadden.com 202-371-7008 \nParty name: The Autistic Self Advocacy Network and The Disability Rights Education and Defense Fund &quot;
+## [112] &quot;Attorney: D. Kent Safriet \nOrganization: Holtzman Vogel Baran Torchinsky &amp; Josefiak PLLC 15405 John Marshall Highway Haymarket, VA 20169 kent@holtzmanvogel.com (540) 341-8808 \nParty name: Christian Medical &amp; Dental Associations &quot;                                                                                                                                                         
+## [113] &quot;Attorney: Gene Clayton Schaerr \nOrganization: Schaerr | Jaffe 1717 K Street NW, Suite 900 Washington, DC 20006 gschaerr@schaerr-jaffe.com 202-787-1060 \nParty name: Maureen L. Condic, Ph.D. and the Charlotte Lozier Institute &quot;                                                                                                                                                             
+## [114] &quot;Attorney: Elizabeth Brooks Scherer \nOrganization: P.O. Box 27525 Raleigh, NC 27611 scherer.appeals@gmail.com 919.755.8790 \nParty name: Professor Randy Beck &quot;                                                                                                                                                                                                                                 
+## [115] &quot;Attorney: Linda Boston Schlueter \nOrganization: Trinity Legal Center 1150 N. Loop 1604 W. Suite 108-208 San Antonio, TX 78248 TLC4Linda@aol.com 210-274-5274 \nParty name: Trinity Legal Center &quot;                                                                                                                                                                                              
+## [116] &quot;Attorney: Jay Alan Sekulow \nOrganization: American Center for Law and Justice 201 Maryland Avenue, N.E. Washington, DC 20002 jsekulow@claglaw.com 2022485407 \nParty name: American Center for Law &amp; Justice &quot;                                                                                                                                                                                 
+## [117] &quot;Attorney: Jay Alan Sekulow \nOrganization: American Center for Law and Justice 201 Maryland Avenue, N.E. Washington, DC 20002 sekulow@aclj.org 2025468890 \nParty name: Elliot Institute &quot;                                                                                                                                                                                                      
+## [118] &quot;Attorney: Jay Alan Sekulow \nOrganization: American Center for Law and Justice 201 Maryland Avenue, N.E. Washington, DC 20002 sekulow@aclj.org 20225468890 \nParty name: American Center for Law and Justice and Bioethics Defense Fund &quot;                                                                                                                                                       
+## [119] &quot;Attorney: Jordan Adam Sekulow \nOrganization: American Center for Law and Justice 201 Maryland Avenue, NE Washington, DC 20002 sekulow.jas@aclj.org 202-546-8890 \nParty name: The European Centre for Law and Justice &quot;                                                                                                                                                                        
+## [120] &quot;Attorney: Shannon Rose Selden \nOrganization: Debevoise &amp; Plimpton LLP 919 3rd Avenue New York, NY 10022 srselden@debevoise.com 212-909-6000 \nParty name: International and Comparative Legal Scholars &quot;                                                                                                                                                                                       
+## [121] &quot;Attorney: Jeffrey A. Shafer \nOrganization: Langdon Law LLC 8913 Cincinnati-Dayton Rd. West Chester, OH 45069 jshafer@langdonlaw.com 513-577-7380 \nParty name: 396 State Legislators from 41 States &quot;                                                                                                                                                                                          
+## [122] &quot;Attorney: Catherine Wynne Short \nOrganization: Life Legal Defense Foundation P.O. Box 2105 Napa, CA 94558 kshort@lldf.org (707) 224-6675 \nParty name: Robin Pierucci, M.D., and Life Legal Defense Foundation &quot;                                                                                                                                                                               
+## [123] &quot;Attorney: Heather Dorothy Shumaker \nOrganization: National Women&#39;s Law Center 11 Dupont Cir Nw Suite 800 Washington, DC 20036 hshumaker@nwlc.org 202-588-5180 \nParty name: National Women&#39;s Law Center and 72 Additional Organizations Committed to Gender Equality &quot;                                                                                                                         
+## [124] &quot;Attorney: Howard Nathan Slugh \nOrganization: 2400 Virginia Ave NW Apt C619 Washington, DC 20037 hslugh@jcrl.org 954-328-9461 \nParty name: Jewish Coalition For Religious Liberty &quot;                                                                                                                                                                                                            
+## [125] &quot;Attorney: J. Thomas Smith Jr. \nOrganization: Constitutional Government Defense Fund 1113 Murfreesboro Road 106-167 Franklin, TN 37064 jthomsmith@cgdfund.com 202-669-1452 \nParty name: 22 State Policy Organizations &quot;                                                                                                                                                                        
+## [126] &quot;Attorney: Priscilla J. Smith \nOrganization: Yale Law School 319 Sterling Place 18th Floor Brooklyn, NY 11238 priscilla.smith@yale.edu 3472625177 \nParty name: Yale Law School Information Society Project &quot;                                                                                                                                                                                   
+## [127] &quot;Attorney: William Lucien Smith \nOrganization: Balch &amp; Bingham LLP 188 East Capitol Street, Suite 1400 Jackson, MS 39201 bsmith@balch.com 6019658175 \nParty name: Commissioner Andy Gipson, et al. &quot;                                                                                                                                                                                           
+## [128] &quot;Attorney: Orin Samuel Snyder \nOrganization: Gibson, Dunn &amp; Crutcher LLp 200 Park Avenue New York, NY 10166 osnyder@gibsondunn.com (212) 351-4000 \nParty name: Constitutional Law Scholars Lee C. Bollinger, et al., &quot;                                                                                                                                                                         
+## [129] &quot;Attorney: Anjali Srinivasan \nOrganization: Keker, Van Nest &amp; Peters LLP 633 Battery Street San Francisco, CA 94111 asrinivasan@keker.com 415-391-5400 \nParty name: Economists &quot;                                                                                                                                                                                                               
+## [130] &quot;Attorney: Mathew D. Staver \nOrganization: Liberty Counsel PO Box 540774 Orlando, FL 32854 court@lc.org 407-875-1776 \nParty name: African American, Hispanic, Roman Catholic and Protestant Religious and Civil Rights Organizations and Leaders &quot;                                                                                                                                             
+## [131] &quot;Attorney: Simon Arthur Steel \nOrganization: Dentons US LLP 1900 K Street, NW Washington, DC 20006 simon.steel@dentons.com 2029776249 \nParty name: European Law Professors &quot;                                                                                                                                                                                                                   
+## [132] &quot;Attorney: Judd Edward Stone II \nOrganization: Texas Attorney General&#39;s Office P.O. Box 12548 (MC 059) Austin, TX 78711-2548 judd.stone@oag.texas.gov 512-936-1700 \nParty name: States of Texas, et al. &quot;                                                                                                                                                                                      
+## [133] &quot;Attorney: Judd Edward Stone II \nOrganization: Texas Attorney General&#39;s Office P.O. Box 12548 (MC 059) Austin, TX 78711-2548 judd.stone@oag.texas.gov 512-936-1700 \nParty name: States of Texas, et al., &quot;                                                                                                                                                                                     
+## [134] &quot;Attorney: Christian Janet Strickland \nOrganization: Schwartz, Orgler &amp; Jordan, PLLC 2355 Pass Road Biloxi, MS 39531 christian@sojlaw.net 228-388-7441 \nParty name: Roman Catholic Diocese of Jackson and Roman Catholic Diocese of Biloxi &quot;                                                                                                                                                   
+## [135] &quot;Attorney: Claude G. Szyfer \nOrganization: Stroock &amp; Stroock &amp; Lavan LLP 180 Maiden Lane New York, NY 10038 cszyfer@stroock.com (212) 806-5400 \nParty name: 896 State Legislators &quot;                                                                                                                                                                                                            
+## [136] &quot;Attorney: Stephanie Toti \nOrganization: Lawyering Project 41 Schermerhorn Street No. 1056 New York, NY 11201 stoti@lawyeringproject.org (646) 490-1083 \nParty name: Abortion Funds and Practical Support Organizations &quot;                                                                                                                                                                      
+## [137] &quot;Attorney: Reginald M. Turner Jr. \nOrganization: American Bar Association 321 North Clark St. Chicago, IL 60654 abapresident@americanbar.org 3129885000 \nParty name: American Bar Association &quot;                                                                                                                                                                                                
+## [138] &quot;Attorney: Angela C. Vigil \nOrganization: Baker and McKenzie LLP 1111 Brickell Avenue Suite 1700 Miami, FL 33131 angela.vigil@bakermckenzie.com 305-789-8904 \nParty name: Ywca USA, Girls Inc., Supermajority Education Fund, and United State of Women &quot;                                                                                                                                      
+## [139] &quot;Attorney: William Wagner \nOrganization: Great Lakes Justice Center 5600 W. Mount Hope Hwy. Upper Level Lansing, MI 48917 Prof.WWJD@gmail.com 517-643-1765 \nParty name: National Catholic Bioethics Center, et al. &quot;                                                                                                                                                                           
+## [140] &quot;Attorney: Kevin Christian Walsh \nOrganization: University of Richmond School of Law 203 Richmond Way Richmond, VA 23173 kwalsh@richmond.edu 804-287-6018 \nParty name: Professor Kurt T. Lash &quot;                                                                                                                                                                                                
+## [141] &quot;Attorney: Xiao Wang \nOrganization: Northwestern University Pritzker School of Law 375 E. Chicago Avenue, 8th Floor Chicago, IL 60611 x.wang@law.northwestern.edu 3125031486 \nParty name: Human Rights Watch, Global Justice Center, and Amnesty International &quot;                                                                                                                               
+## [142] &quot;Attorney: Edward Todd Waters \nOrganization: Feldesman Tucker Leifer Fidell LLP 1129 20th Street, NW. 4th Floor Washington, DC 20036 ewaters@feldesmantucker.com 202 466 8960 \nParty name: 547 Deans, Chairs, Scholars, et al. &quot;                                                                                                                                                               
+## [143] &quot;Attorney: Edward Mark Wenger \nOrganization: Holtzman Vogel Baran Torchinsky &amp; Josefiak PLLC 2300 N Street NW Suite 643-A Washington, DC 20037 emwenger@holtzmanvogel.com 2027378808 \nParty name: The American Cornerstone Institute and its founder Dr. Benjamin S. Carson &quot;                                                                                                                  
+## [144] &quot;Attorney: Danielle Merry White \nOrganization: Heartbeat International, Inc. 5000 Arlington Centre Blvd., Suite 2277 Columbus, OH 43220 dwhite@heartbeatinternational.org 6148857577 \nParty name: Heartbeat International, Inc. &quot;                                                                                                                                                              
+## [145] &quot;Attorney: Philip Daniel Williamson \nOrganization: Taft Stettinius &amp; Hollister LLP 425 Walnut Street, Suite 1800 Cincinnati, OH 45202 pwilliamson@taftlaw.com 5133579417 \nParty name: Lee J. Strang &quot;                                                                                                                                                                                          
+## [146] &quot;Attorney: Tiffany Regina Wright \nOrganization: Howard University School of Law Human and Civil Rights Clinic 2900 Van Ness Street NW Washington, DC 20008 tiffany.wright@orrick.com 202-643-7204 \nParty name: Howard University School of Law Human and Civil Rights Clinic &quot;                                                                                                                 
+## [147] &quot;Attorney: Geoffrey M. Wyatt \nOrganization: Skadden, Arps, Slate, Meagher &amp; Flom, LLP 1440 New York Avenue, N.W. Washington, DC 20005 geoffrey.wyatt@skadden.com 202-371-7008 \nParty name: The Autistic Self Advocacy Network and The Disability Rights Education and Defense Fund &quot;                                                                                                           
 ## [148] &quot;Attorney: Chelsey Danaye Youman \nOrganization: Human Coalition Action P.O. Box 5052 Frisco, TX 75035 cyouman@hucoaction.org 2146294806 \nParty name: Human Coalition Action and Students for Life of America&quot;</code></pre>
 </div>
 

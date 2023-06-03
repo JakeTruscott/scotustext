@@ -1494,7 +1494,7 @@ names(dobbs_test)
 - `special_filing`: Factor indicating whether filing considered writs of ***Habeas Corpus*** or ***Mandamus***, as well as whether it considered ***Capital Punishment*** (e.g., ***Stays of Execution***) or is a petition filed under the Court's ***Original Jurisdiction***.
 - `docket_url`: Http address corresponding with location of docket of interest on supremecourt.gov.
 
-## **Example Walkthrough**
+## `docket_search` **Example Walkthrough**
 
 Here's an example of how to use the `docket_search` function using *Dobbs v. Jackson Women's Health Clinic* (2022), one of the largest docket sheets hosted by the Supreme Court:
 
