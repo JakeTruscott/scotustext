@@ -7,6 +7,11 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
   cat("\nDocket Sheets Found in Archive: ", length(unique(archive_collect$docket_number)))
   archive_retrieved <- archive_collect$docket_number
   docket_id <- docket_id[!docket_id %in% archive_retrieved]
+  completed_count <- 0
+  final_urls <- c()
+  retry_urls <- c()
+  failed_urls <- c()
+  non_collect <- c()
 
   if (length(docket_id) == 0){
     cat("\nAll Requests Retrieved from Archive")
@@ -19,11 +24,6 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
     cat("\nDocket Sheets to Collect: ", length(unique(urls)), "\n")
 
     docket_entries <- archive_collect
-    completed_count <- 0
-    final_urls <- c()
-    retry_urls <- c()
-    failed_urls <- c()
-    non_collect <- c()
 
     process_url <- function(url, docket_entries) {
       docket_frame <- suppressWarnings(docket_call(url, sleep))

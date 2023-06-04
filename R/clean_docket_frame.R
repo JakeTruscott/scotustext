@@ -820,6 +820,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
                   x <- trimws(x)
                   x <- gsub(" Organization:", " \nOrganization:", x)
                   x <- gsub(" Party name:", " \nParty name:", x)
+                  x <- gsub("\\; ", " \\(\\&\\) ", x)
                   x
                 })
                 flattened <- unlist(flattened)
@@ -846,6 +847,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
                   x <- trimws(x)
                   x <- gsub(" Organization:", " \nOrganization:", x)
                   x <- gsub(" Party name:", " \nParty name:", x)
+                  x <- gsub("\\; ", " \\(\\&\\) ", x)
                   x
                 })
                 flattened <- unlist(flattened)
@@ -871,6 +873,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
                   x <- trimws(x)
                   x <- gsub(" Organization:", " \nOrganization:", x)
                   x <- gsub(" Party name:", " \nParty name:", x)
+                  x <- gsub("\\; ", " \\(\\&\\) ", x)
                   x
                 })
                 flattened <- unlist(flattened)
@@ -907,7 +910,15 @@ clean_docket_frame <- function(docket_frame, include, exclude){
                    respondent_counsel = gsub("\\d", "", respondent_counsel)) %>%
             mutate(all_other_counsel = gsub("Attorney: Attorneys", "Attorney: ", all_other_counsel),
                    all_petitioner_counsel = gsub("Attorney: Attorneys", "Attorney: ", all_petitioner_counsel),
-                   all_respondent_counsel = gsub("Attorney: Attorneys", "Attorney: ", all_respondent_counsel))
+                   all_respondent_counsel = gsub("Attorney: Attorneys", "Attorney: ", all_respondent_counsel)) %>%
+            mutate(all_other_counsel = gsub("\\nOrganization:  \\nOrganization:", "\nOrganization: ", all_other_counsel),
+                   all_petitioner_counsel = gsub("\\nOrganization:  \\nOrganization:", "\nOrganization: ", all_petitioner_counsel),
+                   all_respondent_counsel = gsub("\\nOrganization:  \\nOrganization:", "\nOrganization: ", all_respondent_counsel)) %>%
+            mutate(all_other_counsel = gsub("Attorney\\: \\:", "Attorney:", all_other_counsel),
+                   all_petitioner_counsel = gsub("Attorney\\: \\:", "Attorney:", all_petitioner_counsel),
+                   all_respondent_counsel = gsub("Attorney\\: \\:", "Attorney:", all_respondent_counsel))
+
+
 
           if (is.na(docket_entries$petitioner)) {
             docket_entries$petitioner_counsel <- NA
@@ -1065,6 +1076,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
                 x <- gsub(" Organization:", " \nOrganization:", x)
                 x <- gsub(" Party name:", " \nParty name:", x)
                 x <- gsub("(?<!General)Attorney\\s(?![A-Za-z])", "Attorney:", x, perl = TRUE)
+                x <- gsub("\\; ", " \\(\\&\\) ", x)
                 x
               })
               flattened <- unlist(flattened)
@@ -1097,6 +1109,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
                 x <- gsub(" Organization:", " \nOrganization:", x)
                 x <- gsub(" Party name:", " \nParty name:", x)
                 x <- gsub("(?<!General)Attorney\\s(?![A-Za-z])", "Attorney:", x, perl = TRUE)
+                x <- gsub("\\; ", " \\(\\&\\) ", x)
                 x
               })
               flattened <- unlist(flattened)
@@ -1129,6 +1142,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
                 x <- gsub(" Organization:", " \nOrganization:", x)
                 x <- gsub(" Party name:", " \nParty name:", x)
                 x <- gsub("(?<!General)Attorney\\s(?![A-Za-z])", "Attorney:", x, perl = TRUE)
+                x <- gsub("\\; ", " \\(\\&\\) ", x)
                 x
               })
               flattened <- unlist(flattened)
@@ -1166,7 +1180,13 @@ clean_docket_frame <- function(docket_frame, include, exclude){
                  respondent_counsel = gsub("\\d", "", respondent_counsel)) %>%
           mutate(all_other_counsel = gsub("Attorney: Attorneys", "Attorney: ", all_other_counsel),
                  all_petitioner_counsel = gsub("Attorney: Attorneys", "Attorney: ", all_petitioner_counsel),
-                 all_respondent_counsel = gsub("Attorney: Attorneys", "Attorney: ", all_respondent_counsel))
+                 all_respondent_counsel = gsub("Attorney: Attorneys", "Attorney: ", all_respondent_counsel)) %>%
+          mutate(all_other_counsel = gsub("\\nOrganization:  \\nOrganization:", "\nOrganization: ", all_other_counsel),
+                 all_petitioner_counsel = gsub("\\nOrganization:  \\nOrganization:", "\nOrganization: ", all_petitioner_counsel),
+                 all_respondent_counsel = gsub("\\nOrganization:  \\nOrganization:", "\nOrganization: ", all_respondent_counsel))
+
+
+
 
         if (is.na(docket_entries$petitioner)) {
           docket_entries$petitioner_counsel <- NA
