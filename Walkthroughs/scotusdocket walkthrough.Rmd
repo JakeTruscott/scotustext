@@ -1486,10 +1486,6 @@ clean_docket_frame <- function(docket_frame, include, exclude){
   return(docket_entries)
 
 }
-
-
-
-
 docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, exclude = NULL, write_csv = FALSE, write_xlsx = FALSE, write_reactable = FALSE) {
 
   archive_collect <- NULL
@@ -1886,6 +1882,12 @@ print_flattened_list <- function(column) {
 
 ```
 
+```{r, eval = F}
+#Load scotustext package
+install.packages("scotustext")
+library(scotustext)
+```
+
 ## **docket_search()**
 
 `docket_search`serves as an automated tool for collecting, parsing, and cleaning information from docketed cases, petitions, and motions to the United States Supreme Court. Implementation of `docket_search` requires providing a docket number corresponding to the petition (or application/motion) of interest as a character object (`docket_id`). The function call will also accept a list of docket numbers, as well as an object containing a list of comma-separated character vectors. For more information on the Supreme Court docket, *see*   [supremecourt.gov](https://www.supremecourt.gov/docket/docket.aspx).
@@ -1963,12 +1965,6 @@ names(dobbs_test)
 Here's an example of how to use the `docket_search` function using *Dobbs v. Jackson Women's Health Clinic* (2022), one of the largest docket sheets hosted by the Supreme Court. Each call to `docket_search` will initialize a search to the archived data on the primary `scotustext` [Github repository](https://github.com/JakeTruscott/scotustext.git), denote the number of retrieved values for `docket_id`, and finally indicate the number that need to be processed. Upon completion, `docket_search` will return a completion report along with summary statistics of a retrieved data. 
 
 
-```{r, eval = F}
-#Load scotustext package
-install.packages("scotustext")
-library(scotustext)
-```
-
 ```{r}
 #Call to Docket Using Docket Number for Dobbs v. Jackson (19-1392)
 dobbs_test <- docket_search(docket_id = "19-1392")
@@ -1995,22 +1991,35 @@ print_flattened_list <- function(column) {
 print_flattened_list(<DOCKET OBJECT AND INDEX COLUMN>)
 ```
 
+
+**List of Conferences Where Dobbs Was Considered**
 ```{r}
 #List of Conferences Where Dobbs Was Considered
 print_flattened_list(dobbs_test$multiple_conference_dates)
+```
 
-#List of Opinions Filed
+**List of Opinions Filed**
+```{r}
 print_flattened_list(dobbs_test$opinion_filings)
+```
 
-#List of Amicus Filers
+**List of Amicus Filers**
+```{r}
 print_flattened_list(dobbs_test$amicus_filers)
+```
 
-#List Counsel (Petitioner)
+**List Counsel (Petitioners)**
+```{r}
 print_flattened_list(dobbs_test$all_petitioner_counsel)
+```
 
-#List Counsel (Respondent)
+**List Counsel (Respondents)**
+```{r}
 print_flattened_list(dobbs_test$all_respondent_counsel)
+```
 
+**List Counsel (Other - e.g., Amicus)**
+```{r}
 #List Counsel (Other)
 print_flattened_list(dobbs_test$all_other_counsel)
 ```
