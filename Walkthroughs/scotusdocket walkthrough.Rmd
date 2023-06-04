@@ -1918,6 +1918,7 @@ names(dobbs_test)
 - `first_conference_date`: Date indicating the first conference where the relevant petition was considered (**Petitions Only**). 
 - `conference_count`: Integer representing the number of times the petition was re-listed and considered at another conference (**Petitions Only**). 
 - `multiple_conference_dates`: Dichtomous term indicating whether the petition was considered at more than one conference (**Petitions Only**). 
+- `certiorari_order`: Factor term indicating whether certiorari (review) was granted by the Court (**Petition GRANTED** or **Petition DENIED*).
 - `most_recent_order`: Factor indicating the most recent action taken by Court (**Docketed**, **Petition DENIED**, **Petition GRANTED**, **SET FOR ARGUMENT**, **ARGUED**, **JUDGEMENT ISSUED**).
 - `all_docket_entries`: Partitioned list of all docket entries (or orders) separated by date of entry.
 - `majority_opinion_writer`: Character vector indicating justice who wrote majority opinion (**Argued and Decided Petitions Only**). 
