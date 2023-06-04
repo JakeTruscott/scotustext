@@ -668,7 +668,7 @@ clean_docket_frame <- function(docket_frame, include, exclude){
 
       split_rows <- strsplit(docket_entries$application_type_check, "\n###\n")
       filtered_rows <- lapply(split_rows, function(row) {
-        has_application_type <- grepl(", submitted to", row, ignore.case = TRUE)
+        has_application_type <- grepl(", submitted to", row, ignore.case = F)
         row[has_application_type]
       })
 
@@ -676,19 +676,12 @@ clean_docket_frame <- function(docket_frame, include, exclude){
         gsub("\\([^()]*\\)", "", row)
       })
       cleaned_rows <- lapply(cleaned_rows, function(row) {
-        trimws(row)
-      })
-      cleaned_rows <- lapply(cleaned_rows, function(row) {
-        gsub(".*for ", "", row, ignore.case = )
-      })
-      cleaned_rows <- lapply(cleaned_rows, function(row) {
-        gsub("\\,.*", "", row)
-      })
-      cleaned_rows <- lapply(cleaned_rows, function(row) {
-        gsub("a ", "", row)
-      })
-      cleaned_rows <- lapply(cleaned_rows, function(row) {
+        row <- gsub("(.*Application |.*Motion )", "", row)
+        row <- gsub("(\\, submitted .*|submitted .*|)", "", row)
         str_remove(row, "\n\n")
+        trimws(row)
+        row <- gsub("^ ", "", row)
+        str_to_title(row)
       })
 
       docket_entries$application_type = cleaned_rows
@@ -1336,9 +1329,30 @@ clean_docket_frame <- function(docket_frame, include, exclude){
 
     docket_entries <- docket_entries %>%
       mutate(docket_number = gsub("No. ", "", docket_number)) %>%
+      mutate(docketed = ifelse(grepl('Docketed:', docketed, ignore.case = T), gsub(";.*?", "", docketed), docketed)) %>%
       mutate(petition_type = type) %>%
       mutate(amicus_indicator = ifelse(amicus_indicator == 1, "Yes", "No")) %>%
       select(docket_number, petition_type, case_title, petitioner, petitioner_counsel, all_petitioner_counsel, respondent, respondent_counsel, all_respondent_counsel, all_other_counsel, docketed, submitted_to, referred_to_court, application_type, linked_with, lower_court, lower_court_case_number, lower_court_decision_date, amicus_indicator, amicus_filers, amicus_count, first_conference_date, conference_count, multiple_conference_dates, certiorari_order, most_recent_order, all_docket_entries, majority_opinion_writer, opinion_type, number_of_opinions, opinions_by_type, opinion_filings, argument_date, special_filing, docket_url)
+
+    if (grepl('Docketed:', docket_entries$docketed)) {
+      modified_text <- gsub("^((?:\\S+\\s+){2}\\S+).*", "\\1", docket_entries$all_docket_entries)
+      modified_text <- gsub("^(\\S+\\s+\\S+)", "\\1,", modified_text)
+      modified_text <- gsub("Jan ", "January ", modified_text)
+      modified_text <- gsub("Feb ", "February ", modified_text)
+      modified_text <- gsub("Mar ", "March ", modified_text)
+      modified_text <- gsub("Apr ", "April ", modified_text)
+      modified_text <- gsub("May ", "May ", modified_text)
+      modified_text <- gsub("Jun ", "June ", modified_text)
+      modified_text <- gsub("Jul ", "July ", modified_text)
+      modified_text <- gsub("Aug ", "August ", modified_text)
+      modified_text <- gsub("Sep ", "September ", modified_text)
+      modified_text <- gsub("Oct ", "October ", modified_text)
+      modified_text <- gsub("Nov ", "November ", modified_text)
+      modified_text <- gsub("Dec ", "December ", modified_text)
+
+      docket_entries$docketed <- modified_text
+    }
+
     docket_entries[docket_entries == ""] <- NA
 
 
@@ -1349,3 +1363,6 @@ clean_docket_frame <- function(docket_frame, include, exclude){
   return(docket_entries)
 
 }
+
+
+
