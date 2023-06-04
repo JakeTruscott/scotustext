@@ -47,21 +47,6 @@ library(reactablefmtr)
 library(httr)
 library(devtools)
 
-call_docket_data <- function(docket_id) {
-  base_url <- "https://github.com/JakeTruscott/scotustext/raw/master/Data/"
-  rdata_url <- paste0(base_url, "dockets_archive.rdata")
-  load(url(rdata_url))
-
-  subset_dockets <- dockets_archive[dockets_archive$docket_number %in% docket_id, ]
-
-  if (nrow(subset_dockets) == 0) {
-    archive_collect <- data.frame()  # Empty dataframe
-  } else {
-    archive_collect <- subset_dockets
-  }
-
-  return(archive_collect)
-}
 process_docket_id <- function(docket_id) {
   docket_url_newer <- "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/"
   docket_url_older <- "https://www.supremecourt.gov/search.aspx?filename=/docketfiles/"
@@ -72,7 +57,7 @@ process_docket_id <- function(docket_id) {
     mutate(type = ifelse(grepl("a", docket_id, ignore.case = T), 1, type)) %>%
     mutate(type = ifelse(grepl("o", docket_id, ignore.case = T), 4, type)) %>%
     mutate(year = as.numeric(gsub("\\-.*|a.*|A.*|m.*|M.*|Original.*|original.*|o.*|O.*|Orig.*|orig.*", "", docket_id))) %>%
-    mutate(year = ifelse(as.numeric(year) %in% 0:9, as.character(paste0(sprintf("%02d", year))), as.character(year))) %>%
+    mutate(year = ifelse(as.numeric(year) %in% 0:9, as.character(paste0("0", year)), as.character(year))) %>%
     mutate(docket_number = gsub(".*\\-|.*a|.*A|.*m|.*M|.*Original|.*original|.*o|.*O|.*Orig|.*orig", "", docket_id)) %>%
     mutate(year = gsub("[^0-9]", "", year),
            docket_number = gsub("[^0-9]", "", docket_number)) %>% #Delete Non-Numbers
@@ -95,6 +80,7 @@ process_docket_id <- function(docket_id) {
   urls <- term$url
   return(urls)
 }
+
 clean_docket_frame <- function(docket_frame, include, exclude){
 
   {
@@ -1486,305 +1472,11 @@ clean_docket_frame <- function(docket_frame, include, exclude){
   return(docket_entries)
 
 }
-docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, exclude = NULL, write_csv = FALSE, write_xlsx = FALSE, write_reactable = FALSE) {
-
-  archive_collect <- NULL
-   completed_count <- 0
-    final_urls <- c()
-    retry_urls <- c()
-    failed_urls <- c()
-    non_collect <- c()
-
-  cat("\nInitializing Search of Docket Archive... ")
-  archive_collect <- call_docket_data(docket_id)
-  cat("\nDocket Sheets Found in Archive: ", length(unique(archive_collect$docket_number)))
-  archive_retrieved <- archive_collect$docket_number
-  docket_id <- docket_id[!docket_id %in% archive_retrieved]
-
-  if (length(docket_id) == 0){
-    cat("\nAll Requests Retrieved from Archive")
-    docket_entries <- archive_collect
-  } else {
-    urls <- suppressWarnings(process_docket_id(docket_id))
-    urls <- gsub(" ", "", urls)
-    urls <- gsub("- ", "-", urls)
-    urls <- gsub(" -", "-", urls)
-    cat("\nDocket Sheets to Collect: ", length(unique(urls)), "\n")
-
-    docket_entries <- archive_collect
-
-    process_url <- function(url, docket_entries) {
-      docket_frame <- suppressWarnings(docket_call(url, sleep))
-      docket_frame$text <- gsub("\\xe2\\x80\\xa2", " ", docket_frame$text)
-      docket_frame$text <- trimws(docket_frame$text)
-      docket_entities <- suppressWarnings(clean_docket_frame(docket_frame = docket_frame))
-
-      if (!is.null(include)) {
-        docket_entities <- include_func(docket_entities, include)
-      }
-
-      if (!is.null(exclude)) {
-        docket_entities <- exclude_func(docket_entities, exclude)
-      }
-
-      if (is.null(docket_entries))
-        docket_entries <- docket_entities
-      else
-        docket_entries <- rbind(docket_entries, docket_entities)
-
-      write_csv_func(docket_entities, write_csv)
-      write_xlsx_func(docket_entities, write_xlsx)
-      write_reactable_func(docket_entries, write_reactable)
-
-      completed_count <<- completed_count + 1
-
-      if (completed_count %% 50 == 0) {
-        message("Successfully Retrieved ", completed_count, " Docket Sheets")
-      }
-
-      return(docket_entries)
-    }
-
-    for (url in urls) {
-      tryCatch({
-        docket_entries <- process_url(url, docket_entries)
-      }, error = function(e) {
-        docket_number <- gsub(".*docketfiles\\/", "", url)
-        docket_number <- gsub(".*(/Public/)", "", docket_number, ignore.case = TRUE)
-        docket_number <- gsub("\\.html", "", docket_number)
-        docket_number <- gsub("\\.htm", "", docket_number)
-        message(paste("Error Retrieving and Cleaning Docket Information from Docket ID:", docket_number))
-        retry_urls <<- c(retry_urls, url)
-        message("Saving URL Information and Trying Again Later")
-        message("Waiting 5 Seconds Before Moving On...")
-        Sys.sleep(5)
-        cat("Resuming Collection Effort\n")
-      })
-    }
-
-    if (length(retry_urls) > 0) {
-      docket_url_newer <- "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/"
-      docket_url_older <- "https://www.supremecourt.gov/search.aspx?filename=/docketfiles/"
-      for (retry_url in retry_urls) {
-        message("\nBeginning Second Attempt at Processing...\n")
-        if (grepl("\\.html", retry_url)) {
-          docket_number <- gsub(".*(/Public/)", "", retry_url, ignore.case = TRUE)
-          docket_number <- gsub("\\.html", "", docket_number)
-          docket_year <- gsub("(\\-.*|a.*|m.*|o.*)", "", docket_number, ignore.case = TRUE)
-          docket_year <- as.numeric(docket_year)
-          if (as.numeric(docket_year) == 16) {
-            retry_url <- paste0(docket_url_older, docket_number, ".htm")
-          } else {
-            retry_url <- paste0(docket_url_newer, docket_number, ".html")
-          }
-        } else {
-          docket_number <- gsub(".*docketfiles\\/", "", retry_url)
-          docket_number <- gsub("\\.htm", "", docket_number)
-          docket_year <- gsub("(\\-.*|a.*|m.*|o.*)", "", docket_number, ignore.case = TRUE)
-          docket_year <- as.numeric(docket_year)
-          if (as.numeric(docket_year) == 16) {
-            retry_url <- paste0(docket_url_newer, docket_number, ".html")
-          } else {
-            retry_url <- paste0(docket_url_older, docket_number, ".htm")
-          }
-        }
-
-        tryCatch({
-          docket_entries <- process_url(retry_url, docket_entries)
-        }, error = function(e) {
-          message(paste("Error In Second Attempt -- Adjusting HTTP Conditions & Trying Again Later ( Docket ID:", docket_number, ")"))
-          final_urls <<- c(final_urls, retry_url)
-        })
-      }
-    }
-
-    if (length(final_urls) > 0) {
-      docket_url_newer <- "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/"
-      docket_url_older <- "https://www.supremecourt.gov/search.aspx?filename=/docketfiles/"
-      for (final_url in final_urls) {
-        if (grepl("\\.html", final_url)) {
-          docket_number <- gsub(".*(/Public/)", "", final_url, ignore.case = TRUE)
-          docket_number <- gsub("\\.html", "", docket_number)
-          final_url <- paste0(docket_url_older, docket_number, ".htm")
-        } else {
-          docket_number <- gsub(".*docketfiles\\/", "", final_url)
-          docket_number <- gsub("\\.htm", "", docket_number)
-          final_url <- paste0(docket_url_newer, docket_number, ".html")
-        }
-
-        tryCatch({
-          docket_entries <- process_url(final_url, docket_entries)
-        }, error = function(e) {
-          message(paste("Error In Final Attempt -- Saving For Completion Report ( Docket ID:", docket_number, ")"))
-          non_collect <<- c(non_collect, final_url)
-        })
-      }
-    }
-  }
 
 
 
-  cat("\n- - - - - - - - COMPLETION SUMMARY - - - - - - - -")
-  cat("\nTotal Docket Sheets Successfully Retrieved:", length(docket_entries$docket_number))
-  cat("\nTotal Docket Sheets Failed to Retrieve:", length(failed_urls))
-  cat("\nDocket Types Retrieved...")
-  cat("\n   Docketed Petitions: ", length(docket_entries$petition_type[docket_entries$petition_type == "Docketed Case"]))
-  cat("\n   Docketed Petitions (Original Jurisdiction): ", length(docket_entries$petition_type[docket_entries$petition_type == "Docketed Case - Original Jurisdiction"]))
-  cat("\n   Applications: ", length(docket_entries$petition_type[docket_entries$petition_type == "Application"]))
-  cat("\n   Motions: ", length(docket_entries$petition_type[docket_entries$petition_type == "Motion"]))
-
-  if (length(non_collect) > 0) {
-    non_collect <- gsub(".*(/Public/)", "", non_collect, ignore.case = TRUE)
-    non_collect <- gsub(".*docketfiles\\/", "", non_collect)
-    non_collect <- gsub(".html", "", non_collect)
-    non_collect <- gsub(".htm", "", non_collect)
-    cat("\nFailed to Retrieve Docket Information for: ")
-    cat(non_collect, sep = ifelse(length(non_collect) > 1, ", ", ""))
-  }
-
-  rownames(docket_entries) <- NULL
-  return(docket_entries)
-}
-docket_search_flat <- function(docket_id, rate = 5000, sleep = 30, include = NULL, exclude = NULL, write_csv = FALSE, write_xlsx = FALSE, write_reactable = FALSE) {
-
-  archive_collect <- NULL
-   completed_count <- 0
-    final_urls <- c()
-    retry_urls <- c()
-    failed_urls <- c()
-    non_collect <- c()
 
 
-  #cat("\nInitializing Search of Docket Archive... ")
-  archive_collect <- call_docket_data(docket_id)
-  #cat("\nDocket Sheets Found in Archive: ", length(unique(archive_collect$docket_number)))
-  archive_retrieved <- archive_collect$docket_number
-  docket_id <- docket_id[!docket_id %in% archive_retrieved]
-
-  if (length(docket_id) == 0){
-   # cat("\nAll Requests Retrieved from Archive")
-    docket_entries <- archive_collect
-  } else {
-    urls <- suppressWarnings(process_docket_id(docket_id))
-    urls <- gsub(" ", "", urls)
-    urls <- gsub("- ", "-", urls)
-    urls <- gsub(" -", "-", urls)
-    #cat("\nDocket Sheets to Collect: ", length(unique(urls)), "\n")
-
-    docket_entries <- archive_collect
-
-    process_url <- function(url, docket_entries) {
-      docket_frame <- suppressWarnings(docket_call(url, sleep))
-      docket_frame$text <- gsub("\\xe2\\x80\\xa2", " ", docket_frame$text)
-      docket_frame$text <- trimws(docket_frame$text)
-      docket_entities <- suppressWarnings(clean_docket_frame(docket_frame = docket_frame))
-
-      if (!is.null(include)) {
-        docket_entities <- include_func(docket_entities, include)
-      }
-
-      if (!is.null(exclude)) {
-        docket_entities <- exclude_func(docket_entities, exclude)
-      }
-
-      if (is.null(docket_entries))
-        docket_entries <- docket_entities
-      else
-        docket_entries <- rbind(docket_entries, docket_entities)
-
-      write_csv_func(docket_entities, write_csv)
-      write_xlsx_func(docket_entities, write_xlsx)
-      write_reactable_func(docket_entries, write_reactable)
-
-      completed_count <<- completed_count + 1
-
-      if (completed_count %% 50 == 0) {
-        message("Successfully Retrieved ", completed_count, " Docket Sheets")
-      }
-
-      return(docket_entries)
-    }
-
-    for (url in urls) {
-      tryCatch({
-        docket_entries <- process_url(url, docket_entries)
-      }, error = function(e) {
-        docket_number <- gsub(".*docketfiles\\/", "", url)
-        docket_number <- gsub(".*(/Public/)", "", docket_number, ignore.case = TRUE)
-        docket_number <- gsub("\\.html", "", docket_number)
-        docket_number <- gsub("\\.htm", "", docket_number)
-        message(paste("Error Retrieving and Cleaning Docket Information from Docket ID:", docket_number))
-        retry_urls <<- c(retry_urls, url)
-        message("Saving URL Information and Trying Again Later")
-        message("Waiting 5 Seconds Before Moving On...")
-        Sys.sleep(5)
-        cat("Resuming Collection Effort\n")
-      })
-    }
-
-    if (length(retry_urls) > 0) {
-      docket_url_newer <- "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/"
-      docket_url_older <- "https://www.supremecourt.gov/search.aspx?filename=/docketfiles/"
-      for (retry_url in retry_urls) {
-        message("\nBeginning Second Attempt at Processing...\n")
-        if (grepl("\\.html", retry_url)) {
-          docket_number <- gsub(".*(/Public/)", "", retry_url, ignore.case = TRUE)
-          docket_number <- gsub("\\.html", "", docket_number)
-          docket_year <- gsub("(\\-.*|a.*|m.*|o.*)", "", docket_number, ignore.case = TRUE)
-          docket_year <- as.numeric(docket_year)
-          if (as.numeric(docket_year) == 16) {
-            retry_url <- paste0(docket_url_older, docket_number, ".htm")
-          } else {
-            retry_url <- paste0(docket_url_newer, docket_number, ".html")
-          }
-        } else {
-          docket_number <- gsub(".*docketfiles\\/", "", retry_url)
-          docket_number <- gsub("\\.htm", "", docket_number)
-          docket_year <- gsub("(\\-.*|a.*|m.*|o.*)", "", docket_number, ignore.case = TRUE)
-          docket_year <- as.numeric(docket_year)
-          if (as.numeric(docket_year) == 16) {
-            retry_url <- paste0(docket_url_newer, docket_number, ".html")
-          } else {
-            retry_url <- paste0(docket_url_older, docket_number, ".htm")
-          }
-        }
-
-        tryCatch({
-          docket_entries <- process_url(retry_url, docket_entries)
-        }, error = function(e) {
-          message(paste("Error In Second Attempt -- Adjusting HTTP Conditions & Trying Again Later ( Docket ID:", docket_number, ")"))
-          final_urls <<- c(final_urls, retry_url)
-        })
-      }
-    }
-
-    if (length(final_urls) > 0) {
-      docket_url_newer <- "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/"
-      docket_url_older <- "https://www.supremecourt.gov/search.aspx?filename=/docketfiles/"
-      for (final_url in final_urls) {
-        if (grepl("\\.html", final_url)) {
-          docket_number <- gsub(".*(/Public/)", "", final_url, ignore.case = TRUE)
-          docket_number <- gsub("\\.html", "", docket_number)
-          final_url <- paste0(docket_url_older, docket_number, ".htm")
-        } else {
-          docket_number <- gsub(".*docketfiles\\/", "", final_url)
-          docket_number <- gsub("\\.htm", "", docket_number)
-          final_url <- paste0(docket_url_newer, docket_number, ".html")
-        }
-
-        tryCatch({
-          docket_entries <- process_url(final_url, docket_entries)
-        }, error = function(e) {
-          message(paste("Error In Final Attempt -- Saving For Completion Report ( Docket ID:", docket_number, ")"))
-          non_collect <<- c(non_collect, final_url)
-        })
-      }
-    }
-  }
-
-  rownames(docket_entries) <- NULL
-  return(docket_entries)
-}
 docket_call <- function(urls, rate, sleep) {
   docket_frame <- data.frame(url = character(), text = character(), stringsAsFactors = FALSE)
   error_count <- 0
@@ -1838,6 +1530,7 @@ docket_call <- function(urls, rate, sleep) {
 
   return(docket_frame)
 } # Call to Docket via Internet
+
 include_func <- function(docket_entities, cols){
   if (!is.null(cols)) {
     docket_entities <- docket_entities %>%
@@ -1845,6 +1538,7 @@ include_func <- function(docket_entities, cols){
   }
   return(docket_entities)
 } #Include Parameter
+
 exclude_func <- function(docket_entities, cols){
   if (!is.null(cols)) {
     docket_entities <- docket_entities %>%
@@ -1852,6 +1546,7 @@ exclude_func <- function(docket_entities, cols){
   }
   return(docket_entities)
 } #Exclude Parameter
+
 write_csv_func <- function(docket_entries, write_csv) {
   if (write_csv) {
     cat("Code to Save Dataframe as (.csv):\n")
@@ -1859,6 +1554,7 @@ write_csv_func <- function(docket_entries, write_csv) {
     cat("write.csv(<SEARCH QUERY OBJECT NAME>, file = '<SAVE FILE>.csv', row.names = FALSE)\n")
   }
 }
+
 write_xlsx_func <- function(docket_entries, write_xlsx) {
   if (write_xlsx) {
     cat("Code to Save Dataframe as (.xlsx):\n")
@@ -1866,6 +1562,7 @@ write_xlsx_func <- function(docket_entries, write_xlsx) {
     cat("write_xlsx(<SEARCH QUERY OBJECT NAME>, path = '<SAVE FILE>.xlsx')\n")
   }
 }
+
 write_reactable_func <- function(docket_entries, write_reactable){
   if (write_reactable){
     cat("Code to Create (.HTML) Table Using Reactable:\n")
@@ -1875,6 +1572,285 @@ write_reactable_func <- function(docket_entries, write_reactable){
     cat("add_subtitle('<YOUR SUBTITLE HERE>')\n")
     }
 }
+
+docket_search_flat <- function(docket_id, rate = 5000, sleep = 30, include = NULL, exclude = NULL, write_csv = FALSE, write_xlsx = FALSE, write_reactable = FALSE) {
+  urls <- suppressWarnings(process_docket_id(docket_id))
+  urls <- gsub(" ", "", urls)
+  urls <- gsub("- ", "-", urls)
+  urls <- gsub(" -", "-", urls)
+
+  docket_entries <- NULL
+  completed_count <- 0
+  final_urls <- c()
+  retry_urls <- c()
+  failed_urls <- c()
+  non_collect <- c()
+
+  process_url <- function(url, docket_entries) {
+    docket_frame <- suppressWarnings(docket_call(url, sleep))
+    docket_frame$text <- gsub("\\xe2\\x80\\xa2", " ", docket_frame$text)
+    docket_frame$text <- trimws(docket_frame$text)
+    docket_entities <- suppressWarnings(clean_docket_frame(docket_frame = docket_frame))
+
+    if (!is.null(include)) {
+      docket_entities <- include_func(docket_entities, include)
+    }
+
+    if (!is.null(exclude)) {
+      docket_entities <- exclude_func(docket_entities, exclude)
+    }
+
+    if (is.null(docket_entries))
+      docket_entries <- docket_entities
+    else
+      docket_entries <- rbind(docket_entries, docket_entities)
+
+    write_csv_func(docket_entities, write_csv)
+    write_xlsx_func(docket_entities, write_xlsx)
+    write_reactable_func(docket_entries, write_reactable)
+
+    completed_count <<- completed_count + 1
+
+    if (completed_count %% 50 == 0) {
+      message("Successfully Retrieved ", completed_count, " Docket Sheets")
+    }
+
+    return(docket_entries)
+  }
+
+  for (url in urls) {
+    tryCatch({
+      docket_entries <- process_url(url, docket_entries)
+    }, error = function(e) {
+      docket_number <- gsub(".*docketfiles\\/", "", url)
+      docket_number <- gsub(".*(/Public/)", "", docket_number, ignore.case = TRUE)
+      docket_number <- gsub("\\.html", "", docket_number)
+      docket_number <- gsub("\\.htm", "", docket_number)
+      message(paste("Error Retrieving and Cleaning Docket Information from Docket ID:", docket_number))
+      retry_urls <<- c(retry_urls, url)
+      message("Saving URL Information and Trying Again Later")
+      message("Waiting 10 Seconds Before Moving On...")
+      Sys.sleep(10)
+      cat("Resuming Collection Effort\n")
+    })
+  }
+
+  if (length(retry_urls) > 0) {
+    docket_url_newer <- "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/"
+    docket_url_older <- "https://www.supremecourt.gov/search.aspx?filename=/docketfiles/"
+    for (retry_url in retry_urls) {
+      message("\nBeginning Second Attempt at Processing...\n")
+      if (grepl("\\.html", retry_url)) {
+        docket_number <- gsub(".*(/Public/)", "", retry_url, ignore.case = TRUE)
+        docket_number <- gsub("\\.html", "", docket_number)
+        docket_year <- gsub("\\-.*", "", docket_number)
+        docket_year <- as.numeric(docket_year)
+        if (as.numeric(docket_year) == 16) {
+          retry_url <- paste0(docket_url_older, docket_number, ".htm")
+        } else {
+          retry_url <- paste0(docket_url_newer, docket_number, ".html")
+        }
+      } else {
+        docket_number <- gsub(".*docketfiles\\/", "", retry_url)
+        docket_number <- gsub("\\.htm", "", docket_number)
+        docket_year <- gsub("\\-.*", "", docket_number)
+        docket_year <- as.numeric(docket_year)
+        if (as.numeric(docket_year) == 16) {
+          retry_url <- paste0(docket_url_newer, docket_number, ".html")
+        } else {
+          retry_url <- paste0(docket_url_older, docket_number, ".htm")
+        }
+      }
+
+      tryCatch({
+        docket_entries <- process_url(retry_url, docket_entries)
+      }, error = function(e) {
+        message(paste("Error In Second Attempt -- Adjusting HTTP Conditions & Trying Again Later ( Docket ID:", docket_number, ")"))
+        final_urls <<- c(final_urls, retry_url)
+      })
+    }
+  }
+
+  if (length(final_urls) > 0) {
+    docket_url_newer <- "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/"
+    docket_url_older <- "https://www.supremecourt.gov/search.aspx?filename=/docketfiles/"
+    for (final_url in final_urls) {
+      if (grepl("\\.html", final_url)) {
+        docket_number <- gsub(".*(/Public/)", "", final_url, ignore.case = TRUE)
+        docket_number <- gsub("\\.html", "", docket_number)
+        final_url <- paste0(docket_url_older, docket_number, ".htm")
+      } else {
+        docket_number <- gsub(".*docketfiles\\/", "", final_url)
+        docket_number <- gsub("\\.htm", "", docket_number)
+        final_url <- paste0(docket_url_newer, docket_number, ".html")
+      }
+
+      tryCatch({
+        docket_entries <- process_url(final_url, docket_entries)
+      }, error = function(e) {
+        message(paste("Error In Final Attempt -- Saving For Completion Report ( Docket ID:", docket_number, ")"))
+        non_collect <<- c(non_collect, final_url)
+      })
+    }
+  }
+
+
+  if (length(non_collect) > 0) {
+    non_collect <- gsub(".*(/Public/)", "", non_collect, ignore.case = TRUE)
+    non_collect <- gsub(".*docketfiles\\/", "", non_collect)
+    non_collect <- gsub(".html", "", non_collect)
+    non_collect <- gsub(".htm", "", non_collect)
+    #cat("\nFailed to Retrieve Docket Information for: ")
+    #cat(non_collect, sep = ifelse(length(non_collect) > 1, ", ", ""))
+  }
+
+  return(docket_entries)
+}
+
+docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, exclude = NULL, write_csv = FALSE, write_xlsx = FALSE, write_reactable = FALSE) {
+  urls <- suppressWarnings(process_docket_id(docket_id))
+  urls <- gsub(" ", "", urls)
+  urls <- gsub("- ", "-", urls)
+  urls <- gsub(" -", "-", urls)
+  cat("\nDocket Sheets to Collect: ", length(unique(urls)), "\n")
+
+  docket_entries <- NULL
+  completed_count <- 0
+  final_urls <- c()
+  retry_urls <- c()
+  failed_urls <- c()
+  non_collect <- c()
+
+  process_url <- function(url, docket_entries) {
+    docket_frame <- suppressWarnings(docket_call(url, sleep))
+    docket_frame$text <- gsub("\\xe2\\x80\\xa2", " ", docket_frame$text)
+    docket_frame$text <- trimws(docket_frame$text)
+    docket_entities <- suppressWarnings(clean_docket_frame(docket_frame = docket_frame))
+
+    if (!is.null(include)) {
+      docket_entities <- include_func(docket_entities, include)
+    }
+
+    if (!is.null(exclude)) {
+      docket_entities <- exclude_func(docket_entities, exclude)
+    }
+
+    if (is.null(docket_entries))
+      docket_entries <- docket_entities
+    else
+      docket_entries <- rbind(docket_entries, docket_entities)
+
+    write_csv_func(docket_entities, write_csv)
+    write_xlsx_func(docket_entities, write_xlsx)
+    write_reactable_func(docket_entries, write_reactable)
+
+    completed_count <<- completed_count + 1
+
+    if (completed_count %% 50 == 0) {
+      message("Successfully Retrieved ", completed_count, " Docket Sheets")
+    }
+
+    return(docket_entries)
+  }
+
+  for (url in urls) {
+    tryCatch({
+      docket_entries <- process_url(url, docket_entries)
+    }, error = function(e) {
+      docket_number <- gsub(".*docketfiles\\/", "", url)
+      docket_number <- gsub(".*(/Public/)", "", docket_number, ignore.case = TRUE)
+      docket_number <- gsub("\\.html", "", docket_number)
+      docket_number <- gsub("\\.htm", "", docket_number)
+      message(paste("Error Retrieving and Cleaning Docket Information from Docket ID:", docket_number))
+      retry_urls <<- c(retry_urls, url)
+      message("Saving URL Information and Trying Again Later")
+      message("Waiting 10 Seconds Before Moving On...")
+      Sys.sleep(10)
+      cat("Resuming Collection Effort\n")
+    })
+  }
+
+  if (length(retry_urls) > 0) {
+    docket_url_newer <- "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/"
+    docket_url_older <- "https://www.supremecourt.gov/search.aspx?filename=/docketfiles/"
+    for (retry_url in retry_urls) {
+      message("\nBeginning Second Attempt at Processing...\n")
+      if (grepl("\\.html", retry_url)) {
+        docket_number <- gsub(".*(/Public/)", "", retry_url, ignore.case = TRUE)
+        docket_number <- gsub("\\.html", "", docket_number)
+        docket_year <- gsub("\\-.*", "", docket_number)
+        docket_year <- as.numeric(docket_year)
+        if (as.numeric(docket_year) == 16) {
+          retry_url <- paste0(docket_url_older, docket_number, ".htm")
+        } else {
+          retry_url <- paste0(docket_url_newer, docket_number, ".html")
+        }
+      } else {
+        docket_number <- gsub(".*docketfiles\\/", "", retry_url)
+        docket_number <- gsub("\\.htm", "", docket_number)
+        docket_year <- gsub("\\-.*", "", docket_number)
+        docket_year <- as.numeric(docket_year)
+        if (as.numeric(docket_year) == 16) {
+          retry_url <- paste0(docket_url_newer, docket_number, ".html")
+        } else {
+          retry_url <- paste0(docket_url_older, docket_number, ".htm")
+        }
+      }
+
+      tryCatch({
+        docket_entries <- process_url(retry_url, docket_entries)
+      }, error = function(e) {
+        message(paste("Error In Second Attempt -- Adjusting HTTP Conditions & Trying Again Later ( Docket ID:", docket_number, ")"))
+        final_urls <<- c(final_urls, retry_url)
+      })
+    }
+  }
+
+  if (length(final_urls) > 0) {
+    docket_url_newer <- "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/"
+    docket_url_older <- "https://www.supremecourt.gov/search.aspx?filename=/docketfiles/"
+    for (final_url in final_urls) {
+      if (grepl("\\.html", final_url)) {
+        docket_number <- gsub(".*(/Public/)", "", final_url, ignore.case = TRUE)
+        docket_number <- gsub("\\.html", "", docket_number)
+        final_url <- paste0(docket_url_older, docket_number, ".htm")
+      } else {
+        docket_number <- gsub(".*docketfiles\\/", "", final_url)
+        docket_number <- gsub("\\.htm", "", docket_number)
+        final_url <- paste0(docket_url_newer, docket_number, ".html")
+      }
+
+      tryCatch({
+        docket_entries <- process_url(final_url, docket_entries)
+      }, error = function(e) {
+        message(paste("Error In Final Attempt -- Saving For Completion Report ( Docket ID:", docket_number, ")"))
+        non_collect <<- c(non_collect, final_url)
+      })
+    }
+  }
+
+
+  cat("\n- - - - - - - - COMPLETION SUMMARY - - - - - - - -")
+  cat("\nTotal Docket Sheets Successfully Retrieved:", length(docket_entries$docket_number))
+  cat("\nTotal Docket Sheets Failed to Retrieve:", length(failed_urls))
+  cat("\nDocket Types Retrieved...")
+  cat("\n   Docketed Petitions: ", length(docket_entries$petition_type[docket_entries$petition_type == "Docketed Case"]))
+  cat("\n   Docketed Petitions (Original Jurisdiction): ", length(docket_entries$petition_type[docket_entries$petition_type == "Docketed Case - Original Jurisdiction"]))
+  cat("\n   Applications: ", length(docket_entries$petition_type[docket_entries$petition_type == "Application"]))
+  cat("\n   Motions: ", length(docket_entries$petition_type[docket_entries$petition_type == "Motion"]))
+
+  if (length(non_collect) > 0) {
+    non_collect <- gsub(".*(/Public/)", "", non_collect, ignore.case = TRUE)
+    non_collect <- gsub(".*docketfiles\\/", "", non_collect)
+    non_collect <- gsub(".html", "", non_collect)
+    non_collect <- gsub(".htm", "", non_collect)
+    cat("\nFailed to Retrieve Docket Information for: ")
+    cat(non_collect, sep = ifelse(length(non_collect) > 1, ", ", ""))
+  }
+
+  return(docket_entries)
+}
+
 print_flattened_list <- function(column) {
   flattened_list <- unlist(lapply(column, function(x) strsplit(x, "; ")[[1]]))
   print(flattened_list)
@@ -1888,17 +1864,10 @@ install.packages("scotustext")
 library(scotustext)
 ```
 
+
 ## **docket_search()**
 
-`docket_search`serves as an automated tool for collecting, parsing, and cleaning information from docketed cases, petitions, and motions to the United States Supreme Court. Implementation of `docket_search` requires providing a docket number corresponding to the petition (or application/motion) of interest as a character object (`docket_id`). The function call will also accept a list of docket numbers, as well as an object containing a list of comma-separated character vectors. For more information on the Supreme Court docket, *see*   [supremecourt.gov](https://www.supremecourt.gov/docket/docket.aspx).
-
-The process draws on 4 (potential) layers of iteration:   
-1. `call_docket_data` retrieves an archived dataset on the primary `scotustext` [Github repository](https://github.com/JakeTruscott/scotustext.git). Any entries for `docket_id` found in the archived data will automatically be retrieved.    
-**Note**: The dataset retains records of docketed petitions, motions, and applications filed between the 2001 and 2022 docketing years (as of June 2023), which will be periodically updated in the future.     
-2. `process_docket_id` converts character entries of `docket_id` not retrieved from `call_docket_data` to URLs reflective of their location on [supremecourt.gov](https://www.supremecourt.gov/docket/docket.aspx).     
-3.  For those values of `docket_id` processed using `process_docket_id`, `docket_search` will draw on `docket_call` and `process_url` to iteratively call to the docket and subsequently retrieve, clean, and parse the relevant data of interest.     
-4. For those that values of `docket_id` that fail to retrieve data for whatever reason, `docket_search` will make two subsequent attempts to process -- which includes a full retry of the docket retrieval protocol, as well as trying a final time by altering the `https://` structure of the url to assess whether the `docket_id` was inadvertently assigned the incorrect .html or .htm structure to locate its storage location on [supremecourt.gov](https://www.supremecourt.gov/docket/docket.aspx).    
-**Note**: Do not be alarmed by repeated messages in the **R** console that `docket_search` failed to retrieve information from specific docket numbers. As noted above, it will make several attempts to retrieve docket numbers of interest. Further, owing to the Court's transition from (.htm) to (.html) docket sheets with the incorporation of electronic filing during the 2016-2017 filing years, do not be alarmed if the first pass at dockets filed in the 2016 filing year (e.g., "16-1213") fail to retrieve information. Each docket filed in 2016 is assigned an (.htm) structure, though there is an indeterminate point where 2016 filings transition to (.html). There are special exception handling protocols to manage those filed in 2016 built into `docket_search` that will help to mitigate these issues on the second retrieval attempt. 
+`docket_search`serves as an automated tool for collecting, parsing, and cleaning information from docketed cases, petitions, and motions to the United States Supreme Court. Implementation of `docket_search` requires providing a docket number corresponding to the petition (or application/motion) of interest as a character vector. The function call will also accept a list of docket numbers, as well as an object containing a list of comma-separated character vectors. For more information on the Supreme Court docket, *see*   [supremecourt.gov](https://www.supremecourt.gov/docket/docket.aspx).
 
 
 ## **Function Description**
@@ -1962,7 +1931,8 @@ names(dobbs_test)
 
 ## `docket_search` **Example Walkthrough**
 
-Here's an example of how to use the `docket_search` function using *Dobbs v. Jackson Women's Health Clinic* (2022), one of the largest docket sheets hosted by the Supreme Court. Each call to `docket_search` will initialize a search to the archived data on the primary `scotustext` [Github repository](https://github.com/JakeTruscott/scotustext.git), denote the number of retrieved values for `docket_id`, and finally indicate the number that need to be processed. Upon completion, `docket_search` will return a completion report along with summary statistics of a retrieved data. 
+Here's an example of how to use the `docket_search` function using *Dobbs v. Jackson Women's Health Clinic* (2022), one of the largest docket sheets hosted by the Supreme Court:
+
 
 
 ```{r}
@@ -1970,7 +1940,7 @@ Here's an example of how to use the `docket_search` function using *Dobbs v. Jac
 dobbs_test <- docket_search(docket_id = "19-1392")
 ```
 
-**Note**: Variables where multiple elements are returned (*e.g., multiple amici curiae filers*) are stored as flattended lists to allow for exporting to (.csv) and (.xlsx). However, these can be converted back to their original structure using the function below, which can also be called from the `scotustext` package: 
+**Note**: Variables where multiple elements are returned (*e.g., multiple amici curiae filers*) are stored as flattended lists to allow for exporting to (.csv) and (.xlsx). However, these can be converted back to their original structure using the function below: 
 
 ```{r, eval = F}
 print_flattened_list <- function(column) {
@@ -1990,7 +1960,6 @@ print_flattened_list <- function(column) {
 }
 print_flattened_list(<DOCKET OBJECT AND INDEX COLUMN>)
 ```
-
 
 **List of Conferences Where Dobbs Was Considered**
 ```{r}

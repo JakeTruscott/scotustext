@@ -253,7 +253,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">body {background-color: #212121;color: #ffffff;}:not(pre) > code:not(.r), :not(pre) > code:not(.r) > span {background-color: transparent;color: inherit;}</style>
+<link rel="stylesheet" href="gray.css" type="text/css" />
 
 
 
@@ -373,47 +373,10 @@ parsing, and cleaning information from docketed cases, petitions, and
 motions to the United States Supreme Court. Implementation of
 <code>docket_search</code> requires providing a docket number
 corresponding to the petition (or application/motion) of interest as a
-character object (<code>docket_id</code>). The function call will also
-accept a list of docket numbers, as well as an object containing a list
-of comma-separated character vectors. For more information on the
-Supreme Court docket, <em>see</em> <a href="https://www.supremecourt.gov/docket/docket.aspx">supremecourt.gov</a>.</p>
-<p>The process draws on 4 (potential) layers of iteration:<br />
-1. <code>call_docket_data</code> retrieves an archived dataset on the
-primary <code>scotustext</code> <a href="https://github.com/JakeTruscott/scotustext.git">Github
-repository</a>. Any entries for <code>docket_id</code> found in the
-archived data will automatically be retrieved.<br />
-<strong>Note</strong>: The dataset retains records of docketed
-petitions, motions, and applications filed between the 2001 and 2022
-docketing years (as of June 2023), which will be periodically updated in
-the future.<br />
-2. <code>process_docket_id</code> converts character entries of
-<code>docket_id</code> not retrieved from <code>call_docket_data</code>
-to URLs reflective of their location on <a href="https://www.supremecourt.gov/docket/docket.aspx">supremecourt.gov</a>.<br />
-3. For those values of <code>docket_id</code> processed using
-<code>process_docket_id</code>, <code>docket_search</code> will draw on
-<code>docket_call</code> and <code>process_url</code> to iteratively
-call to the docket and subsequently retrieve, clean, and parse the
-relevant data of interest.<br />
-4. For those that values of <code>docket_id</code> that fail to retrieve
-data for whatever reason, <code>docket_search</code> will make two
-subsequent attempts to process – which includes a full retry of the
-docket retrieval protocol, as well as trying a final time by altering
-the <code>https://</code> structure of the url to assess whether the
-<code>docket_id</code> was inadvertently assigned the incorrect .html or
-.htm structure to locate its storage location on <a href="https://www.supremecourt.gov/docket/docket.aspx">supremecourt.gov</a>.<br />
-<strong>Note</strong>: Do not be alarmed by repeated messages in the
-<strong>R</strong> console that <code>docket_search</code> failed to
-retrieve information from specific docket numbers. As noted above, it
-will make several attempts to retrieve docket numbers of interest.
-Further, owing to the Court’s transition from (.htm) to (.html) docket
-sheets with the incorporation of electronic filing during the 2016-2017
-filing years, do not be alarmed if the first pass at dockets filed in
-the 2016 filing year (e.g., “16-1213”) fail to retrieve information.
-Each docket filed in 2016 is assigned an (.htm) structure, though there
-is an indeterminate point where 2016 filings transition to (.html).
-There are special exception handling protocols to manage those filed in
-2016 built into <code>docket_search</code> that will help to mitigate
-these issues on the second retrieval attempt.</p>
+character vector. The function call will also accept a list of docket
+numbers, as well as an object containing a list of comma-separated
+character vectors. For more information on the Supreme Court docket,
+<em>see</em> <a href="https://www.supremecourt.gov/docket/docket.aspx">supremecourt.gov</a>.</p>
 </div>
 <div id="function-description" class="section level2">
 <h2><strong>Function Description</strong></h2>
@@ -573,19 +536,12 @@ docket of interest on supremecourt.gov.</li>
 <h2><code>docket_search</code> <strong>Example Walkthrough</strong></h2>
 <p>Here’s an example of how to use the <code>docket_search</code>
 function using <em>Dobbs v. Jackson Women’s Health Clinic</em> (2022),
-one of the largest docket sheets hosted by the Supreme Court. Each call
-to <code>docket_search</code> will initialize a search to the archived
-data on the primary <code>scotustext</code> <a href="https://github.com/JakeTruscott/scotustext.git">Github
-repository</a>, denote the number of retrieved values for
-<code>docket_id</code>, and finally indicate the number that need to be
-processed. Upon completion, <code>docket_search</code> will return a
-completion report along with summary statistics of a retrieved data.</p>
+one of the largest docket sheets hosted by the Supreme Court:</p>
 <pre class="r"><code>#Call to Docket Using Docket Number for Dobbs v. Jackson (19-1392)
 dobbs_test &lt;- docket_search(docket_id = &quot;19-1392&quot;)</code></pre>
 <pre><code>## 
-## Initializing Search of Docket Archive... 
-## Docket Sheets Found in Archive:  1
-## All Requests Retrieved from Archive
+## Docket Sheets to Collect:  1 
+## 
 ## - - - - - - - - COMPLETION SUMMARY - - - - - - - -
 ## Total Docket Sheets Successfully Retrieved: 1
 ## Total Docket Sheets Failed to Retrieve: 0
@@ -597,8 +553,8 @@ dobbs_test &lt;- docket_search(docket_id = &quot;19-1392&quot;)</code></pre>
 <p><strong>Note</strong>: Variables where multiple elements are returned
 (<em>e.g., multiple amici curiae filers</em>) are stored as flattended
 lists to allow for exporting to (.csv) and (.xlsx). However, these can
-be converted back to their original structure using the function below,
-which can also be called from the <code>scotustext</code> package:</p>
+be converted back to their original structure using the function
+below:</p>
 <pre class="r"><code>print_flattened_list &lt;- function(column) {
   if (length(column) &gt; 1) {
     for (row in column) {
