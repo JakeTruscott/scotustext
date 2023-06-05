@@ -1,4 +1,17 @@
-
+#' SCOTUS Oral Argument Search
+#'
+#' @param term Term of interest as character or vector
+#' @param justice Justice(s) of interest as character or vector
+#' @param attorney Attorney(s) of interest as character or vector
+#' @param speaker_type Factor indicating return Justices or Attorneys only
+#' @param docket_id Supreme Court docket identification number coinciding with argument(s) of interest
+#' @param party Party or parties represented in argument(s) of interest
+#'
+#' @return Parsed data frame of oral argument data (2004 to present or reflective of optional parameters)
+#' @export
+#'
+#' @examples
+#' sample_oa <- oa_search(term = "2005", justice = "Breyer")
 oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type = NULL, docket_id = NULL, party = NULL) {
   base_url <- "https://github.com/JakeTruscott/scotustext/raw/master/Data/"
   rdata_url <- paste0(base_url, "scotus_transcripts.rdata")
