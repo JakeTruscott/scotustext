@@ -7,6 +7,6 @@ Authors@R: person("Jake", "Truscott", email = "jake.truscott@uga.edu",
 Description: This package provides tools for collecting, parsing, cleaning, and analyzing text data from the United States Supreme Court, including: Docket Sheets, Oral Argument Transcripts, Rulings and Orders, etc. 
 License: use_mit_license()
 Encoding: UTF-8
-LazyData: true
-Imports: ggplot2, tidyverse, tidytext, plyr, data.table, ggrepel, htmltools, pdftools, stringr, htm2txt, sjPlot, reactable, reactablefmtr, httr, devtools, readtext
+LazyData: TRUE
+Imports: dplyr, tidyverse, tidytext, plyr, data.table, ggrepel, htmltools, pdftools, stringr, htm2txt, sjPlot, reactable, reactablefmtr, httr, devtools, readtext
 RoxygenNote: 7.2.3

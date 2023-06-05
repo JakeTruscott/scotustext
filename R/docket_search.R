@@ -1,3 +1,4 @@
+
 docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, exclude = NULL, write_csv = FALSE, write_xlsx = FALSE, write_reactable = FALSE) {
   urls <- suppressWarnings(process_docket_id(docket_id))
   urls <- gsub(" ", "", urls)
