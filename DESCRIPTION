@@ -9,5 +9,5 @@ License: file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
 LazyDataCompression: xz
-Imports: dplyr, tidyr, tm, tidyverse, tidytext, plyr, data.table, ggrepel, htmltools, pdftools, stringr, htm2txt, sjPlot, reactable, reactablefmtr, httr, devtools, readtext
+Imports: dplyr, zoo, tidyr, tm, tidyverse, tidytext, plyr, data.table, ggrepel, htmltools, pdftools, stringr, htm2txt, sjPlot, reactable, reactablefmtr, httr, devtools, readtext
 RoxygenNote: 7.2.3
