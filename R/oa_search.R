@@ -1,3 +1,6 @@
+importFrom("dplyr", "%>%", "filter")
+
+
 oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type = NULL, docket_id = NULL, party = NULL) {
   base_url <- "https://github.com/JakeTruscott/scotustext/raw/master/Data/"
   rdata_url <- paste0(base_url, "scotus_transcripts.rdata")

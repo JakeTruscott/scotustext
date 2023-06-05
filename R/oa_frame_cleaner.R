@@ -1,3 +1,8 @@
+importFrom("dplyr", "%>%", "group_by", "mutate", "filter", "select")
+importFrom("stringr", "str_split", "str_to_title")
+importFrom("tidyr", "separate")
+
+
 oa_frame_cleaner <- function(cleaned_corpus){
   scotus <- cleaned_corpus %>%
     group_by(argument) %>%

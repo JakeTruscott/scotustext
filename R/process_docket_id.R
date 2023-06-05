@@ -1,3 +1,8 @@
+importFrom("dplyr", "%>%", "mutate")
+importFrom("stringr", "str_split")
+importFrom("dplyr", "case_when")
+
+
 process_docket_id <- function(docket_id) {
   docket_url_newer <- "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/"
   docket_url_older <- "https://www.supremecourt.gov/search.aspx?filename=/docketfiles/"

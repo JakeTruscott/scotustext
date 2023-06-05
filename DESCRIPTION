@@ -8,5 +8,7 @@ Description: This package provides tools for collecting, parsing, cleaning, and 
 License: use_mit_license()
 Encoding: UTF-8
 LazyData: TRUE
+LazyDataCompression: xz
+License: file LICENSE
 Imports: dplyr, tidyverse, tidytext, plyr, data.table, ggrepel, htmltools, pdftools, stringr, htm2txt, sjPlot, reactable, reactablefmtr, httr, devtools, readtext
 RoxygenNote: 7.2.3
