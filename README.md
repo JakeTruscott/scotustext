@@ -5,7 +5,7 @@
 </p>
 
 ## Description
-This is a package designed for use in **R** that contains automated tools to retrieve, parse, clean, and analyze documents from the United States Supreme Court - including: oral argument transcripts, motions, applications, orders, and decisions. Navigate [here](https://jaketruscott.github.io/scotustext/) to see walkhroughs and other relevent package documentation.
+This is a package designed for use in **R** that contains automated tools to retrieve, parse, clean, and analyze documents from the United States Supreme Court - including: oral argument transcripts, motions, applications, orders, and decisions. Navigate to [jaketruscott.github.io/scotustext](https://jaketruscott.github.io/scotustext/) to see walkhroughs and other relevent package documentation.
 
 
 ## *Notice* 
