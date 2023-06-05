@@ -1,7 +1,3 @@
-importFrom("tm", "Corpus", "VectorSource", "tm_map", "content_transformer")
-importFrom("stringr", "str_replace_all")
-importFrom("tm.plugin.webmining", "stripWhitespace")
-
 
 oa_corpus_cleaner <- function(dir_path) {
   directory <- trimws(dir_path)

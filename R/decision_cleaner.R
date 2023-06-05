@@ -1,8 +1,3 @@
-importFrom("tm", "Corpus", "VectorSource", "tm_map", "content_transformer")
-importFrom("dplyr", "%>%", "group_by", "mutate")
-importFrom("stringr", "str_split", "str_replace_all", "str_extract_all")
-
-
 decisions_cleaner <- function(file_path, dir_path) {
 
   {

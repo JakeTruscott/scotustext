@@ -1,6 +1,4 @@
-importFrom("tm", "VectorSource", "tm_map", "content_transformer")
-importFrom("stringr", "str_replace_all", "str_replace")
-importFrom("dplyr", "%>%", "mutate", "filter", "select")
+
 
 
 clean_docket_frame <- function(docket_frame, include, exclude){
