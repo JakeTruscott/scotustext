@@ -364,7 +364,7 @@ font-size: 12pt;
 }
 </style>
 <pre class="r"><code>#Load scotustext package
-install.packages(&quot;scotustext&quot;)
+remotes::install_github(&quot;JakeTruscott/scotustext&quot;)
 library(scotustext)</code></pre>
 <div id="oral-argument-tools" class="section level2">
 <h2><strong>Oral Argument Tools</strong></h2>
@@ -562,7 +562,7 @@ Carolina</em> (20-1199)</li>
 </ul>
 <pre class="r"><code>#Replace &lt;FOLDER DIRECTORY&gt; with Relevant File Path
 oa_parse_sample &lt;- oa_parser(dir_path = &quot;&lt;FOLDER DIRECTORY&gt;&quot;)</code></pre>
-<pre><code>## Total Number of Transcripts to be Processed:  2 
+<pre><code>## Total Number of Transcripts to be Processed:  3 
 ## 
 ## - - - - - - - - COMPLETION SUMMARY - - - - - - - -
 ## Total Arguments: 2
