@@ -74,46 +74,25 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
 
       for (j in seq_along(batch_urls)) {
         url <- batch_urls[j]
-        try_count <- 0
 
-        while (try_count < 6) {
+        while (TRUE) {
           tryCatch({
             text <- gettxt(url, encoding = "UTF-8")
             docket_frame <- rbind(docket_frame, data.frame(url = url, text = text, stringsAsFactors = FALSE))
-            error_count <- 0  # Reset error count if there was a successful retrieval
             url_counter <- url_counter + 1  # Increment the URL counter
 
             if (url_counter %% 500 == 0) {
               cat(paste("Completed Docket:", url_counter, "\n"))
             }
+
+            break  # Exit the loop if there was no error
           }, error = function(e) {
-            error_count <- error_count + 1
-
-            if (error_count == 1) {
-              cat(paste("Error occurred with URL:", url, "\n"))
-              cat(paste("Waiting a few seconds then trying again...\n"))
-              Sys.sleep(5)  # Pause for 5 seconds
-              try_count <- try_count + 1
-            } else if (error_count == 21) {
-              cat(paste("Could Not Collect From URL:", url, "\n"))
-              cat(paste("Stopping Function. Please Ensure Docket Number Written Correctly and Try Again\n"))
-              break  # Exit the outer loop
-            } else {
-              cat(paste("Error occurred with URL:", url, "\n"))
-              cat(paste("Waiting a few seconds then trying again...\n"))
-              Sys.sleep(5)  # Pause for 5 seconds
-              try_count <- try_count + 1
-            }
+            cat(paste("Error occurred with URL:", url, "\n"))
+            cat(paste("Waiting a few seconds then trying again...\n"))
+            Sys.sleep(5)  # Pause for 5 seconds
+            non_collect <- c(non_collect, url)  # Add the failed URL to final_urls
           })
-
-          if (error_count == 0) {
-            break  # Exit the inner loop
-          }
         }
-      }
-
-      if (error_count == 21) {
-        break  # Exit the outer loop
       }
 
       if (i + rate - 1 < length(urls)) {
@@ -121,6 +100,7 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
         Sys.sleep(30)
       }
     }
+
 
 
     return(docket_frame)
@@ -320,6 +300,11 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
         nested_lower_court_decision_date <- replace_empty(nested_lower_court_decision_date)
         docket_entries$lower_court_decision_date <- sapply(nested_lower_court_decision_date, function(x) paste(unlist(x), collapse = "; "))
       } #Lower Court Case Number
+      {
+        docket_entries <- docket_entries %>%
+          mutate(lower_court_case_number = ifelse(grepl("Case", lower_court_case_number, ignore.case = T), "", lower_court_case_number),
+                 lower_court = ifelse(grepl("Lower", lower_court, ignore.case = T), "", lower_court_case_number))
+      } #Clean Lower Court Terms (If Needed)
       {
         docket_entries <- docket_entries %>%
           mutate(special_filing = ifelse(
@@ -1509,7 +1494,9 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
       }
 
       docket_entries[docket_entries == ""] <- NA
-
+      docket_entries[docket_entries == "Character(0)"] <- NA
+      docket_entries[docket_entries == "character(0)"] <- NA
+      docket_entries$certiorari_order = ifelse(!is.na(docket_entries$argument_date) & docket_entries$certiorari_order == "Petition DENIED", "Petition GRANTED", docket_entries$certiorari_order)
 
 
 
@@ -1519,49 +1506,44 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
 
   } #Clean and Parse Retrieved Docket Text
 
-  all_of <- NULL
-  type <- NULL
-  year <- NULL
-  text_original <- NULL
-  amicus_filers <- NULL
-  amicus_indicator <- NULL
-  amicus_count <- NULL
-  argument_date <- NULL
-  multiple_conference_dates <- NULL
-  majority_opinion_writer <- NULL
-  opinions_by_type <- NULL
-  opinion_raw <- NULL
-  opinion_type <- NULL
-  submitted_to <- NULL
-  all_respondent_counsel <- NULL
-  all_other_counsel <- NULL
-  all_petitioner_counsel <- NULL
-  contains_org_petitioner <- NULL
-  contains_org_respondent <- NULL
-  contains_org_other <- NULL
-  petitioner_counsel <- NULL
-  respondent_counsel <- NULL
-  certiorari_full <- NULL
-  certiorari_order <- NULL
-  type <- NULL
-  petition_type <- NULL
-  referred_to_court <- NULL
-  application_type <- NULL
-  first_conference_date <- NULL
-  conference_count <- NULL
-  most_recent_order <- NULL
-  all_docket_entries <- NULL
-  number_of_opinions <- NULL
-  opinion_filings <- NULL
-  special_filing <- NULL
-  docket_url <- NULL
-
-
-  urls <- suppressWarnings(process_docket_id(docket_id))
-  urls <- gsub(" ", "", urls)
-  urls <- gsub("- ", "-", urls)
-  urls <- gsub(" -", "-", urls)
-  cat("\nDocket Sheets to Collect: ", length(unique(urls)), "\n")
+  {
+    all_of <- NULL
+    type <- NULL
+    year <- NULL
+    text_original <- NULL
+    amicus_filers <- NULL
+    amicus_indicator <- NULL
+    amicus_count <- NULL
+    argument_date <- NULL
+    multiple_conference_dates <- NULL
+    majority_opinion_writer <- NULL
+    opinions_by_type <- NULL
+    opinion_raw <- NULL
+    opinion_type <- NULL
+    submitted_to <- NULL
+    all_respondent_counsel <- NULL
+    all_other_counsel <- NULL
+    all_petitioner_counsel <- NULL
+    contains_org_petitioner <- NULL
+    contains_org_respondent <- NULL
+    contains_org_other <- NULL
+    petitioner_counsel <- NULL
+    respondent_counsel <- NULL
+    certiorari_full <- NULL
+    certiorari_order <- NULL
+    type <- NULL
+    petition_type <- NULL
+    referred_to_court <- NULL
+    application_type <- NULL
+    first_conference_date <- NULL
+    conference_count <- NULL
+    most_recent_order <- NULL
+    all_docket_entries <- NULL
+    number_of_opinions <- NULL
+    opinion_filings <- NULL
+    special_filing <- NULL
+    docket_url <- NULL
+  } #Global Variables
 
   docket_entries <- NULL
   completed_count <- 0
@@ -1569,6 +1551,12 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
   retry_urls <- c()
   failed_urls <- c()
   non_collect <- c()
+
+  urls <- suppressWarnings(process_docket_id(docket_id))
+  urls <- gsub(" ", "", urls)
+  urls <- gsub("- ", "-", urls)
+  urls <- gsub(" -", "-", urls)
+  cat("\nDocket Sheets to Collect: ", length(unique(urls)), "\n")
 
   process_url <- function(url, docket_entries) {
     docket_frame <- suppressWarnings(docket_call(url, sleep))
@@ -1678,7 +1666,7 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
 
   cat("\n- - - - - - - - COMPLETION SUMMARY - - - - - - - -")
   cat("\nTotal Docket Sheets Successfully Retrieved:", length(docket_entries$docket_number))
-  cat("\nTotal Docket Sheets Failed to Retrieve:", length(failed_urls))
+  cat("\nTotal Docket Sheets Failed to Retrieve:", length(non_collect))
   cat("\nDocket Types Retrieved...")
   cat("\n   Docketed Petitions: ", length(docket_entries$petition_type[docket_entries$petition_type == "Docketed Case"]))
   cat("\n   Docketed Petitions (Original Jurisdiction): ", length(docket_entries$petition_type[docket_entries$petition_type == "Docketed Case - Original Jurisdiction"]))
