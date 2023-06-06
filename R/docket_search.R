@@ -70,50 +70,58 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
     url_counter <- 0
 
     for (i in seq(1, length(urls), by = rate)) {
-      batch_urls <- urls[i:min(i+rate-1, length(urls))]
+      batch_urls <- urls[i:min(i + rate - 1, length(urls))]
+
       for (j in seq_along(batch_urls)) {
         url <- batch_urls[j]
         try_count <- 0
+
         while (try_count < 6) {
           tryCatch({
             text <- gettxt(url, encoding = "UTF-8")
             docket_frame <- rbind(docket_frame, data.frame(url = url, text = text, stringsAsFactors = FALSE))
             error_count <- 0  # Reset error count if there was a successful retrieval
             url_counter <- url_counter + 1  # Increment the URL counter
+
             if (url_counter %% 500 == 0) {
               cat(paste("Completed Docket:", url_counter, "\n"))
             }
           }, error = function(e) {
             error_count <- error_count + 1
+
             if (error_count == 1) {
               cat(paste("Error occurred with URL:", url, "\n"))
-              cat(paste("Waiting 1 minute, then trying again...\n"))
-              Sys.sleep(60)  # Pause for 1 minute
+              cat(paste("Waiting a few seconds then trying again...\n"))
+              Sys.sleep(5)  # Pause for 5 seconds
               try_count <- try_count + 1
             } else if (error_count == 21) {
               cat(paste("Could Not Collect From URL:", url, "\n"))
               cat(paste("Stopping Function. Please Ensure Docket Number Written Correctly and Try Again\n"))
-              break  # Exit the inner loop
+              break  # Exit the outer loop
             } else {
               cat(paste("Error occurred with URL:", url, "\n"))
-              cat(paste("Waiting 1 minute, then trying again...\n"))
-              Sys.sleep(60)  # Pause for 1 minute
+              cat(paste("Waiting a few seconds then trying again...\n"))
+              Sys.sleep(5)  # Pause for 5 seconds
               try_count <- try_count + 1
             }
           })
+
           if (error_count == 0) {
-            break
+            break  # Exit the inner loop
           }
         }
       }
+
       if (error_count == 21) {
-        break
+        break  # Exit the outer loop
       }
-      if (i+4999 < length(urls)) {
+
+      if (i + rate - 1 < length(urls)) {
         cat("Pausing for 30 seconds...\n")
         Sys.sleep(30)
       }
     }
+
 
     return(docket_frame)
   } # Call to Docket
@@ -400,7 +408,8 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
       })
       cleaned_rows <- lapply(filtered_rows, function(row) {
         row <- iconv(row, to = "UTF-8", sub = "")
-        row <- str_remove(row, " Argued\\..*")
+        row <- gsub("Argued\\..*", "", row)
+        row <- trimws(row)
       })
       nested_list <- lapply(cleaned_rows, function(row) paste(row, collapse = ", "))
 
@@ -1601,8 +1610,8 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
       message(paste("Error Retrieving and Cleaning Docket Information from Docket ID:", docket_number))
       retry_urls <<- c(retry_urls, url)
       message("Saving URL Information and Trying Again Later")
-      message("Waiting 10 Seconds Before Moving On...")
-      Sys.sleep(10)
+      message("Waiting 5 Seconds Before Moving On...")
+      Sys.sleep(5)
       cat("Resuming Collection Effort\n")
     })
   }
@@ -1615,7 +1624,7 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
       if (grepl("\\.html", retry_url)) {
         docket_number <- gsub(".*(/Public/)", "", retry_url, ignore.case = TRUE)
         docket_number <- gsub("\\.html", "", docket_number)
-        docket_year <- gsub("\\-.*", "", docket_number)
+        docket_year <- gsub("([moa].*)|\\-.*", "", docket_number)
         docket_year <- as.numeric(docket_year)
         if (as.numeric(docket_year) == 16) {
           retry_url <- paste0(docket_url_older, docket_number, ".htm")
@@ -1625,7 +1634,7 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
       } else {
         docket_number <- gsub(".*docketfiles\\/", "", retry_url)
         docket_number <- gsub("\\.htm", "", docket_number)
-        docket_year <- gsub("\\-.*", "", docket_number)
+        docket_year <- gsub("([moa].*)|\\-.*", "", docket_number)
         docket_year <- as.numeric(docket_year)
         if (as.numeric(docket_year) == 16) {
           retry_url <- paste0(docket_url_newer, docket_number, ".html")
