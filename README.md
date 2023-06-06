@@ -9,11 +9,16 @@ This is a package designed for use in **R** that contains automated tools to ret
 
 
 ## *Notice* 
-This package is currently in development (as of June 1, 2023). For early access (or if you would like to test the package materials), please contact: jake.truscott@uga.edu. 
+This package is currently in end-stage development (as of June 6, 2023). For early access, use:
+
+```
+remotes::install_github("JakeTruscott/scotustext")
+```
 
 ## About Package Developer
   
-Jake S. Truscott, Ph.D <br>
+Jake S. Truscott, Ph.D <br> 
+[![Follow @JakeTruscott_44](https://img.shields.io/twitter/follow/JakeTruscott_44?style=social)](https://twitter.com/JakeTruscott_44) <br> 
 Research Areas: Judicial Politics, Federal Courts, Text as Data & NLP <br>
 University of Georgia (until Summer 2023) <br>
 C-Span Center for Scholarship and Engagement <br>
