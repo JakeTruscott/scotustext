@@ -1,4 +1,6 @@
 Package: scotustext
+BuildVignettes: true
+BuildKeepEmptyDirs: true
 Type: Package
 Title: SCOTUS Documents Processor
 Version: 0.1.0
