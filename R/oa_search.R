@@ -13,6 +13,11 @@
 #' @examples
 #' sample_oa <- oa_search(term = "2005", justice = "Breyer")
 oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type = NULL, docket_id = NULL, party = NULL) {
+
+  type <- NULL
+  speaker <- NULL
+  argument <- NULL
+
   base_url <- "https://github.com/JakeTruscott/scotustext/raw/master/Data/"
   rdata_url <- paste0(base_url, "scotus_transcripts.rdata")
   load(url(rdata_url))
@@ -101,14 +106,14 @@ oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type
   }
 
 
-  # Print the Filters
+  cat("\n- - - - - - - - COMPLETION SUMMARY - - - - - - - -")
+
 
   collected_terms <- unique(scotus$term)
   if (length(collected_terms) > 0) {
     collected_terms <- sort(collected_terms)
     terms_string <- paste(collected_terms, collapse = ", ")
-    message("Oral Argument Data Collected for...")
-    message(paste("Terms:", terms_string))
+    cat("\nTerms: ", terms_string)
   }
 
   if (!is.null(docket_id)) {
@@ -116,7 +121,7 @@ oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type
     if (length(collected_arguments) > 0) {
       collected_arguments <- sort(collected_arguments)
       arguments_string <- paste(collected_arguments, collapse = ", ")
-      message(paste("Arguments:", arguments_string))
+      cat("\nArguments: ", arguments_string)
     }
   }
 
@@ -125,18 +130,7 @@ oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type
     if (length(collected_cases) > 0) {
       collected_cases <- sort(collected_cases)
       cases_string <- paste(collected_cases, collapse = ", ")
-      message(paste("Cases:", cases_string))
-    }
-  }
-
-  collected_speaker_type <- unique(scotus$type)
-  if (length(collected_speaker_type) > 0) {
-    if ("Justice" %in% collected_speaker_type && "Attorney" %in% collected_speaker_type) {
-      message("Speaker Type: Both Justices and Attorneys")
-    } else if ("Justice" %in% collected_speaker_type) {
-      message("Speaker Type: Justices ONLY")
-    } else if ("Attorney" %in% collected_speaker_type) {
-      message("Speaker Type: Attorneys Only")
+      cat("\nCases: ", cases_string)
     }
   }
 
@@ -146,9 +140,20 @@ oa_search <- function(term = NULL, justice = NULL, attorney = NULL, speaker_type
     if (length(collected_justices) > 0) {
       collected_justices <- sort(collected_justices)
       justices_string <- paste(collected_justices, collapse = ", ")
-      message(paste("Justices:", justices_string))
+      cat("\nJustices: ", justices_string)    }
+  }
+
+  collected_speaker_type <- unique(scotus$type)
+  if (length(collected_speaker_type) > 0) {
+    if ("Justice" %in% collected_speaker_type && "Attorney" %in% collected_speaker_type) {
+      cat("\nSpeaker Type: Both Justices and Attorneys\n")
+    } else if ("Justice" %in% collected_speaker_type) {
+      cat("\nSpeaker Type: Justices ONLY\n")
+    } else if ("Attorney" %in% collected_speaker_type) {
+      cat("\nSpeaker Type: Attorneys Only\n")
     }
   }
+
 
   return(scotus)
 }

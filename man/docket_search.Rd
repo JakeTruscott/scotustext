@@ -9,10 +9,7 @@ docket_search(
   rate = 5000,
   sleep = 30,
   include = NULL,
-  exclude = NULL,
-  write_csv = FALSE,
-  write_xlsx = FALSE,
-  write_reactable = FALSE
+  exclude = NULL
 )
 }
 \arguments{
@@ -25,12 +22,6 @@ docket_search(
 \item{include}{A character vector that will limit the output variables to only those requested (default is NULL).}
 
 \item{exclude}{A character vector that will exclude any output variables requested (default is NULL)}
-
-\item{write_csv}{Logical value indicating whether to print code to convert the output dataframe to a .csv file (default is FALSE)}
-
-\item{write_xlsx}{Logical value indicating whether to print code to convert the output dataframe to an excel file (default is FALSE)}
-
-\item{write_reactable}{Logical value indicating whether to print code to convert the output dataframe to a .html file using reactable() (default is FALSE)}
 }
 \value{
 Cleaned and parsed information from docketed petitions, applications, and motions to the United States Supreme Court.
