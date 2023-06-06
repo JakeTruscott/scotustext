@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2023-06-02" />
+<meta name="date" content="2023-06-06" />
 
 <title>Oral Arguments (scotustext.R)</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Oral Arguments (scotustext.R)</h1>
 <h4 class="author">Jake S. Truscott, Ph.D</h4>
 <address class="author_afil">
-University of Georgia<br><h4 class="date">2023-06-02</h4>
+University of Georgia<br><h4 class="date">2023-06-06</h4>
 
 </div>
 
@@ -366,8 +366,8 @@ font-size: 12pt;
 <pre class="r"><code>#Load scotustext package
 install.packages(&quot;scotustext&quot;)
 library(scotustext)</code></pre>
-<div id="oral-argument-functions" class="section level2">
-<h2><strong>Oral Argument Functions</strong></h2>
+<div id="oral-argument-tools" class="section level2">
+<h2><strong>Oral Argument Tools</strong></h2>
 <p>These tools aim to help with retrieving, processing, and cleaning
 oral argument transcripts from the United States Supreme Court.</p>
 <p>Within the <em>Oral Arguments</em> suite of
@@ -403,8 +403,8 @@ is engaging with:</p>
 demarcations, but the ability to assess which justice is actually
 engaging with counsel is no longer possible.</p>
 </div>
-<div id="docket_search-walkthrough" class="section level2">
-<h2><code>docket_search</code> <strong>Walkthrough</strong></h2>
+<div id="oa_search-function-description" class="section level2">
+<h2><code>oa_search</code> <strong>Function Description</strong></h2>
 <p><code>oa_search</code> accepts several optional parameters to
 customize and curtail search queries:</p>
 <ul>
@@ -433,50 +433,9 @@ United</em>))</li>
 to 2022 (as of May 2023). Queries will return all matches to provided
 parameters. Not providing any parameters will retrieve <em>all</em>
 transcript data from OT04 to OT22.</p>
-<div id="docket_search-examples" class="section level3">
-<h3><code>docket_search</code> <strong>Examples</strong></h3>
-<p>Below is a collection of example code highlighting the functionality
-of <code>oa_search</code> and how optional parameters can curtail
-queries.</p>
-<div id="curtailing-search-queries" class="section level4">
-<h4>Curtailing Search Queries</h4>
-<p><strong>Retrieve Transcripts from OT2017</strong></p>
-<pre class="r"><code>oral_arguments_07 &lt;- oa_search(term = &quot;2017&quot;)</code></pre>
-<pre><code>## Oral Argument Data Collected for...</code></pre>
-<pre><code>## Terms: 2017</code></pre>
-<pre><code>## Speaker Type: Both Justices and Attorneys</code></pre>
-<pre class="r"><code>#Number of Entries Returned For OT2017
-length(oral_arguments_07$text)</code></pre>
-<pre><code>## [1] 15743</code></pre>
-<p><strong>Retrieve Transcripts Limited to Justice Breyer</strong></p>
-<pre class="r"><code>oral_arguments_breyer &lt;- oa_search(justice = &quot;Breyer&quot;)
-
-#Number of Entries Returned For Breyer
-length(oral_arguments_breyer$text)</code></pre>
-<pre><code>## [1] 23078</code></pre>
-<p><strong>Retrieve Transcripts Limited to Justices Breyer and Ginsburg
-in OT2017 and OT2018</strong></p>
-<pre class="r"><code>oral_arguments_0718_breyer_ginsburg &lt;- oa_search(term = c(&quot;2017&quot;, &quot;2018&quot;), justice = c(&quot;Breyer&quot;, &quot;Ginsburg&quot;))
-
-#Number of Entries Returned For Breyer &amp; Ginsburg in OT17 and OT18
-length(oral_arguments_0718_breyer_ginsburg$text)</code></pre>
-<pre><code>## [1] 1892</code></pre>
-<p><strong>Retrieve Transcripts from Dobbs v. Jackson</strong></p>
-<pre class="r"><code>oral_arguments_dobbs &lt;- oa_search(party = &quot;Dobbs&quot;)
-
-#Number of Entries Returned For Dobbs
-length(oral_arguments_dobbs$text)</code></pre>
-<pre><code>## [1] 320</code></pre>
-<p><strong>Sample Transcript Data from Dobbs v. Jackson</strong></p>
-<pre><code>## [1] &quot;CHIEF JUSTICE ROBERTS: We will hear argument this morning in Case 19-1392, Dobbs versus Jackson Women&#39;s Health Organization. General Stewart.&quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-## [2] &quot;MR. STEWART: Mr. Chief Justice, and may it please the Court: Roe versus Wade and Planned Parenthood versus Casey haunt our country. They have no basis in the Constitution. They have no home in our history or traditions. They&#39;ve damaged the democratic process. They&#39;ve poisoned the law. They&#39;ve choked off compromise. For years, they&#39;ve kept this Court at the center of a political battle that it can never resolve. And years on, they stand alone. Nowhere else does this Court recognize a right to end a human life. Consider this case: The Mississippi law here prohibits abortions after weeks. The law includes robust exceptions for a woman&#39;s life and health. It leaves months to obtain an abortion. Yet, the courts below struck the law down. It didn&#39;t matter that the law apply -- that the law applies when an unborn child is undeniably human, when risks to women surge, and when the common abortion procedure is brutal. The lower courts held that because the law prohibits abortions before viability, it is unconstitutional no matter what. Roe and Casey&#39;s core holding, according to those courts, is that the people can protect an unborn girl&#39;s life when she just barely can survive outside the womb but not any earlier when she needs a little more help. That is the world under Roe and Casey. That is not the world the Constitution promises. The Constitution places its trust in the people. On hard issue after hard issue, the people make this country work. Abortion is a hard issue. It demands the best from all of us, not a judgment by just a few of us. When an issue affects everyone and when the Constitution does not take sides on it, it belongs to the people. Roe and Casey have failed, but the people, if given the chance, will succeed. This Court should overrule Roe and Casey and uphold the state&#39;s law. I welcome the Court&#39;s questions. &quot;
-## [3] &quot;JUSTICE THOMAS: General Stewart, you focus on the right to abortion, but our jurisprudence seems to -- seem to focus on, in Casey, autonomy; in Roe, privacy. Does it make a difference that we focus on privacy or autonomy or more specifically on abortion? &quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-## [4] &quot;MR. STEWART: I think whichever one of those you&#39;re focusing on, Your Honor, particularly if you&#39;re focusing on -- on the right to abortion, each of those starts to become a step removed for what&#39;s provided in the Constitution. Yes, the Constitution does provide certain -- protect certain aspects of privacy, of autonomy, and the like. But, as this Court said in Glucksberg, going directly from general concepts of autonomy, of privacy, of bodily integrity, to -- to a right is not how we traditionally, this Court traditionally, does due process analysis. So I think it just confirms, whichever one of those you look at, Your Honor, a right to abortion is -- is not grounded in the text, and it&#39;s grounded on abstract concepts that this Court has rejected in -- in other contexts as supplying a substantive right. &quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-## [5] &quot;JUSTICE THOMAS: You say that this is the only constitutional right that involves the taking of a life. What difference does that make in your analysis? &quot;</code></pre>
 </div>
-</div>
-<div id="oa_parser-walkthrough" class="section level3">
-<h3><strong>oa_parser()</strong> Walkthrough</h3>
+<div id="oa_parser-function-description" class="section level2">
+<h2><code>oa_parser</code> <strong>Function Description</strong></h2>
 <p>Implementation of the <code>oa_parser</code> tool only requires a
 single parameter, <code>dir_path</code>, which provides a file path (as
 a character object) to the folder on your local machine containing oral
@@ -490,6 +449,107 @@ demarcations are indicated using “<em>QUESTION:…</em>”.</p>
 employ the use of Optical Character Recognition (OCR) software. As such,
 the tool can only process <strong>non-scanned</strong> PDF
 transcripts.</p>
+<div id="oa_search-and-oa_parser-variables" class="section level3">
+<h3><code>oa_search</code> and <code>oa_parser</code>
+<strong>Variables</strong></h3>
+<pre><code>## [1] &quot;speaker&quot;    &quot;text&quot;       &quot;argument&quot;   &quot;id&quot;         &quot;term&quot;      
+## [6] &quot;type&quot;       &quot;case_name&quot;  &quot;word_count&quot;</code></pre>
+<ul>
+<li><code>speaker</code>: Character indicating Justice or Attorney
+providing statement</li>
+<li><code>text</code>: Text of statement provided by Justice or
+Attorney</li>
+<li><code>argument</code>: Docket number coinciding with argument of
+interest</li>
+<li><code>id</code>: Numeric ID number associated with statement
+presence in argument (i.e., the order in which the statement was offered
+in the argument’s transcript)</li>
+<li><code>term</code>: Term coinciding with argument of interest</li>
+<li><code>type</code>: Factor indicating whether statement was offered
+by a Justice or Attorney</li>
+<li><code>case_name</code>: Character indicating title of case being
+orally argued (e.g., <em>DOBBS, STATE HEALTH OFFICER OF THE MISSISSIPPI
+DEPARTMENT OF HEALTH, ET AL. v. JACKSON WOMEN’S HEALTH ORGANIZATION, ET
+AL</em>)</li>
+<li><code>word_count</code>: Raw count of words (measured using spaces
+present in string) provided in statement</li>
+</ul>
+</div>
+<div id="oa_search-examples" class="section level3">
+<h3><code>oa_search</code> <strong>Examples</strong></h3>
+<p>Below is a collection of example code highlighting the functionality
+of <code>oa_search</code>.<br />
+<strong>Note</strong>: Successful retrieval and (or) processing of
+transcripts using <code>oa_search</code> or <code>oa_parser</code> will
+yield a <em>Completion Summary</em> denoting summary statistics of the
+processed oral arguments.</p>
+<p><strong>Retrieve All Oral Argument Transcript Data (OT04 to
+OT22)</strong><br />
+<strong>(Leave Optional Parameters Empty)</strong></p>
+<pre class="r"><code>oral_arguments &lt;- oa_search()</code></pre>
+<pre><code>## 
+## - - - - - - - - COMPLETION SUMMARY - - - - - - - -
+## Terms:  2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022
+## Speaker Type: Both Justices and Attorneys</code></pre>
+<p><strong>Number of Entries for Justice Breyer</strong></p>
+<pre class="r"><code>length(oral_arguments$text[oral_arguments$speaker == &quot;JUSTICE BREYER&quot;])</code></pre>
+<pre><code>## [1] 23078</code></pre>
+<p><strong>Number of Entries for Paul Clement (Attorney and Fmr.
+Solicitor General)</strong></p>
+<pre class="r"><code>length(oral_arguments$text[oral_arguments$speaker == &quot;MR. CLEMENT&quot;])</code></pre>
+<pre><code>## [1] 2871</code></pre>
+<p><strong>Number of Unique Attorneys in Dataset</strong></p>
+<pre class="r"><code>length(oral_arguments$text[oral_arguments$type == &quot;Attorney&quot;])</code></pre>
+<pre><code>## [1] 152483</code></pre>
+<div id="curtailing-search-queries" class="section level4">
+<h4><strong>Curtailing Search Queries</strong></h4>
+<p><strong>Retrieve Transcripts Limited to OT 2017</strong></p>
+<pre class="r"><code>oral_arguments_07 &lt;- oa_search(term = &quot;2017&quot;)</code></pre>
+<pre><code>## 
+## - - - - - - - - COMPLETION SUMMARY - - - - - - - -
+## Terms:  2017
+## Speaker Type: Both Justices and Attorneys</code></pre>
+<pre class="r"><code>#Number of Entries Returned For OT2017
+length(oral_arguments_07$text)</code></pre>
+<pre><code>## [1] 15743</code></pre>
+<p><strong>Retrieve Transcripts Limited to Justice Breyer</strong></p>
+<pre class="r"><code>oral_arguments_breyer &lt;- oa_search(justice = &quot;Breyer&quot;)</code></pre>
+<pre><code>## 
+## - - - - - - - - COMPLETION SUMMARY - - - - - - - -
+## Terms:  2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021
+## Justices:  JUSTICE BREYER
+## Speaker Type: Justices ONLY</code></pre>
+<pre class="r"><code>#Number of Entries Returned For Breyer
+length(oral_arguments_breyer$text)</code></pre>
+<pre><code>## [1] 23078</code></pre>
+<p><strong>Retrieve Transcripts Limited to Justices Breyer and Ginsburg
+in OT2017 and OT2018</strong></p>
+<pre class="r"><code>oral_arguments_0718_breyer_ginsburg &lt;- oa_search(term = c(&quot;2017&quot;, &quot;2018&quot;), justice = c(&quot;Breyer&quot;, &quot;Ginsburg&quot;))</code></pre>
+<pre><code>## 
+## - - - - - - - - COMPLETION SUMMARY - - - - - - - -
+## Terms:  2017, 2018
+## Justices:  JUSTICE BREYER, JUSTICE GINSBURG
+## Speaker Type: Justices ONLY</code></pre>
+<pre class="r"><code>#Number of Entries Returned For Breyer &amp; Ginsburg in OT17 and OT18
+length(oral_arguments_0718_breyer_ginsburg$text)</code></pre>
+<pre><code>## [1] 1892</code></pre>
+<p><strong>Retrieve Transcripts from Dobbs v. Jackson</strong></p>
+<pre class="r"><code>oral_arguments_dobbs &lt;- oa_search(party = &quot;Dobbs&quot;)</code></pre>
+<pre><code>## 
+## - - - - - - - - COMPLETION SUMMARY - - - - - - - -
+## Terms:  2021
+## Cases:  Dobbs v. Jackson Women&#39;s Health Organization
+## Speaker Type: Both Justices and Attorneys</code></pre>
+<pre class="r"><code>#Number of Entries Returned For Dobbs
+length(oral_arguments_dobbs$text)</code></pre>
+<pre><code>## [1] 320</code></pre>
+<p><strong>Sample Transcript Data from Dobbs v. Jackson</strong></p>
+<pre><code>## [1] &quot;CHIEF JUSTICE ROBERTS: We will hear argument this morning in Case 19-1392, Dobbs versus Jackson Women&#39;s Health Organization. General Stewart.&quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+## [2] &quot;MR. STEWART: Mr. Chief Justice, and may it please the Court: Roe versus Wade and Planned Parenthood versus Casey haunt our country. They have no basis in the Constitution. They have no home in our history or traditions. They&#39;ve damaged the democratic process. They&#39;ve poisoned the law. They&#39;ve choked off compromise. For years, they&#39;ve kept this Court at the center of a political battle that it can never resolve. And years on, they stand alone. Nowhere else does this Court recognize a right to end a human life. Consider this case: The Mississippi law here prohibits abortions after weeks. The law includes robust exceptions for a woman&#39;s life and health. It leaves months to obtain an abortion. Yet, the courts below struck the law down. It didn&#39;t matter that the law apply -- that the law applies when an unborn child is undeniably human, when risks to women surge, and when the common abortion procedure is brutal. The lower courts held that because the law prohibits abortions before viability, it is unconstitutional no matter what. Roe and Casey&#39;s core holding, according to those courts, is that the people can protect an unborn girl&#39;s life when she just barely can survive outside the womb but not any earlier when she needs a little more help. That is the world under Roe and Casey. That is not the world the Constitution promises. The Constitution places its trust in the people. On hard issue after hard issue, the people make this country work. Abortion is a hard issue. It demands the best from all of us, not a judgment by just a few of us. When an issue affects everyone and when the Constitution does not take sides on it, it belongs to the people. Roe and Casey have failed, but the people, if given the chance, will succeed. This Court should overrule Roe and Casey and uphold the state&#39;s law. I welcome the Court&#39;s questions. &quot;
+## [3] &quot;JUSTICE THOMAS: General Stewart, you focus on the right to abortion, but our jurisprudence seems to -- seem to focus on, in Casey, autonomy; in Roe, privacy. Does it make a difference that we focus on privacy or autonomy or more specifically on abortion? &quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+## [4] &quot;MR. STEWART: I think whichever one of those you&#39;re focusing on, Your Honor, particularly if you&#39;re focusing on -- on the right to abortion, each of those starts to become a step removed for what&#39;s provided in the Constitution. Yes, the Constitution does provide certain -- protect certain aspects of privacy, of autonomy, and the like. But, as this Court said in Glucksberg, going directly from general concepts of autonomy, of privacy, of bodily integrity, to -- to a right is not how we traditionally, this Court traditionally, does due process analysis. So I think it just confirms, whichever one of those you look at, Your Honor, a right to abortion is -- is not grounded in the text, and it&#39;s grounded on abstract concepts that this Court has rejected in -- in other contexts as supplying a substantive right. &quot;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+## [5] &quot;JUSTICE THOMAS: You say that this is the only constitutional right that involves the taking of a life. What difference does that make in your analysis? &quot;</code></pre>
+</div>
 </div>
 </div>
 <div id="oa_parser-examples" class="section level2">
@@ -501,10 +561,17 @@ transcripts.</p>
 Carolina</em> (20-1199)</li>
 </ul>
 <pre class="r"><code>#Replace &lt;FOLDER DIRECTORY&gt; with Relevant File Path
-oa_parse_sample &lt;- oa_parser(dir_path = &lt;FOLDER DIRECTORY&gt;)</code></pre>
-<pre><code>## Total Number of Transcripts to be Processed:  2</code></pre>
-<pre class="r"><code>#Number of Entries Returned For Twitter, Inc &amp; UNC
-length(unique(oa_parse_sample$text))</code></pre>
+oa_parse_sample &lt;- oa_parser(dir_path = &quot;&lt;FOLDER DIRECTORY&gt;&quot;)</code></pre>
+<pre><code>## Total Number of Transcripts to be Processed:  2 
+## 
+## - - - - - - - - COMPLETION SUMMARY - - - - - - - -
+## Total Arguments: 2
+## Total Statements: 1,318
+## Number of Justices: 9
+## Number of Unique Attorneys: 7</code></pre>
+<p><strong>Number of Entries Returned For Twitter, Inc &amp;
+UNC</strong></p>
+<pre class="r"><code>length(unique(oa_parse_sample$text))</code></pre>
 <pre><code>## [1] 1153</code></pre>
 <p><strong>Sample Transcript Data from Students For Fair Admissions v.
 UNC</strong></p>
