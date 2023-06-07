@@ -272,7 +272,7 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
           row[has_lower_court_case_number]
         })
         cleaned_lower_court_case_number <- lapply(lower_court_case_number, function(row) {
-          row <- str_replace_all(row, ".*(Case Number: |Case Numbers: |Case No: )", "")
+          row <- str_replace_all(row, ".*(Case Number: |Case Numbers: |Case No: |Case Nos: )", "")
           row <- trimws(row)
         })
         nested_lower_court_case_number <- lapply(cleaned_lower_court_case_number, function(row) list(row))
