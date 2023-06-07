@@ -1,0 +1,5 @@
+decision_processor      SCOTUS Decision Text Processor
+docket_search           SCOTUS Docket Search
+oa_parser               SCOTUS Oral Argument Parser
+oa_search               SCOTUS Oral Argument Search
+print_flattened_list    Print Flattened List (scotustext)

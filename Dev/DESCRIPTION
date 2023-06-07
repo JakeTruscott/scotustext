@@ -1,0 +1,20 @@
+Package: scotustext
+BuildVignettes: true
+BuildKeepEmptyDirs: true
+Type: Package
+Title: SCOTUS Documents Processor
+Version: 0.1.0
+Authors@R: person("Jake", "Truscott", email = "jake.truscott@uga.edu",
+                  role = c("aut", "cre"))
+Description: This package provides tools for collecting, parsing, cleaning, and analyzing text data from the United States Supreme Court, including: Docket Sheets, Oral Argument Transcripts, Rulings and Orders, etc. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: TRUE
+LazyDataCompression: xz
+Imports: dplyr, zoo, tidyr, tm, pdftools, stringr, htm2txt, readtext
+RoxygenNote: 7.2.3
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Author: Jake Truscott [aut, cre]
+Maintainer: Jake Truscott <jake.truscott@uga.edu>
+Built: R 4.3.0; ; 2023-06-07 17:36:52 UTC; windows
