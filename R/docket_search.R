@@ -672,7 +672,7 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
       cleaned_rows <- lapply(filtered_rows, function(row) {
         row <- iconv(row, to = "UTF-8", sub = "")
         row <- gsub("\\n.*", "", row)
-        has_ruling <- grepl("Affirmed | Vacated | Remanded | Reversed", row, ignore.case = TRUE) & !grepl("JUDGMENT ISSUED", row, ignore.case = T)
+        has_ruling <- grepl("Affirmed| Vacated| Remanded| Reversed", row, ignore.case = TRUE) & !grepl("JUDGMENT ISSUED", row, ignore.case = T)
         row[has_ruling]
       })
 
