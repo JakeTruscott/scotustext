@@ -1498,6 +1498,12 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
       docket_entries[docket_entries == "character(0)"] <- NA
       docket_entries$certiorari_order = ifelse(!is.na(docket_entries$argument_date) & docket_entries$certiorari_order == "Petition DENIED", "Petition GRANTED", docket_entries$certiorari_order)
 
+      docket_entries <- docket_entries %>%
+        mutate(petitioner_counsel = gsub("\\nOrganization:.*", "", petitioner_counsel),
+               respondent_counsel = gsub("\\nOrganization:.*", "", respondent_counsel)) %>%
+        mutate(petitioner_counsel = gsub("Organization:.*", "", petitioner_counsel),
+               respondent_counsel = gsub("Organization:.*", "", respondent_counsel))
+
 
 
     } #Final Cleaning (Arrange columns & convert bytes to UTF-8)
