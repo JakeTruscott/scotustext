@@ -66,18 +66,50 @@
 }
 
 </style>
+
+   <title>Button Redirect</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        button {
+            background-color: #ffffff;
+            border: ;
+            border-color: #24292e;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+
+        button img {
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        button:hover {
+            background-color: #8d918e;
+        }
+    </style>
+
 </head>
 
 <body>
     <header>
         <div class="header">
             <div class="scotustext">scotustext (R)</div>
-<div class="developer">Developed by <a href="https://jaketruscott.github.io/">Jake S. Truscott, Ph.D</a></div>
+<div class="developer">Developed by Jake S. Truscott, Ph.D</div>
+<button onclick="window.location.href = 'https://jaketruscott.github.io/';">
+        <img src="/Misc/github_logo.png" width="20" height="20">
+        Developer Website
+    </button>
             <div class="center-name">
                 Center for C-SPAN Scholarship &amp; Engagement (Beginning Summer 2023) <br>
                 Purdue University<br>
                 West Lafayette, IN<br>
-
             </div>
             <img src="https://github.com/JakeTruscott/scotustext/blob/master/Misc/scotus_hex.png?raw=true" alt="scotustext logo" class="logo">
         </div>
