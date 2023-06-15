@@ -127,10 +127,10 @@ decision_processor <- function(dir_path) {
                  sapply(paste, collapse = "; ") %>%
                  sapply(function(x) gsub(" joins| join", "", x))) %>%
         mutate(opinion_type = case_when(
-          grepl("delivered", opinion, ignore.case = T) & grepl("court", opinion, ignore.case = T) ~ "Majority Opinion",
-          grepl("dissenting", opinion) ~ "Dissent",
-          grepl("concurring", opinion) ~ "Concurrence",
-          grepl("concurrence", opinion) & grepl("dissenting", opinion) & grepl("in part", opinion) ~ "Concur & Dissent (In Part)")) %>%
+          grepl("deliv", opinion, ignore.case = T) & grepl("court", opinion, ignore.case = T) ~ "Majority Opinion",
+          grepl("dis", opinion) ~ "Dissent",
+          grepl("conc", opinion) ~ "Concurrence",
+          grepl("conc", opinion) & grepl("dis", opinion) & grepl("in part", opinion) ~ "Concur & Dissent (In Part)")) %>%
         mutate(opinion_type = ifelse(is.na(opinion_type), "Per Curiam", opinion_type))  %>%
         mutate(text = ifelse(opinion_type == "Per Curiam", gsub(".*PER CURIAM", "", text), text)) %>%
         mutate(opinion_writer = ifelse(opinion_type == "Per Curiam", "Per Curiam", opinion_writer)) %>%
