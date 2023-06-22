@@ -1502,7 +1502,8 @@ docket_search <- function(docket_id, rate = 5000, sleep = 30, include = NULL, ex
         mutate(petitioner_counsel = gsub("\\nOrganization:.*", "", petitioner_counsel),
                respondent_counsel = gsub("\\nOrganization:.*", "", respondent_counsel)) %>%
         mutate(petitioner_counsel = gsub("Organization:.*", "", petitioner_counsel),
-               respondent_counsel = gsub("Organization:.*", "", respondent_counsel))
+               respondent_counsel = gsub("Organization:.*", "", respondent_counsel)) %>%
+        mutate(lower_court = ifelse(lower_court == "Lower Ct:", NA, lower_court))
 
 
 
