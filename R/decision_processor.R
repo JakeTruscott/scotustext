@@ -132,6 +132,7 @@ decision_processor <- function(dir_path) {
           grepl("conc", opinion) ~ "Concurrence",
           grepl("conc", opinion) & grepl("dis", opinion) & grepl("in part", opinion) ~ "Concur & Dissent (In Part)")) %>%
         mutate(opinion_type = ifelse(is.na(opinion_type), "Per Curiam", opinion_type))  %>%
+        filter(!(opinion_type == "Per Curiam" & !grepl("PER CURIAM", text, ignore.case = TRUE))) %>%
         mutate(text = ifelse(opinion_type == "Per Curiam", gsub(".*PER CURIAM", "", text), text)) %>%
         mutate(opinion_writer = ifelse(opinion_type == "Per Curiam", "Per Curiam", opinion_writer)) %>%
         mutate(text = sub(".*?\\.", "", text)) %>%
@@ -144,7 +145,6 @@ decision_processor <- function(dir_path) {
         mutate(text = gsub("\\n", " ", text)) %>%
         select(-c(opinion)) %>%
         mutate(word_count = str_count(text, "\\w+")) %>%
-        filter(word_count > 10) %>%
         select(argument, docket_id, published, text, footnotes, opinion_writer, opinion_type, word_count)
     } #Process & Clean Docket Frame
 
