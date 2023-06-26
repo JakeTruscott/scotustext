@@ -143,7 +143,9 @@ decision_processor <- function(dir_path) {
         mutate(text = gsub("-\\n", "", text)) %>%
         mutate(text = gsub("\\n", " ", text)) %>%
         select(-c(opinion)) %>%
-        select(argument, docket_id, published, text, footnotes, opinion_writer, opinion_type)
+        mutate(word_count = str_count(text, "\\w+")) %>%
+        filter(word_count > 10) %>%
+        select(argument, docket_id, published, text, footnotes, opinion_writer, opinion_type, word_count)
     } #Process & Clean Docket Frame
 
   } #Process Opinions
