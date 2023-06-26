@@ -75,6 +75,7 @@ decision_processor <- function(dir_path) {
 
       decisions$argument <- case_names$case_names
       decisions$docket_id <- case_names$docket_number
+      decisions$docket_id <- gsub("\\.", "", decisions$docket_id)
       decisions$published <- case_names$published
 
 
