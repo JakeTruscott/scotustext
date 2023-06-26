@@ -47,7 +47,7 @@ decision_processor <- function(dir_path) {
 
       case_names <- data.frame(case_names)
       case_names$docket_number <- sapply(case_names$case_names, function(x) {
-        if (grepl(" ", x)) {
+        if (grepl(" ", x) & grepl("-", x)) {
           return(sub(" .*", "", x))
         } else {
           return(NA)
