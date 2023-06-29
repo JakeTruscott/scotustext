@@ -80,7 +80,7 @@ decision_processor <- function(dir_path) {
 
 
     } #File Metadata
-    {{
+    {
       decisions_test <- decisions %>%
         mutate(text = str_split(text, "\\<DECISION BREAK\\>")) %>%
         unnest(text) %>%
