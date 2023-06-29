@@ -80,27 +80,41 @@ decision_processor <- function(dir_path) {
 
 
     } #File Metadata
-    {
+    {{
       decisions_test <- decisions %>%
         mutate(text = str_split(text, "\\<DECISION BREAK\\>")) %>%
         unnest(text) %>%
         filter(grepl("\\<Keep\\>", text, ignore.case = TRUE)) %>%
         filter(!grepl("syllabus\\n\\n", text, ignore.case = TRUE)) %>%
-        mutate(text = trimws(text)) %>%
+        mutate(text = gsub("J.\\n\\n", "<END HEADER>", text, perl = TRUE)) %>%
+        mutate(text = gsub("(?<!\\S) {2,}(?!\\S)", " ", text, perl = TRUE)) %>%
+        mutate(text = gsub("(?<!\\S)\n(?!\\S)", " \n", text, perl = TRUE)) %>%
         mutate(text = gsub("\\n\\n", " \n\n ", text, perl = TRUE)) %>%
         mutate(text = gsub("\\n\\n ------\\n[ ]*", "<BEGIN FOOTNOTE> ", text)) %>%
         mutate(text = gsub("\\n------\\n", " \n------\n ", text, perl = TRUE)) %>%
         mutate(text = gsub("\\n------\\n", " <BEGIN FOOTNOTE> ", text, perl = TRUE)) %>%
-        mutate(text = str_replace_all(text, "J., dissenting\\s+\\n\\n", "J., dissenting \n\n <END HEADER> ")) %>%
-        mutate(text = str_replace_all(text, "J., concurring\\s+\\n\\n", "J., dissenting \n\n <END HEADER> ")) %>%
-        mutate(text = str_replace_all(text, "Opinion of the Court\\s+\\n\\n", "J., dissenting \n\n <END HEADER> ")) %>%
+        mutate(text = gsub("in part \\n\\n", "<END HEADER> ", text, ignore.case = T)) %>%
+        mutate(text = gsub("in judgement \\n\\n", "<END HEADER> ", text, ignore.case = T)) %>%
+        mutate(text = gsub("C\\.J\\.\\, concurring", "<END HEADER> ", text, ignore.case = T)) %>%
+        mutate(text = gsub("J\\.\\, concurring", "<END HEADER> ", text, ignore.case = T)) %>%
+        mutate(text = gsub("C\\.J\\.\\, dissenting", "<END HEADER> ", text, ignore.case = T)) %>%
+        mutate(text = gsub("J\\.\\, dissenting", "<END HEADER> ", text, ignore.case = T)) %>%
+        mutate(text = str_replace_all(text, "Opinion of the Court\\s+\\n\\n", "<END HEADER> ")) %>%
+        mutate(text = str_replace_all(text, "Opinion of the Court", "<END HEADER> ")) %>%
+        mutate(text = str_replace_all(text, "Opinion of .*? , J", "<END HEADER>")) %>%
+        mutate(text = str_replace_all(text, "Order of (.*?), C\\.J\\.", "<END HEADER>")) %>%
         mutate(text = str_replace_all(text, "\\n\\n\\s+\\d+", "<BEGIN HEADER>")) %>%
+        mutate(text = gsub("\\s{2,}", " ", text)) %>%
         mutate(text = str_replace_all(text, "Cite as:", " <BEGIN HEADER> Cite as:"))  %>%
         mutate(footnotes = text) %>%
         mutate(footnotes = str_extract_all(text, "(?<=<BEGIN FOOTNOTE>)([\\s\\S]*?)(?=<BEGIN HEADER>)")) %>%
-        mutate(footnotes = sapply(footnotes, function(x) if (length(x) > 0) paste(x, collapse = "\n\n") else NA_character_)) %>%
+        mutate(footnotes = sapply(footnotes, function(x) if (length(x) > 0) paste(x, collapse = "\n\n") else NA_character_))  %>%
         mutate(text = gsub("<BEGIN FOOTNOTE>.*?<END HEADER>", "", text)) %>%
-        mutate(text = gsub("<BEGIN HEADER>.*?<END HEADER>", "", text)) %>%
+        mutate(text = str_replace_all(text, "<BEGIN HEADER>.*?(<END HEADER>|<END SPECIAL HEADER>)", "")) %>%
+        mutate(text = gsub("<BEGIN HEADER>.*?<END SPECIAL HEADER>", "", text)) %>%
+        mutate(text = gsub(" C\\. J\\.\\,", "", text)) %>%
+        mutate(text = gsub(" C\\.J\\.\\,", "", text)) %>%
+        mutate(text = gsub(" J\\.\\,", "", text)) %>%
         mutate(footnotes = gsub("\\n\\n {3,}(\\d+)", "<FOOTNOTE BREAK> \\1", footnotes)) %>%
         mutate(footnotes = gsub("\\n\\n", "", footnotes)) %>%
         mutate(footnotes = gsub("<FOOTNOTE BREAK>", "\n\n", footnotes)) %>%
@@ -146,6 +160,11 @@ decision_processor <- function(dir_path) {
         mutate(text = gsub("\\n", " ", text)) %>%
         select(-c(opinion)) %>%
         mutate(word_count = str_count(text, "\\w+")) %>%
+        mutate(text = gsub("\\.(?!.*\\..*$)\\s?.*", ".", text, perl = TRUE)) %>%
+        mutate(text = gsub("\\<END HEADER\\>", "", text, perl = T)) %>%
+        mutate(text = gsub("\\<BEGIN HEADER\\>", "", text, perl = T)) %>%
+        mutate(text = gsub("\\,\\)", ", J.)", text, perl = T)) %>%
+        mutate(text = gsub("\\, \\)", ", J.)", text, perl = T)) %>%
         select(argument, docket_id, published, text, footnotes, opinion_writer, opinion_type, word_count)
     } #Process & Clean Docket Frame
 
