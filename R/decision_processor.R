@@ -31,6 +31,14 @@ decision_processor <- function(dir_path) {
       corpus <- tm_map(corpus, content_transformer(gsub), pattern = "on bill of complaint", replacement = "<DECISION BREAK> <KEEP>", ignore.case = TRUE)
       decisions <- data.frame(text = sapply(corpus, as.character), stringsAsFactors = FALSE)
     } #Collect and Pre-Process Text
+
+    # Check if 'decisions' data frame is empty
+    if (nrow(decisions) == 0) {
+      message("\nError Processing PDF:", file_path)
+      return(NULL)
+    }
+
+
     {
       file_names_processed <- gsub(paste0(dir_path, "/"), "", file_path)
       file_names_processed <- gsub("\\_.*", "", file_names_processed)
@@ -180,9 +188,20 @@ decision_processor <- function(dir_path) {
 
 
   start_time <- Sys.time()
+  count <- 1
   for (i in files) {
-    cleaned_decisions <- suppressWarnings(decisions_cleaner(file_path = i, dir_path = i))
-    all_decisions <- rbind(all_decisions, cleaned_decisions)
+    tryCatch({
+      cleaned_decisions <- suppressWarnings(decisions_cleaner(file_path = i, dir_path = i))
+      all_decisions <- rbind(all_decisions, cleaned_decisions)
+
+      if (count %% 25 == 0) {
+        message("\nCompleted ", count, "Decisions of", length(files))
+      }
+
+      count <- count + 1
+    }, error = function(e) {
+      cat("Failure with Decision ", i, "...Moving On\n")
+    })
   }
 
   end_time <- Sys.time()
