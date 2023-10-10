@@ -191,16 +191,15 @@ decision_processor <- function(dir_path) {
   count <- 1
   for (i in files) {
     tryCatch({
-      cleaned_decisions <- suppressWarnings(decisions_cleaner(file_path = i, dir_path = i))
+      cleaned_decisions <- suppressWarnings(decisions_cleaner(file_path = i, dir_path = dir_path))
       all_decisions <- rbind(all_decisions, cleaned_decisions)
-
       if (count %% 25 == 0) {
-        message("\nCompleted ", count, "Decisions of", length(files))
+        message("\nCompleted ", count, " Decisions of ", length(files))
       }
-
       count <- count + 1
     }, error = function(e) {
-      cat("Failure with Decision ", i, "...Moving On\n")
+      cat("Error with Decision ", i, ":\n")
+      print(e)
     })
   }
 
