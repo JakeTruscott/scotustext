@@ -39,6 +39,8 @@ oa_parser <- function(dir_path = NULL) {
     corpus <- tm_map(corpus, content_transformer(iconv), to = "ASCII//TRANSLIT")
     corpus <- tm_map(corpus, content_transformer(gsub), pattern = "-", replacement = "-")
     corpus <- tm_map(corpus, content_transformer(gsub), pattern = "case is submitted.*", replacement = "case is submitted", ignore.case = TRUE)
+    corpus <- tm_map(corpus, content_transformer(gsub), pattern = "the case was submitted.*", replacement = "the case was submitted", ignore.case = TRUE)
+
     corpus <- tm_map(corpus, content_transformer(gsub),
                      pattern = "^(.*?)(CHIEF JUSTICE ROBERTS:|CHIEF JUSTICE REHNQUIST:)",
                      replacement = "\\2", ignore.case = TRUE)
