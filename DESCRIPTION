@@ -3,8 +3,8 @@ BuildVignettes: true
 BuildKeepEmptyDirs: true
 Type: Package
 Title: SCOTUS Documents Processor
-Version: 0.1.0
-Authors@R: person("Jake", "Truscott", email = "jake.truscott@uga.edu",
+Version: 2.0.0
+Authors@R: person("Jake", "Truscott", email = "jaketruscott@ufl.edu",
                   role = c("aut", "cre"))
 Description: This package provides tools for collecting, parsing, cleaning, and analyzing text data from the United States Supreme Court, including: Docket Sheets, Oral Argument Transcripts, Rulings and Orders, etc. 
 License: MIT + file LICENSE

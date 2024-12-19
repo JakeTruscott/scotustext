@@ -1,0 +1,248 @@
+---
+title: "Oyez Argument Search (```scotustext(R)```)"
+output: html_document
+date: "Updated December 2024"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(rvest);library(httr); library(dplyr); library(tidyr); library(reticulate); library(jsonlite); library(dplyr); library(httr); library(tidyr); library(stringr); library(stringi); library(rvest); library(jsonlite)
+
+
+oyez_transcript_search <- function(docket = NULL, # Docket Number (Character, Req.)
+                                   term = NULL){ # Term (Character, Req)
+
+  {
+
+    oyez_meta_search <- "
+
+import pandas as pd
+import requests
+import oyez_api_wrapper
+import json
+
+def get_case_data(term, docket):
+    temp_case_obj = oyez_api_wrapper.court_case(str(term), str(docket))
+    temp_audio_links = temp_case_obj.get_audio_links()
+    return temp_audio_links
+
+term = {term}
+docket = '{docket}'
+
+case_data = get_case_data(term, docket)
+"
+
+
+  } # Oyez Meta Search (Python)
+
+  check_dependencies_oyez <- function(){
+
+    installed <- reticulate::py_list_packages() # Check Installed Py Packages
+
+    install_if_needed <- function(packages) {
+
+      for (pkg in packages) {
+        if (!(pkg %in% installed$package)) {
+          cat(paste("Installing", pkg, "...\n"))
+          py_install(pkg)
+        } else {
+          next
+        }
+      }
+    }
+
+    packages_to_check <- c("pandas", "requests", "oyez-api-wrapper") # Check if Already Downloaded
+
+    if (!all(packages_to_check %in% installed$package)){
+      install_if_needed(packages_to_check) # Install If Needed
+    }
+
+  } # Check Dependencies
+
+  run_oyez_script <- function(term, docket) {
+
+    python_script <- gsub("\\{term\\}", term, oyez_meta_search)
+    python_script <- gsub("\\{docket\\}", docket, python_script)
+
+    # Write the script to a temporary file
+    temp_file <- tempfile(fileext = ".py")
+    writeLines(python_script, temp_file)
+
+    output <- reticulate::py_run_file(temp_file) # Run Script
+
+    if (file.exists(temp_file)){
+      file.remove(temp_file)
+    } # Delete Temp Python File
+
+    # Parse the JSON output
+    case_data <- output$case_data # Retrieve Oral Argument Meta
+
+    return(case_data) # Return Meta
+  }
+
+  retrieve_argument_transcript <- function(api_location, docket, term){
+
+
+    {
+
+      tryCatch({
+        url <- api_location
+        response <- GET(url)
+
+        if (status_code(response) == 200) {
+          json_content <- content(response, as = "text", encoding = "UTF-8")  # Specify the encoding
+          parsed_json <- fromJSON(json_content)
+
+        } else {
+          stop(paste("Failed to retrieve JSON data from the URL with status code:", status_code(response)))
+        }
+      }, error = function(e) {
+        cat("Error downloading file: ", json_output_file, "\n")
+      }) # Get Json (parsed_json)
+
+
+    } # Retrieve JSON
+
+    {
+
+      temp <- data.frame()
+
+      for (j in 1:length(parsed_json$transcript$sections$turns)) {
+        temp_text <- parsed_json$transcript$sections$turns[j]
+        temp <- bind_rows(temp, temp_text)
+      }
+
+      temp_meta <- data.frame(
+        case_name = parsed_json$transcript$title[1]
+      )
+
+      temp_complete <- data.frame()
+
+      for (k in 1:nrow(temp)) {
+        text_blocks <- temp$text_blocks[k]
+        flattened_text <- paste(sapply(text_blocks, function (block) block$text), collapse = " ")
+
+        temp_full <- data.frame(
+          case_name = temp_meta$case_name,
+          text_start = temp$start[k],
+          text_stop = temp$stop[k],
+          speaker = temp$speaker$name[k],
+          role = ifelse(is.null(temp$speaker$roles[k][[1]]$role_title) && is.null(temp$speaker$name[k]), "NA",
+                        ifelse(is.null(temp$speaker$roles[k][[1]]$role_title), "Attorney", temp$speaker$roles[k][[1]]$role_title)),
+          text = flattened_text,
+          word_count = str_count(flattened_text, "\\w+"),
+          row_id = k,
+          object_title = parsed_json$title
+        )
+
+        temp_complete <- bind_rows(temp_complete, temp_full)
+      }
+
+
+      temp_complete <- temp_complete %>%
+        mutate(
+          argument_duration = temp_meta$argument_duration,
+          docket = docket,
+        ) %>%
+        relocate(case_name, docket) %>%
+        mutate(role = ifelse(is.na(speaker), NA, role)) %>%
+        mutate(role = ifelse(grepl('Justice', role, ignore.case = T), 'Justice', role))
+
+
+
+    } # Convert to Rdata
+
+    return(temp_complete)
+
+  }
+
+  check_venv <- function(){
+    env_name <- file.path("~/.virtualenvs/r-reticulate")
+
+    # Force remove existing virtualenv if it exists
+    if (virtualenv_exists(env_name)){
+      use_virtualenv(env_name, required = T)  # Ensures removal
+    }
+
+    # Create and use the virtual environment
+    virtualenv_create(env_name, packages = c("pandas", "requests", "oyez-api-wrapper", "numpy"))
+    use_virtualenv(env_name, required = TRUE)
+    message("Virtual Environment Created & Activated")
+  } # Check if venv is active
+
+
+  check_venv() # Check Venv (Created & Active)
+  check_dependencies_oyez() # Check if Modules Installed
+  argument_links <- run_oyez_script(term = term, docket = docket)
+
+  transcripts <- data.frame()
+
+  for (i in 1:length(argument_links)){
+
+    temp_transcript <- retrieve_argument_transcript(api_location = argument_links[[i]], docket = docket, term = term)
+    transcripts <- bind_rows(transcripts, temp_transcript)
+
+  }
+
+  title_date_combinations = paste(unique(transcripts$case_name), ' ', unique(transcripts$object_title))
+
+  message('Completed Transcript Compilation for:')
+  for (i in 1:length(title_date_combinations)){
+    message(title_date_combinations[i])
+  }
+
+  return(transcripts)
+
+
+} # Main Function - Returns Transcript Object
+
+test <- oyez_transcript_search(docket = '19-1392', term = '2021')
+
+```
+
+
+### ```oyez_transcript_search```
+
+An automated tool for retrieving oral argument transcripts from the Oyez Project for cases argued by the United States Supreme Court. The routine pipes Python code through `R` using `reticulate::()` without needing to adjust the global environment. 
+
+### Function Description
+
+The `oyez_transcript_search` function replaces `oa_search` and `oa_parser` to directly retrieve, clean, and parse transcripts from the Oyez Project, rather than rely on the uploading and cleaning of transcript PDFs. The function requires the entry of two parameters: 
+
+- `docket`: A character object indicating the docket number assigned by the Supreme Court
+- `term`: A character object indicating the term associated with the orally argued case.
+
+#### Variables
+
+```{r variables, echo=FALSE}
+
+names(test)
+
+```
+
+- `case_name`: Case title
+- `docket`: Docket Number
+- `text_start`: Oyez timestamp indicating start of utterance
+- `text_stop`: Oyez timestamp indicating end of utterance
+- `speaker`: Speaker (name) associated with utterance
+- `role`: Role of Speaker (Justice or Attorney)
+- `text`: Transcription
+- `word_count`: Number of words spoken during utterance
+- `row_id`: Utterance order identification number
+- `object_title`:  Oyez API transcription identification title (**Note**: Given that some cases were orally argued several times -- or across several sittings, this variable will provide which the transcription belongs.)
+
+### Sample Walkthrough
+
+```{r, walkthrough}
+
+dobbs_example <- oyez_transcript_search(docket = '19-1392', term = '2021')
+
+head(dobbs_example$text)
+
+head(dobbs_example$speaker)
+
+head(dobbs_example$role)
+
+
+```
