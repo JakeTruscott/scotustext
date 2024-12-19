@@ -9,8 +9,4 @@ importFrom("utils", "tail")
 importFrom("htm2txt", "gettxt")
 importFrom("zoo", "na.locf")
 importFrom("pdftools", "pdf_info")
-importFrom('rvest')
-importFrom('httr')
-importFrom('reticulate')
-importFrom('jsonlite')
 
