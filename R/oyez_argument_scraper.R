@@ -10,10 +10,6 @@
 #' \dontrun{
 #' dobbs_sample <- oyez_transcript_search(docket = '19-1392', term = '2021')
 #' }
-
-
-library(reticulate); library(jsonlite); library(dplyr); library(httr); library(tidyr); library(stringr); library(stringi); library(rvest); library(jsonlite)
-
 oyez_transcript_search <- function(docket = NULL, # Docket Number (Character, Req.)
                                    term = NULL){ # Term (Character, Req)
 
@@ -200,5 +196,3 @@ case_data = get_case_data(term, docket)
 
 
 } # Main Function - Returns Transcript Object
-
-test <- oyez_transcript_search(docket = '19-1392', term = '2021')
