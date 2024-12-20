@@ -16,6 +16,34 @@ decision_processor <- function(dir_path) {
   cat("\nDecisions to Process: ", num_files)
   all_decisions <- NULL
 
+  check_package_install <- function(){
+
+    check_and_load_packages <- function(packages) {
+      for (pkg in packages) {
+        if (!requireNamespace(pkg, quietly = TRUE)) {
+          cat(sprintf("Package '%s' is not installed. Do you want to install it? (Y/N): ", pkg))
+          response <- tolower(readline())
+          if (response == "y") {
+            install.packages(pkg)
+          } else if (response == "n") {
+            stop(sprintf("Cannot proceed without '%s' installed. Exiting.", pkg))
+          } else {
+            stop("Invalid input. Please enter Y or N. Exiting.")
+          }
+        }
+        # Load the library after installation or if already installed
+        library(pkg, character.only = TRUE)
+      }
+    }
+
+    required_packages <- c('dplyr', 'rvest', 'reticulate', 'httr', 'tm', 'stringr', 'tm', 'tidyr', 'graphics', 'utils', 'htm2txt', 'zoo', 'pdftools')
+    check_and_load_packages(required_packages)
+    library(dplyr); library(rvest); library(reticulate); library(httr); library(tm); library(stringr); library(tm); library(tidyr); library(graphics); library(utils); library(htm2txt); library(zoo); library(pdftools)
+
+  } # Check if dplyr, rvest, reticulate, and httr are installed
+
+  check_package_install() # Check If Necessary Packages are Installed
+
   decisions_cleaner <- function(file_path, dir_path) {
 
     {
