@@ -11,7 +11,8 @@
 #' dobbs_sample <- oyez_transcript_search(docket = '19-1392', term = '2021')
 #' }
 oyez_transcript_search <- function(docket = NULL, # Docket Number (Character, Req.)
-                                   term = NULL){ # Term (Character, Req)
+                                   term = NULL,
+                                   progress = T){ # Term (Character, Req)
 
   {
 
@@ -81,18 +82,18 @@ case_data = get_case_data(term, docket)
     return(case_data) # Return Meta
   }
 
-  retrieve_argument_transcript <- function(api_location, docket, term){
+  retrieve_argument_transcript <- function(api_location, docket_number, term){
 
 
     {
 
       tryCatch({
-        url <- api_location
+        url <- api_location[[1]]
         response <- GET(url)
 
         if (status_code(response) == 200) {
           json_content <- content(response, as = "text", encoding = "UTF-8")  # Specify the encoding
-          parsed_json <- fromJSON(json_content)
+          parsed_json <- jsonlite::fromJSON(json_content)
 
         } else {
           stop(paste("Failed to retrieve JSON data from the URL with status code:", status_code(response)))
@@ -131,7 +132,7 @@ case_data = get_case_data(term, docket)
           role = ifelse(is.null(temp$speaker$roles[k][[1]]$role_title) && is.null(temp$speaker$name[k]), "NA",
                         ifelse(is.null(temp$speaker$roles[k][[1]]$role_title), "Attorney", temp$speaker$roles[k][[1]]$role_title)),
           text = flattened_text,
-          word_count = str_count(flattened_text, "\\w+"),
+          word_count = stringr::str_count(flattened_text, "\\w+"),
           row_id = k,
           object_title = parsed_json$title
         )
@@ -143,9 +144,10 @@ case_data = get_case_data(term, docket)
       temp_complete <- temp_complete %>%
         mutate(
           argument_duration = temp_meta$argument_duration,
-          docket = docket,
+          docket_number = docket_number,
+          term = term,
         ) %>%
-        relocate(case_name, docket) %>%
+        relocate(case_name, docket_number) %>%
         mutate(role = ifelse(is.na(speaker), NA, role)) %>%
         mutate(role = ifelse(grepl('Justice', role, ignore.case = T), 'Justice', role))
 
@@ -174,22 +176,36 @@ case_data = get_case_data(term, docket)
 
   check_venv() # Check Venv (Created & Active)
   check_dependencies_oyez() # Check if Modules Installed
-  argument_links <- run_oyez_script(term = term, docket = docket)
 
   transcripts <- data.frame()
 
-  for (i in 1:length(argument_links)){
+  for (temp_docket in 1:length(docket)){
 
-    temp_transcript <- retrieve_argument_transcript(api_location = argument_links[[i]], docket = docket, term = term)
-    transcripts <- bind_rows(transcripts, temp_transcript)
+    tryCatch({
+      argument_links <- run_oyez_script(term = term, docket = docket[temp_docket])
 
-  }
+      for (i in 1:length(argument_links)){
 
-  title_date_combinations = paste(unique(transcripts$case_name), ' ', unique(transcripts$object_title))
+        temp_transcript <- retrieve_argument_transcript(api_location = argument_links[[i]], docket_number = docket[temp_docket], term = term)
+        transcripts <- bind_rows(transcripts, temp_transcript)
 
-  message('Completed Transcript Compilation for:')
-  for (i in 1:length(title_date_combinations)){
-    message(title_date_combinations[i])
+      }
+
+      title_date_combinations = paste(unique(transcripts$case_name), ' ', unique(transcripts$object_title))
+
+      if (progress == TRUE){
+        message('Completed Transcript Compilation for:')
+        for (i in 1:length(title_date_combinations)){
+          message(title_date_combinations[i])
+        }
+      }
+
+
+    }, error = function(e) {
+      message("No Transcript Found for ", term, "-", docket[temp_docket], '   ---- Moving On')
+      NULL
+    })
+
   }
 
   return(transcripts)
