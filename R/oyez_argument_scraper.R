@@ -148,6 +148,7 @@ case_data = get_case_data(term, docket)
           term = term,
         ) %>%
         relocate(case_name, docket_number) %>%
+        relocate(term, .after = docket_number) %>%
         mutate(role = ifelse(is.na(speaker), NA, role)) %>%
         mutate(role = ifelse(grepl('Justice', role, ignore.case = T), 'Justice', role))
 
