@@ -1,0 +1,147 @@
+* using log directory 'C:/Users/jaketruscott/Github/scotustext.Rcheck'
+* using R version 4.4.1 (2024-06-14 ucrt)
+* using platform: x86_64-w64-mingw32
+* R was compiled by
+    gcc.exe (GCC) 13.2.0
+    GNU Fortran (GCC) 13.2.0
+* running under: Windows 11 x64 (build 22631)
+* using session charset: UTF-8
+* using options '--no-manual --as-cran'
+* checking for file 'scotustext/DESCRIPTION' ... OK
+* checking extension type ... Package
+* this is package 'scotustext' version '2.0.0'
+* package encoding: UTF-8
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking serialization versions ... OK
+* checking whether package 'scotustext' can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking for future file timestamps ... NOTE
+unable to verify current time
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... NOTE
+Non-standard file/directory found at top level:
+  'R_v1'
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking code files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking dependencies in R code ... WARNING
+'::' or ':::' import not declared from: 'lubridate'
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+decision_processor : decisions_cleaner: no visible binding for global
+  variable 'word_count'
+docket_search : process_docket_id: no visible binding for global
+  variable 'type'
+docket_search : process_docket_id: no visible binding for global
+  variable 'year'
+docket_search : process_docket_id: no visible binding for global
+  variable 'docket_number'
+docket_search : docket_info: no visible binding for global variable
+  'X1'
+docket_search : docket_info: no visible binding for global variable
+  'X2'
+docket_search : docket_info: no visible binding for global variable
+  'information'
+docket_search : docket_info: no visible binding for global variable
+  'entry'
+docket_search : docket_info: no visible binding for global variable
+  'title'
+docket_search : docket_info: no visible binding for global variable
+  'petitioner'
+docket_search : docket_info: no visible binding for global variable
+  'respondent'
+docket_search : docket_info: no visible binding for global variable
+  'linked_with'
+docket_search : docket_info: no visible binding for global variable
+  'docketed'
+docket_search : docket_entries: no visible binding for global variable
+  'html_content'
+docket_search : docket_entries: no visible binding for global variable
+  'X1'
+docket_search : docket_entries: no visible binding for global variable
+  'X2'
+docket_search : docket_entries: no visible global function definition
+  for 'rename'
+docket_search : counsel: no visible binding for global variable '.'
+docket_search : counsel: no visible global function definition for
+  'across'
+docket_search : counsel: no visible global function definition for
+  'everything'
+docket_search : counsel: no visible binding for global variable 'X1'
+docket_search : counsel: no visible binding for global variable 'X2'
+docket_search : counsel: no visible binding for global variable 'X3'
+docket_search : counsel: no visible binding for global variable 'name'
+docket_search : counsel: no visible binding for global variable 'party'
+docket_search : principal_counsel: no visible binding for global
+  variable 'counsel_of_record'
+docket_search : principal_counsel: no visible binding for global
+  variable 'party'
+docket_search : principal_counsel: no visible binding for global
+  variable 'name'
+docket_search: no visible binding for global variable
+  'petitioner_counsel'
+docket_search: no visible binding for global variable 'petitioner'
+docket_search: no visible binding for global variable
+  'respondent_counsel'
+docket_search: no visible binding for global variable 'respondent'
+oyez_transcript_search : retrieve_argument_transcript : <anonymous>: no
+  visible binding for global variable 'json_output_file'
+oyez_transcript_search : retrieve_argument_transcript: no visible
+  global function definition for 'bind_rows'
+oyez_transcript_search : retrieve_argument_transcript: no visible
+  global function definition for 'relocate'
+oyez_transcript_search : retrieve_argument_transcript: no visible
+  binding for global variable 'case_name'
+oyez_transcript_search : retrieve_argument_transcript: no visible
+  binding for global variable 'speaker'
+oyez_transcript_search : retrieve_argument_transcript: no visible
+  binding for global variable 'role'
+oyez_transcript_search: no visible global function definition for
+  'bind_rows'
+Undefined global functions or variables:
+  . X1 X2 X3 across bind_rows case_name counsel_of_record docket_number
+  docketed entry everything html_content information json_output_file
+  linked_with name party petitioner petitioner_counsel relocate rename
+  respondent respondent_counsel role speaker title type word_count year
+Consider adding
+  importFrom("graphics", "title")
+to your NAMESPACE file.
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... WARNING
+Undocumented arguments in Rd file 'oyez_transcript_search.Rd'
+  'progress'
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter 'Writing R documentation files' in the 'Writing R
+Extensions' manual.
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking examples ... OK
+* checking for non-standard things in the check directory ... OK
+* checking for detritus in the temp directory ... OK
+* DONE
+Status: 2 WARNINGs, 3 NOTEs
